@@ -1,0 +1,87 @@
+{
+  "CCV": [
+    "tu vas bien",
+    "comment ça va",
+    "estce que tu vas bien",
+    "tu vas comment en ce jour",
+    "qu'estce que tu racontes beau",
+    "tout roule pour toi",
+    "ça dit quoi",
+    "tu fais quoi de beau",
+    "ça va mon gars",
+    "tu vas comment le bot"
+  ],
+  "DATE": [
+    "on est quel jour aujourd'hui",
+    "tu sais quel jour on est",
+    "tu peux me dire quel jour on est",
+    "c'est quel jour aujourd'hui",
+    "quel jour on est le bot"
+  ],
+  "EDT": [
+    "je peux avoir l'emploi du temps stp",
+    "tu connais mes cours pour demain",
+    "l'emploi du temps",
+    "l'EDT",
+    "montremoi l'EDT s'il te plaît",
+    "il me faut l'emploi du temps là",
+    "emploi du temps",
+    "tu peux me passer mon emploi du temps stp",
+    "quels sont les cours de cette semaine",
+    "donnemoi les cours de la semaine",
+    "l'emploi du temps de la semaine stp",
+    "je veux bien mon EDT de cette semaine"
+  ],
+  "METEO": [
+    "tu peux me donner la météo",
+    "je peux avoir la météo de Niort stp",
+    "il fait quel temps à Paris",
+    "tu as quel temps là",
+    "tu peux me dire la météo",
+    "quel temps il fait",
+    "météo stp",
+    "je veux savoir le temps qu'il va faire demain",
+    "donne moi la météo"
+  ],
+  "NEWS": [
+    "tu peux me donner les news du jour stp",
+    "tu as les nouvelles du jour",
+    "c'est quoi les news",
+    "donnemoi les news du jour stp",
+    "il s'est passé quoi aujourd'hui"
+  ],
+  "PIRELOGICIEL": [
+    "c'est quoi le pire logiciel",
+    "tu connais le pire logiciel",
+    "donnemoi le pire logiciel qui existe",
+    "dismoi quel est le pire logiciel",
+    "tu le connais le pire des logiciels"
+  ],
+  "MEILLEURLOGICIEL": [
+    "quel est le meilleur logiciel",
+    "tu peux me dire quel est le meilleur logiciel",
+    "tu connais le meilleur logiciel",
+    "dismoi qui est le meilleur logiciel",
+    "donnemoi le meilleur logiciel qui existe"
+  ],
+  "MEILLEURCHATBOT": [
+    "c'est qui le meilleur des chatbots",
+    "tu connais le meilleur chatbot",
+    "tu peux me dire qui est le meilleur chatbot",
+    "c'est quoi selon toi le meilleur chatbot",
+    "c'est quoi le chat bot qui est le mieux"
+  ],
+  "GEOGUESSR": [
+    "tu peux me lancer Geoguessr",
+    "est-ce que tu peux me lancer le jeu Gue Guessr",
+    "Geo Guessr",
+    "Geoguessr",
+    "Lance Geo Guessr"
+  ],
+  "out_of_scope": [
+    "",
+    "",
+    "",
+    ""
+  ]
+}

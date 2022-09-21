@@ -1,0 +1,25 @@
+{% extends "./layouts/base_layout.html" %}
+
+{% block title %}Discussion{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+    <section class="page-section" id="discussion">
+        <div class="container">
+            <!-- Discussion Section Heading-->
+            <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Discussion de groupe</h2>
+            <!-- Icon Divider-->
+            <div class="divider-custom">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <!-- Chat area-->
+            <div class="input-group">
+                <input type="text" placeholder="Ecrivez un message...">
+                <button class="chatbox__send--footer send__button">Envoyer</button>
+            </div>
+        </div>
+    </section>
+{% endblock %}

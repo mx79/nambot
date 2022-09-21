@@ -1,0 +1,1 @@
+const myInput = document.getElementById("signup_email");

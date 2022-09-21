@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+
+  redis:
+    container_name: container-redis
+    image: redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    hostname: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  app:
+    container_name: container-cas-question
+    network_mode: "host"
+    build: ..
+    image: fast-worker-cas-question
+    restart: on-failure
+    depends_on:
+      - redis
+    # environment:
+    #  - A_VAR: ${A_VALUE:-OK}
+    # ports:
+    #  - "8080:8080"
+
+volumes:
+  redis-data:

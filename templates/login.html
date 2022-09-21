@@ -1,0 +1,106 @@
+{% extends "./layouts/base_layout.html" %}
+
+{% block title %}Connexion{% endblock %}
+<!-- Loading Login form CSS-->
+{% block login_stylesheet %}
+    <link href="{{ url_for('static', filename='./css/login.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+    <section class="page-section">
+        <div class="section">
+            <div class="container">
+                <div class="row full-height">
+                    <div class="col-12 text-center align-self-center py-5">
+                        <div class="section pb-5 pt-5 pt-sm-2 text-center">
+                            <h6 class="mb-0 pb-3"><span>Se connecter</span><span>S'inscrire</span></h6>
+                            <input class="checkbox" type="checkbox" id="reg-log" name="reg-log"
+                                   {% if card_back %}checked=""{% endif %}/>
+                            <label for="reg-log"></label>
+                            <div class="card-3d-wrap mx-auto">
+                                <div class="card-3d-wrapper">
+                                    <!-- Login card-->
+                                    <div class="card-front">
+                                        <div class="center-wrap">
+                                            <form action="/login" class="section text-center" method="post">
+                                                <h4 class="mb-4 pb-3">Connexion</h4>
+                                                <div class="form-group">
+                                                    <input type="text" name="login_username" class="form-style"
+                                                           placeholder="Nom d'utilisateur" id="login_username"
+                                                           autocomplete="off" required>
+                                                    <i class="input-icon uil uil-at"></i>
+                                                </div>
+                                                <div class="form-group mt-2">
+                                                    <input type="password" name="login_password" class="form-style"
+                                                           placeholder="Mot de passe" id="login_password"
+                                                           autocomplete="off" required>
+                                                    <i class="input-icon uil uil-lock-alt"></i>
+                                                </div>
+                                                <input type="submit" name="submit" class="btn mt-4"
+                                                       value="Se connecter">
+                                                {% if pwd_validation %}
+                                                    <p class="mb-0 mt-4 text-center">{{ pwd_validation }}</p>
+                                                {% endif %}
+                                                <p class="mb-0 mt-4 text-center"><a href="/forgot-password"
+                                                                                    class="link">J'ai oublié mon mot de
+                                                    passe</a></p>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="card-back">
+                                        <!-- Register card-->
+                                        <div class="center-wrap">
+                                            <form action="/login" class="section text-center" method="post">
+                                                <h4 class="mb-4 pb-3">Inscription</h4>
+                                                <div class="form-group">
+                                                    <input type="text" name="signup_username" class="form-style"
+                                                           placeholder="Nom d'utilisateur" id="signup_username"
+                                                           autocomplete="off" required>
+                                                    <i class="input-icon uil uil-user"></i>
+                                                </div>
+                                                <div class="form-group mt-2">
+                                                    <input type="email" name="signup_email" class="form-style"
+                                                           placeholder="Adresse email CNAM" id="signup_email"
+                                                           autocomplete="off" required>
+                                                    <i class="input-icon uil uil-at"></i>
+                                                </div>
+                                                <div class="form-group mt-2">
+                                                    <input type="text" name="signup_promo" class="form-style"
+                                                           placeholder="Promotion, ex : 'P4BDIA' " id="signup_promo"
+                                                           autocomplete="off" required>
+                                                    <i class="input-icon uil uil-lock-alt"></i>
+                                                </div>
+                                                <div class="form-group mt-2">
+                                                    <input type="password" name="signup_password" class="form-style"
+                                                           placeholder="Mot de passe" id="signup_password"
+                                                           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                                           autocomplete="off" required>
+                                                    <i class="input-icon uil uil-lock-alt"></i>
+                                                </div>
+                                                <input type="submit" name="submit" class="btn mt-4"
+                                                       value="S'inscrire">
+                                                {% if msg %}
+                                                    <p class="mb-0 mt-4 text-center">{{ msg }}</p>
+                                                {% endif %}
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=card-3d-wrap id="email-pwd">
+                        <h3>Le mot de passe devrait contenir les éléments suivants :</h3>
+                        <p id="letter" class="invalid">Une lettre <b>minuscule</b></p>
+                        <p id="capital" class="invalid">Une lettre <b>capitale</b></p>
+                        <p id="number" class="invalid">Un <b>nombre</b></p>
+                        <p id="length" class="invalid">Minimum <b>8 caractères</b></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+{% endblock %}

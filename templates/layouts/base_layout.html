@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>{% block title %}{% endblock %}</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href=" {{ url_for('static', filename='./assets/img/chatbot.png') }} "/>
+    <!-- Font Awesome icons (free version)-->
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Google fonts-->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css"/>
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet"
+          type="text/css"/>
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="{{ url_for('static', filename='./css/style.css') }}" rel="stylesheet"/>
+    <!-- Login stylesheet-->
+    {% block login_stylesheet %}{% endblock %}
+    <!-- Loading ChatBot CSS-->
+    <link href="{{ url_for('static', filename='./css/chatbot.css') }}" rel="stylesheet">
+</head>
+<body id="page-top">
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand" href="/">Cnambot</a>
+        <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive"
+                aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/features">Features</a>
+                </li>
+                {% if session.get("user_id") %}
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded"
+                                                         href="/bugs">Rapporter un bug</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded"
+                                                         href="/logout">Logout</a></li>
+                {% endif %}
+                {% if not session.get("user_id") %}
+                    <li class="nav-item mx-0 mx-lg-1">
+                    <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/login">Login</a>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+<!-- Masthead-->
+{% block header %}
+    <header class="masthead bg-primary text-white text-center">
+        <div class="container d-flex align-items-center flex-column">
+            <!-- Masthead Heading-->
+            <h1 class="masthead-heading text-uppercase mb-0">{% block page_title %}{% endblock %}</h1>
+            <!-- Icon Divider-->
+            <div class="divider-custom divider-light">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <!-- Masthead Subheading-->
+            <p class="masthead-subheading font-weight-light mb-0">{% block page_desc %}{% endblock %}</p>
+        </div>
+    </header>
+{% endblock %}
+<!-- Chatbot-->
+{% if session.get("user_id") %}
+    <div class="chatbox" id="nambot">
+        <div class="chatbox__support">
+            <div class="chatbox__header">
+                <div class="chatbox__image--header">
+                    <img src="{{ url_for('static', filename='./assets/img/chatbot.png') }}"
+                         alt="image">
+                </div>
+                <div class="chatbox__content--header">
+                    <h4 class="chatbox__heading--header">Cnambot</h4>
+                    <p class="chatbox__description--header">CNAMIEN, viens causer, je peux peut-être te renseigner !</p>
+                </div>
+            </div>
+            <div class="chatbox__messages">
+                <div></div>
+            </div>
+            <div class="chatbox__footer">
+                <input type="text" placeholder="Ecrivez un message...">
+                <button class="chatbox__send--footer send__button">Envoyer</button>
+            </div>
+        </div>
+        <div class="chatbox__button">
+            <button>
+                <img src="{{ url_for('static', filename='./assets/img/chatbox-icon.png') }}"
+                     alt="chat-icon"/>
+            </button>
+        </div>
+    </div>
+{% endif %}
+<!-- Content Section-->
+{% block content %}
+{% endblock %}
+<!-- Footer-->
+<footer class="footer text-center">
+    <div class="container">
+        <div class="devs">
+            <h3 class="text-uppercase">Les développeurs du projet</h3>
+            <br>
+        </div>
+        <div class="row">
+            <!-- Max Lesage-->
+            <div class="col-lg-4 mb-5 mb-lg-0">
+                <img class="avatar" src="{{ url_for('static', filename='./assets/img/avatars/max.png') }}"
+                     alt="avatar-max"/>
+                <h4 class="mb-4">Max</h4>
+                <p class="lead mb-0">
+                    Max travaille chez CGI en tant qu'apprenti ingénieur en IA.
+                    <br>
+                    En tant que prestataire, il effectue des missions touchant au spectre du NLP.
+                </p>
+            </div>
+            <!-- Corentin Grégoire-->
+            <div class="col-lg-4 mb-5 mb-lg-0">
+                <img class="avatar" src="{{ url_for('static', filename='./assets/img/avatars/corentin.png') }}"
+                     alt="avatar-coco"/>
+                <h4 class="mb-4">Corentin</h4>
+                <p class="lead mb-0">
+                    Corentin est apprenti Data Engineer chez Dassault Aviation.
+                    <br>
+                    Il y apprend à traiter une quantité importante de données et à les faire parler.
+                </p>
+            </div>
+            <!-- Ammar Kheder-->
+            <div class="col-lg-4 mb-5 mb-lg-0">
+                <img class="avatar" src="{{ url_for('static', filename='./assets/img/avatars/ammar.png') }}"
+                     alt="avatar-ammar"/>
+                <h4 class="mb-4">Ammar</h4>
+                <p class="lead mb-0">
+                    Ammar, en tant qu'apprenti ingénieur, s'occupe du web, mais également de la classification de cartes
+                    à collectionner avec de l'IA chez SGS Safeguard.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Copyright Section-->
+<div class="copyright py-4 text-center text-white">
+    <div class="container"><small>Copyright &copy; Cnambot 2022</small></div>
+</div>
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Widgets animation-->
+<script src="{{ url_for('static', filename='./js/navbar.js') }}"></script>
+<!-- Chatbot script-->
+<script src="{{ url_for('static', filename='./js/chatbot.js') }}"></script>
+<!-- Chat script-->
+<script src="{{ url_for('static', filename='./js/chat.js') }}"></script>
+<!-- Email validation-->
+<script src="{{ url_for('static', filename='./js/email_validation.js') }}"></script>
+<!-- Password validation-->
+<script src="{{ url_for('static', filename='./js/pwd_validation.js') }}"></script>
+</body>
+</html>
