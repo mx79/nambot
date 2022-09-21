@@ -4,9 +4,6 @@ import numpy as np
 import pickle as pkl
 import tensorflow as tf
 from os.path import abspath, dirname, join
-
-from imblearn.over_sampling import SMOTE
-
 from pkg.clean import clean_text
 from keras import Sequential
 from keras.layers import Dense, Dropout
@@ -47,10 +44,6 @@ def train(model_name: str):
     training = np.array(training, dtype=object)
     X_train = np.array(list(training[:, 0]))
     y_train = np.array(list(training[:, 1]))
-
-    # Transform the dataset
-    oversample = SMOTE()
-    X_train, y_train = oversample.fit_resample(X_train, y_train)
 
     # Some parameters
     input_shape = (len(X_train[0]),)
