@@ -1,2 +1,2 @@
 config/.env
-script/train_keras_model.py
+scripts
