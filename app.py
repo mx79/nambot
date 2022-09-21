@@ -45,7 +45,6 @@ publisher = redis_init()
 subscriber = publisher.pubsub(ignore_subscribe_messages=True)
 translator = Translator()
 
-
 # @app.before_request
 # def make_session_permanent():
 

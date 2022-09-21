@@ -13,6 +13,7 @@ SECRET_KEY = getenv("SECRET_KEY")
 # DB file
 client = MongoClient(getenv("MONGO_CLUSTER"))
 db = client.cnambot
+print([user for user in db.users.find()])
 
 # Hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
