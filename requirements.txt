@@ -10,7 +10,7 @@ openpyxl
 pandas
 passlib[bcrypt]
 pyaudio
-pymongo
+pymongo[srv]
 python_dotenv
 pyttsx3
 redis
