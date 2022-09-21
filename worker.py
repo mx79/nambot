@@ -1,9 +1,11 @@
+import os
 import json
 from typing import Dict
 from app import publisher, subscriber
 from pkg.bot.nlu import IntentClassifier, EntityExtractor
 from pkg.bot.conversation import Transcript, Conversation
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 # =================================================== FUNCTIONS =================================================== #
 
