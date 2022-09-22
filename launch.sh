@@ -1,2 +1,2 @@
-python ./app.py &
-python ./worker.py
+python app.py &
+python worker.py
