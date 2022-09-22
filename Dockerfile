@@ -4,15 +4,15 @@ FROM python
 # Use this folder as working directory
 WORKDIR /app
 
+# Ports
+EXPOSE 5000
+
 # Install requirements
 COPY requirements.txt /app/
 RUN pip install -r requirements.txt
 
 # Copy actions folder to working directory
-COPY data /app/data
-COPY pkg/bot/models /app/models
-COPY pkg /app/pkg
-COPY worker.py /app/
+COPY . /app/
 
-# Run worker file inside the container
-CMD ["python", "./main.py"]
+# Run service
+CMD ["bash", "./launch.sh"]
