@@ -9,10 +9,8 @@ numpy
 openpyxl
 pandas
 passlib[bcrypt]
-pyaudio
 pymongo[srv]
 python_dotenv
-pyttsx3
 redis
 requests
 speechrecognition
