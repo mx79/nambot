@@ -15,4 +15,4 @@ RUN pip install -r requirements.txt
 COPY . /app/
 
 # Run service
-CMD ["bash", "./launch.sh"]
+CMD ["bash", "launch.sh"]
