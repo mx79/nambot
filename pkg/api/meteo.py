@@ -13,13 +13,10 @@ def get_meteo(ville: str):
     # Météo
     meteo = data["list"][1]
     t = meteo['main']['temp']
-    t_min = meteo['main']['temp_min']
-    t_max = meteo['main']['temp_max']
     humidity = meteo['main']['humidity']
     temps = meteo['weather'][0]['description']
     res = "{} :\n" \
           "La température moyenne est de {} degrés Celsius\n" \
           "Taux d'humidité {}%\n" \
-          "Conditions climatiques {}\n\n".format(ville.strip(), round(t - 273.15), round(t_min - 273.15),
-                                                 round(t_max - 273.15), humidity, temps)
+          "Conditions climatiques {}\n\n".format(ville.strip(), round(t - 273.15), humidity, temps)
     return res

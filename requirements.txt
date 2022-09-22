@@ -1,7 +1,7 @@
 beautifulsoup4
 flask
 google
-googletrans
+googletrans==4.0.0-rc1
 jinja2
 keras
 nltk
