@@ -6,10 +6,14 @@ on:
   pull_request:
     branches: [ master ]
 
-#set environment variables
+# Set environment variables
 env:
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
   APP_NAME: ${{ 'lecnambot' }}
+  MONGO_CLUSTER: ${{ secrets.MONGO_CLUSTER }}
+  REDIS_URL: ${{ secrets.REDIS_URL }}
+  HASH_ALGORITHM: ${{ secrets.HASH_ALGORITHM }}
+  SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
 jobs:
 
@@ -29,5 +33,5 @@ jobs:
     # Push the Docker image to Heroku Container Registry
     - name: Publish
       run: |
-        heroku container:push web -a $APP_NAME
+        heroku container:push web -a $APP_NAME --arg MONGO_CLUSTER=$MONGO_CLUSTER REDIS_URL=$REDIS_URL HASH_ALGORITHM=$HASH_ALGORITHM SECRET_KEY=$SECRET_KEY
         heroku container:release web -a $APP_NAME
