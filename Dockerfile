@@ -1,5 +1,5 @@
 # Use python image
-FROM python
+FROM python:3.8
 
 # Args
 ARG MONGO_CLUSTER
