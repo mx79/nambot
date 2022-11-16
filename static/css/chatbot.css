@@ -47,6 +47,9 @@
     color: #f0f0f0;
     padding-right: 18px;
     height: 25px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
 }
 
 .send__button {
