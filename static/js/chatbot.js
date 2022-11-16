@@ -1,3 +1,27 @@
+// require('dotenv').config();
+
+// queryWhisperStt: Call the whisper STT api with an audio input
+//
+// Get back the interpreted text
+async function queryWhisperStt(filename) {
+    const fs = require('fs')
+    const data = fs.readFileSync(filename);
+    const response = await fetch(
+        "https://api-inference.huggingface.co/models/openai/whisper-tiny",
+        {
+            headers: {Authorization: "Bearer " + process.env.STT_API_KEY},
+            method: "POST",
+            body: data,
+        }
+    );
+    return await response.json();
+}
+
+// Call whisper STT api
+// queryWhisperStt("sample1.flac").then((response) => {
+// console.log(JSON.stringify(response));
+// });
+
 // TTS integration
 let vocal = new SpeechSynthesisUtterance()
 vocal.lang = "fr";
@@ -10,8 +34,7 @@ class ChatBox {
             openButton: document.querySelector('.chatbox__button'),
             chatBox: document.querySelector('.chatbox__support'),
             sendButton: document.querySelector('.send__button'),
-            // sttButton: document.querySelector('.stt__button'),
-            // ttsButton: document.querySelector('.tts__button')
+            sttButton: document.querySelector('.microphone__button'),
         }
         this.state = false;
         this.messages = [];
@@ -20,10 +43,11 @@ class ChatBox {
     // display
     display() {
         // Defining constant
-        const {openButton, chatBox, sendButton} = this.args;
+        const {openButton, chatBox, sendButton, sttButton} = this.args;
         // Add event listener on click for our buttons
         openButton.addEventListener('click', () => this.toggleState(chatBox))
         sendButton.addEventListener('click', () => this.onSendButton(chatBox))
+        sttButton.addEventListener('click', () => this.onSttButton(chatBox))
         // Action on click
         const node = chatBox.querySelector('input');
         node.addEventListener('keyup', ({key}) => {
@@ -45,6 +69,24 @@ class ChatBox {
         }
     }
 
+    // onSttButton
+    onSttButton() {
+        console.log("clicked microphone");
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition = new SpeechRecognition();
+        recognition.onstart = () => {
+            console.log("starting listening, speak in microphone");
+        }
+        recognition.onspeechend = () => {
+            console.log("stopped listening");
+            recognition.stop();
+        }
+        recognition.onresult = (result) => {
+            console.log(result.results[0][0].transcript);
+        }
+        recognition.start();
+    }
+
     // onSendButton
     onSendButton(chatbox) {
         // Defining var and default behavior for empty textField
@@ -59,7 +101,7 @@ class ChatBox {
         this.updateChatText(chatbox)
         textField.value = ''
         // Create an event listener on the button element:
-        // Get the reciever endpoint from Python using fetch:
+        // Get the receiver endpoint from Python using fetch:
         fetch("http://127.0.0.1:5000/chatbot-receiver",
             {
                 method: 'POST',

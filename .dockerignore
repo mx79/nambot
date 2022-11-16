@@ -1,3 +1,11 @@
-config/.env
-scripts/
+.dockerignore
+.gitignore
+Dockerfile
+.env
+**/*.md
+
+# Folders
+.git/
 .github/
+.cache/
+tmp/

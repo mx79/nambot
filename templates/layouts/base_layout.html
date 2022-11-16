@@ -22,6 +22,8 @@
     <link href="{{ url_for('static', filename='./css/chatbot.css') }}" rel="stylesheet">
 </head>
 <body id="page-top">
+<!-- Audio-->
+<audio id="localAudio"></audio>
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
     <div class="container">
@@ -85,6 +87,7 @@
                 <div></div>
             </div>
             <div class="chatbox__footer">
+                <button><i class="fa-solid fa-microphone microphone__button"></i></button>
                 <input type="text" placeholder="Ecrivez un message...">
                 <button class="chatbox__send--footer send__button">Envoyer</button>
             </div>

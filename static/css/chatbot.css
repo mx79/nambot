@@ -43,6 +43,12 @@
     text-align: right;
 }
 
+.microphone__button {
+    color: #f0f0f0;
+    padding-right: 18px;
+    height: 25px;
+}
+
 .send__button {
     padding: 6px;
     background: transparent;

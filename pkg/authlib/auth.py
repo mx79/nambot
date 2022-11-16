@@ -19,10 +19,10 @@ print([user for user in db.users.find()])
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # Characters to generate password from
-characters = list(string.ascii_letters + string.digits + "!@#$%^&*()")
-
+characters = list(string.ascii_letters + string.digits + string.punctuation)
 
 # =============================================== PASSWORDS FUNCTIONS =============================================== #
+
 
 def pwd_generator() -> str:
     """
@@ -50,7 +50,6 @@ def get_password_hash(password: str) -> str:
     :return:
     """
     return pwd_context.hash(password)
-
 
 # =============================================== DATABASES FUNCTIONS =============================================== #
 
