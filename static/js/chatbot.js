@@ -1,8 +1,22 @@
-// require('dotenv').config();
+import Recorder from "recorderjs";
+require('dotenv').config();
 
-// queryWhisperStt: Call the whisper STT api with an audio input
-//
-// Get back the interpreted text
+// TTS integration
+let vocal = new SpeechSynthesisUtterance()
+vocal.lang = "fr";
+
+// STT Integration: audio stream
+let recording;
+let gumStream;
+let audioInput;
+let rec;
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+let audioContext = new AudioContext;
+
+/**
+ * Call the whisper STT api with an audio input
+ * @returns {Promise<any>}
+ */
 async function queryWhisperStt(filename) {
     const fs = require('fs')
     const data = fs.readFileSync(filename);
@@ -17,14 +31,32 @@ async function queryWhisperStt(filename) {
     return await response.json();
 }
 
-// Call whisper STT api
-// queryWhisperStt("sample1.flac").then((response) => {
-// console.log(JSON.stringify(response));
-// });
-
-// TTS integration
-let vocal = new SpeechSynthesisUtterance()
-vocal.lang = "fr";
+/**
+ * Gets the local audio stream of the current caller
+ * If user accept the audio streaming, return true, else false
+ * @returns {void}
+ */
+function getLocalStream() {
+    navigator.mediaDevices.getUserMedia({video: false, audio: true}).then((stream) => {
+        window.localStream = stream;
+        window.localAudio.srcObject = stream;
+        window.localAudio.autoplay = true;
+        // assign to gumStream for later use
+        gumStream = stream;
+        // use the stream
+        audioInput = audioContext.createMediaStreamSource(stream);
+        // Create the Recorder object and configure to record mono sound (1 channel) Recording 2 channels will double the file size
+        let rec = new Recorder(audioInput, {
+            numChannels: 1
+        })
+        // Start the recording process
+        rec.record()
+        recording = true
+    }).catch((err) => {
+        console.error(`you got an error: ${err}`)
+        recording = false
+    });
+}
 
 // ChatBox object
 class ChatBox {
@@ -69,24 +101,6 @@ class ChatBox {
         }
     }
 
-    // onSttButton
-    onSttButton() {
-        console.log("clicked microphone");
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        let recognition = new SpeechRecognition();
-        recognition.onstart = () => {
-            console.log("starting listening, speak in microphone");
-        }
-        recognition.onspeechend = () => {
-            console.log("stopped listening");
-            recognition.stop();
-        }
-        recognition.onresult = (result) => {
-            console.log(result.results[0][0].transcript);
-        }
-        recognition.start();
-    }
-
     // onSendButton
     onSendButton(chatbox) {
         // Defining var and default behavior for empty textField
@@ -128,6 +142,43 @@ class ChatBox {
             console.error('Error:', error)
         });
     }
+
+    // onSttButton
+    onSttButton() {
+        if (!recording) {
+            getLocalStream()
+        } else {
+            navigator.mediaDevices.getUserMedia({video: false, audio: false}).then()
+            // Stop the audio record
+            rec.stop();
+            recording = false
+            gumStream.getAudioTracks()[0].stop();
+            // Create the wav blob and pass it on to queryWhisperStt
+            rec.exportWAV((blob) => {
+                // Call whisper STT api
+                queryWhisperStt(blob).then((response) => {
+                    console.log(JSON.stringify(response));
+                });
+            });
+        }
+    }
+
+    /* if (getLocalStream()) {
+        console.log("clicked microphone");
+        const SpeechRecognition = window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.onstart = () => {
+            console.log("starting listening, speak in microphone");
+        }
+        recognition.onspeechend = () => {
+            console.log("stopped listening");
+            recognition.stop();
+        }
+        recognition.onresult = (result) => {
+            console.log(result.results[0][0].transcript);
+        }
+        recognition.start();
+    } */
 
     // Is updating the ChatBot discussion fields
     updateChatText(chatbot) {
