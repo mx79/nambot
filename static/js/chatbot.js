@@ -2,7 +2,7 @@
 let vocal = new SpeechSynthesisUtterance()
 vocal.lang = "fr";
 
-// STT Integration: audio stream
+// STT Integration
 const SpeechRecognition = window.webkitSpeechRecognition
 let recognition = new SpeechRecognition()
 recognition.continuous = false;
@@ -10,6 +10,7 @@ recognition.lang = 'fr';
 
 /**
  * Gets the local audio stream of the current caller
+ *
  * If user accept the audio streaming, return true, else false
  * @returns {boolean}
  */
@@ -39,7 +40,10 @@ class ChatBox {
         this.messages = [];
     }
 
-    // display
+    /**
+     * Display Chatbot object adding to it several event listening item.
+     * @returns {void}
+     */
     display() {
         // Defining constant
         const {openButton, chatBox, sendButton, sttButton} = this.args;
@@ -56,7 +60,10 @@ class ChatBox {
         })
     }
 
-    // toggleState
+    /**
+     * Change the state of the Chatbot object, extending the chatbox with a bubble.
+     * @returns {void}
+     */
     toggleState(chatbox) {
         // Reverse object state
         this.state = !this.state;
@@ -68,7 +75,13 @@ class ChatBox {
         }
     }
 
-    // onSendButton
+    /**
+     * Send user message to the NLP worker which is processing the text
+     * and get back the response fetched.
+     *
+     * Also launch the updateChatText function after any message receive.
+     * @returns {void}
+     */
     onSendButton(chatbox) {
         // Defining var and default behavior for empty textField
         let textField = chatbox.querySelector('input');
@@ -110,7 +123,11 @@ class ChatBox {
         });
     }
 
-    // onSttButton
+    /**
+     * Allow user to speak in the browser, then get the text transferred
+     * to the same NLP worker as for basic message processing.
+     * @returns {void}
+     */
     onSttButton(chatbox) {
         if (getLocalStream()) {
             recognition.start();
@@ -152,7 +169,11 @@ class ChatBox {
         }
     }
 
-    // Is updating the ChatBot discussion fields
+    /**
+     * Is updating Chatbot conversation by adding html div
+     * in the message__item section.
+     * @returns {void}
+     */
     updateChatText(chatbot) {
         let html = '';
         this.messages.slice().reverse().forEach(function (item) {
