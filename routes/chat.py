@@ -1,10 +1,9 @@
 from flask import session
 from pkg.authlib.auth import db
-from routes import auth_required, cache
+from routes import auth_required
 
 
 @auth_required
-@cache.cached(timeout=50)
 def chat_receiver():
     """
     Description:

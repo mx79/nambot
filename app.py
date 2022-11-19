@@ -1,5 +1,4 @@
 from flask import Flask
-from flask_caching import Cache
 from routes.home import root
 from routes.bugs import bugs
 from routes.features import features
@@ -11,13 +10,12 @@ from routes.chat import chat_receiver
 
 # Flask app init
 app = Flask(__name__)
-cache = Cache(config={'CACHE_TYPE': 'simple'})
 app.config.from_pyfile("./config/config.py")
 
-# TODO: Discussion de groupe avec Redis
-# TODO: Email verification
+# TODO: Email verification, manque le lien à envoyer et l'activation du compte gmail avec smtp
 # TODO: Email forgot password process
 # TODO: Uppercase first letter of entity "VILLE"
+# TODO: Discussion de groupe avec Redis
 
 # @app.before_request
 # def make_session_permanent():
@@ -39,4 +37,4 @@ app.add_url_rule("/chat-receiver/{promo}", "chat_receiver", chat_receiver, metho
 
 # Launch webserver
 if __name__ == '__main__':
-    cache.init_app(app)
+    app.run()

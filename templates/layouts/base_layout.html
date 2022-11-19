@@ -87,7 +87,7 @@
                 <div></div>
             </div>
             <div class="chatbox__footer">
-                <button class="microphone__button"><i class="fa-solid fa-microphone"></i></button>
+                <button id="microphone_button" class="microphone__button"><i class="fa-solid fa-microphone"></i></button>
                 <input type="text" placeholder="Ecrivez un message...">
                 <button class="chatbox__send--footer send__button">Envoyer</button>
             </div>
@@ -158,9 +158,5 @@
 <script src="{{ url_for('static', filename='./js/chatbot.js') }}" type="module"></script>
 <!-- Chat script-->
 <script src="{{ url_for('static', filename='./js/chat.js') }}"></script>
-<!-- Email validation-->
-<script src="{{ url_for('static', filename='./js/email_validation.js') }}"></script>
-<!-- Password validation-->
-<script src="{{ url_for('static', filename='./js/pwd_validation.js') }}"></script>
 </body>
 </html>

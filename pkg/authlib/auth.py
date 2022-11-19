@@ -1,11 +1,15 @@
 import string
 import random
+import smtplib
 from os import getenv
 from pymongo import MongoClient
+from email.utils import formatdate
+from email.message import EmailMessage
 from passlib.context import CryptContext
 
+
 # =================================================== VARIABLES =================================================== #
-# agrégation, sélection, jointure, création
+
 
 # Env var
 SECRET_KEY = getenv("SECRET_KEY")
@@ -13,13 +17,13 @@ SECRET_KEY = getenv("SECRET_KEY")
 # DB file
 client = MongoClient(getenv("MONGO_CLUSTER"))
 db = client.cnambot
-print([user for user in db.users.find()])
 
 # Hashing
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # Characters to generate password from
 characters = list(string.ascii_letters + string.digits + string.punctuation)
+
 
 # =============================================== PASSWORDS FUNCTIONS =============================================== #
 
@@ -51,33 +55,80 @@ def get_password_hash(password: str) -> str:
     """
     return pwd_context.hash(password)
 
+
 # =============================================== DATABASES FUNCTIONS =============================================== #
 
 
-def create_user(username: str, email: str, promo: str, pwd: str):
+def create_user(username: str, promo: str, email: str, pwd: str):
     """
     Description:
     :param username:
-    :param email:
     :param promo:
+    :param email:
     :param pwd:
     """
     db.users.insert_one({
         "username": username,
+        "promo": promo,
         "email": email,
         "password": get_password_hash(pwd),
-        "promo": promo,
-        "admin": False
     })
 
 
-def user_in_db(email: str):
+def user_in_db(name: str, email: str):
     """
     Description:
+    :param name:
     :param email:
     :return:
     """
     for doc in db.users.find():
+        if name == doc["username"]:
+            return "Ce nom d'utilisateur est déjà pris sur CnamBot !"
         if email == doc["email"]:
             return "Vous êtes déjà inscrit sur CnamBot !"
     return
+
+
+# ============================================= EMAIL RELATED FUNCTIONS ============================================= #
+
+
+def send_email_verif(email: str):
+    """
+    Description: Function used to send email from CnamBot address when we are validating user email address.
+    """
+    # Server start and login with credentials
+    server = smtplib.SMTP('SMTP.gmail.com', 587)
+    server.connect('SMTP.gmail.com', 587)
+    server.ehlo()
+    server.starttls()
+    server.login(getenv("CNAMBOT_EMAIL"), getenv("CNAMBOT_PASSWORD"))
+
+    # Strip eventual space in user address
+    email = email.strip()
+
+    # Headers : cnambot_address, user_address, actual_date, subject, message
+    msg = EmailMessage()
+    msg['From'] = f'CnamBot <{getenv("CNAMBOT_EMAIL")}>'
+    msg['To'] = email
+    msg["Date"] = formatdate(localtime=True)
+    msg['Subject'] = "Votre lien de validation d'email"
+    msg.set_content("""\
+    Bonjour,
+    
+    Bienvenue sur CnamBot, voici le lien à suivre pour achever la validation de votre adresse email :
+    
+    Une fois cela fait, vous pourrez profitez pleinement des services de la plateforme.
+    
+    Bonne journée,
+    L'équipe de développement
+    """)
+
+    # Trying to send the message, catch if there are any error
+    try:
+        server.send_message(msg)
+        print('{0} : send'.format(email))
+    except smtplib.SMTPException as e:
+        print('{0} : {1}'.format(email, e))
+
+    server.quit()

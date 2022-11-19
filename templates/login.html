@@ -29,17 +29,19 @@
                                                 <div class="form-group">
                                                     <input type="text" name="login_username" class="form-style"
                                                            placeholder="Nom d'utilisateur" id="login_username"
+                                                           title="Veuillez entrer votre pseudo."
                                                            autocomplete="off" required>
                                                     <i class="input-icon uil uil-at"></i>
                                                 </div>
                                                 <div class="form-group mt-2">
                                                     <input type="password" name="login_password" class="form-style"
                                                            placeholder="Mot de passe" id="login_password"
+                                                           title="Veuillez entrer votre mot de passe."
                                                            autocomplete="off" required>
                                                     <i class="input-icon uil uil-lock-alt"></i>
                                                 </div>
                                                 <input type="submit" name="submit" class="btn mt-4"
-                                                       value="Se connecter">
+                                                       value="Se connecter" id="login_button">
                                                 {% if pwd_validation %}
                                                     <p class="mb-0 mt-4 text-center">{{ pwd_validation }}</p>
                                                 {% endif %}
@@ -57,30 +59,44 @@
                                                 <div class="form-group">
                                                     <input type="text" name="signup_username" class="form-style"
                                                            placeholder="Nom d'utilisateur" id="signup_username"
+                                                           title="Veuillez entrer un pseudo."
                                                            autocomplete="off" required>
                                                     <i class="input-icon uil uil-user"></i>
                                                 </div>
                                                 <div class="form-group mt-2">
-                                                    <input type="email" name="signup_email" class="form-style"
-                                                           placeholder="Adresse email CNAM" id="signup_email"
+                                                    <input type="text" name="signup_promo" class="form-style"
+                                                           placeholder="Promotion, ex : P4BDIA" id="signup_promo"
+                                                           title="Le nom d'une promotion BDIA au cnam se note ainsi :
+                                                           P5BDIA,
+                                                           P4BDIA,
+                                                           P3BDIA"
+                                                           pattern="P[3-5]{1}BDIA"
                                                            autocomplete="off" required>
                                                     <i class="input-icon uil uil-at"></i>
                                                 </div>
                                                 <div class="form-group mt-2">
-                                                    <input type="text" name="signup_promo" class="form-style"
-                                                           placeholder="Promotion, ex : 'P4BDIA' " id="signup_promo"
+                                                    <input type="email" name="signup_email" class="form-style"
+                                                           placeholder="Adresse email CNAM" id="signup_email"
+                                                           title="Une adresse auditeur du CNAM ressemble à : prenom.nom.auditeur@lecnam.net"
+                                                           pattern="[\w]{1,}[.]{1}[\w]{1,}[.]{1}auditeur@lecnam.net"
                                                            autocomplete="off" required>
-                                                    <i class="input-icon uil uil-lock-alt"></i>
+                                                    <i class="input-icon uil uil-at"></i>
                                                 </div>
                                                 <div class="form-group mt-2">
                                                     <input type="password" name="signup_password" class="form-style"
                                                            placeholder="Mot de passe" id="signup_password"
-                                                           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                                                           title="Votre mot de passe doit contenir au minimum :
+                                                           une lettre minuscule,
+                                                           une lettre majuscule,
+                                                           1 chiffre,
+                                                           10 caractères"
+                                                           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{10,}"
                                                            autocomplete="off" required>
                                                     <i class="input-icon uil uil-lock-alt"></i>
                                                 </div>
                                                 <input type="submit" name="submit" class="btn mt-4"
-                                                       value="S'inscrire">
+                                                       value="S'inscrire" id="signup_button">
+                                                <!-- Warning message if the user is already in DB-->
                                                 {% if msg %}
                                                     <p class="mb-0 mt-4 text-center">{{ msg }}</p>
                                                 {% endif %}
@@ -91,15 +107,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class=card-3d-wrap id="email-pwd">
-                        <h3>Le mot de passe devrait contenir les éléments suivants :</h3>
-                        <p id="letter" class="invalid">Une lettre <b>minuscule</b></p>
-                        <p id="capital" class="invalid">Une lettre <b>capitale</b></p>
-                        <p id="number" class="invalid">Un <b>nombre</b></p>
-                        <p id="length" class="invalid">Minimum <b>8 caractères</b></p>
-                    </div>
                 </div>
-
             </div>
         </div>
     </section>

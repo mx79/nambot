@@ -1,8 +1,6 @@
-from routes import cache
 from flask import redirect, render_template, session, url_for
 
 
-@cache.cached(timeout=50)
 def root():
     """
     Description:

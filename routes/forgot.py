@@ -1,11 +1,9 @@
 import flask
-from app import cache
 from flask import render_template
 from routes import no_auth_required
 
 
 @no_auth_required
-@cache.cached(timeout=50)
 def forgot_password():
     """
     Description:

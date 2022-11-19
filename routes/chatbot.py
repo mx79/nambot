@@ -1,36 +1,9 @@
-import os
 import json
-import redis
-from os import getenv
 from typing import Dict
 from routes import auth_required
 from flask import request, session
-from googletrans import Translator
-from pkg.bot.nlu import IntentClassifier, EntityExtractor
+from routes import cls, ext, publisher, subscriber, translator
 from pkg.bot.conversation import Transcript, Conversation
-
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
-
-
-def redis_init() -> redis.client.Redis:
-    """
-    Description: Redis config initialization
-    :return: An instance of Redis client
-    """
-    REDIS_URL = getenv("REDIS_URL")
-    redis_splitted_url = REDIS_URL.replace("@", " ").replace(":", " ").split(" ")
-    redis_pwd = redis_splitted_url[2]
-    redis_host = redis_splitted_url[3]
-    redis_port = redis_splitted_url[4]
-    return redis.Redis(
-        host=redis_host,
-        port=int(redis_port),
-        password=redis_pwd,
-        ssl=bool(os.getenv('REDIS_TLS')),
-        ssl_cert_reqs=None,
-        charset='utf-8',
-        decode_responses=True
-    )
 
 
 def transform(user_id: str, msg: str) -> Transcript:
@@ -64,6 +37,16 @@ def primary_handler(message: Dict):
                       f'{json.dumps(eval(str(res)))!s}')
 
 
+# Dict of all conversation
+conv_list = dict()
+
+# Listen to all channels matching the pattern below
+subscriber.psubscribe(**{"ongoing_conversation_*": primary_handler})
+
+# Run redis in thread
+subscriber.run_in_thread()
+
+
 @auth_required
 def chatbot_receiver():
     """
@@ -95,26 +78,3 @@ def chatbot_receiver():
     for i in subscriber.listen():
         message = json.loads(i["data"])
         return message["infos"]
-
-
-# Redis
-publisher = redis_init()
-subscriber = publisher.pubsub(ignore_subscribe_messages=True)
-
-# Translator object
-translator = Translator()
-
-# Instantiate a classifier with the model we want
-cls = IntentClassifier("base_keras.pkl")
-
-# Instantiate an entity extractor
-ext = EntityExtractor("regex.json")
-
-# Dict of all conversation
-conv_list = dict()
-
-# Listen to all channels matching the pattern below
-subscriber.psubscribe(**{"ongoing_conversation_*": primary_handler})
-
-# Run redis in thread
-subscriber.run_in_thread()

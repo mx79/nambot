@@ -2,17 +2,16 @@
 let vocal = new SpeechSynthesisUtterance()
 vocal.lang = "fr";
 
-// STT Integration
-const SpeechRecognition = window.webkitSpeechRecognition
-let recognition = new SpeechRecognition()
-recognition.continuous = false;
-recognition.lang = 'fr';
+// STT: Disable button if navigator is Firefox
+if (navigator.userAgent.indexOf("Firefox") !== -1) {
+    document.getElementById("microphone_button").style.display = "none";
+}
 
 /**
  * Gets the local audio stream of the current caller
  *
  * If user accept the audio streaming, return true, else false
- * @returns {boolean}
+ * @return {boolean}
  */
 function getLocalStream() {
     navigator.mediaDevices.getUserMedia({video: false, audio: true}).then((stream) => {
@@ -42,7 +41,7 @@ class ChatBox {
 
     /**
      * Display Chatbot object adding to it several event listening item.
-     * @returns {void}
+     * @return {void}
      */
     display() {
         // Defining constant
@@ -62,7 +61,7 @@ class ChatBox {
 
     /**
      * Change the state of the Chatbot object, extending the chatbox with a bubble.
-     * @returns {void}
+     * @return {void}
      */
     toggleState(chatbox) {
         // Reverse object state
@@ -80,7 +79,7 @@ class ChatBox {
      * and get back the response fetched.
      *
      * Also launch the updateChatText function after any message receive.
-     * @returns {void}
+     * @return {void}
      */
     onSendButton(chatbox) {
         // Defining var and default behavior for empty textField
@@ -126,9 +125,13 @@ class ChatBox {
     /**
      * Allow user to speak in the browser, then get the text transferred
      * to the same NLP worker as for basic message processing.
-     * @returns {void}
+     * @return {void}
      */
     onSttButton(chatbox) {
+        const SpeechRecognition = window.webkitSpeechRecognition
+        let recognition = new SpeechRecognition()
+        recognition.continuous = false;
+        recognition.lang = 'fr';
         if (getLocalStream()) {
             recognition.start();
             console.log('Ready to receive an instruction');
@@ -172,7 +175,7 @@ class ChatBox {
     /**
      * Is updating Chatbot conversation by adding html div
      * in the message__item section.
-     * @returns {void}
+     * @return {void}
      */
     updateChatText(chatbot) {
         let html = '';

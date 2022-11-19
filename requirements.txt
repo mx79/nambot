@@ -1,6 +1,5 @@
 beautifulsoup4
 flask
-flask_caching
 google
 googletrans==4.0.0-rc1
 gunicorn
