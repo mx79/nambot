@@ -1,14 +1,16 @@
 import flask
-from flask import redirect, render_template, session
+from app import cache
+from flask import render_template
+from routes import no_auth_required
 
 
+@no_auth_required
+@cache.cached(timeout=50)
 def forgot_password():
     """
     Description:
     :return:
     """
-    if session.get("user_id") is not None:
-        return redirect("/")
     if flask.request.method == "GET":
         return render_template("forgot.html")
     # Form where user can post email in order to

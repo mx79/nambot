@@ -1,10 +1,11 @@
 import flask
-from routes import no_auth_required
+from routes import cache, no_auth_required
 from pkg.authlib.auth import db, create_user, verify_password, user_in_db
 from flask import redirect, render_template, session
 
 
 @no_auth_required
+@cache.cached(timeout=50)
 def login():
     """
     Description:

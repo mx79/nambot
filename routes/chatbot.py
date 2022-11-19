@@ -15,8 +15,8 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 def redis_init() -> redis.client.Redis:
     """
     Description: Redis config initialization
+    :return: An instance of Redis client
     """
-    # REDIS_URL = "redis://:@localhost:6379"
     REDIS_URL = getenv("REDIS_URL")
     redis_splitted_url = REDIS_URL.replace("@", " ").replace(":", " ").split(" ")
     redis_pwd = redis_splitted_url[2]

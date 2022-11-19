@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_caching import Cache
 from routes.home import root
 from routes.bugs import bugs
 from routes.features import features
@@ -10,12 +11,12 @@ from routes.chat import chat_receiver
 
 # Flask app init
 app = Flask(__name__)
+cache = Cache(config={'CACHE_TYPE': 'simple'})
 app.config.from_pyfile("./config/config.py")
 
 # TODO: Discussion de groupe avec Redis
 # TODO: Email verification
 # TODO: Email forgot password process
-# TODO: STT integration in js
 # TODO: Uppercase first letter of entity "VILLE"
 
 # @app.before_request
@@ -38,4 +39,4 @@ app.add_url_rule("/chat-receiver/{promo}", "chat_receiver", chat_receiver, metho
 
 # Launch webserver
 if __name__ == '__main__':
-    app.run()
+    cache.init_app(app)
