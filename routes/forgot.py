@@ -12,8 +12,8 @@ def forgot_password():
     """
     # Checking HTTP method used
     if flask.request.method == "POST":
-        print("toto")
         forgot_email = request.form.get("forgot_email", "")
         send_email(forgot_email, "forgot")
+        return render_template("forgot.html", send=True)
 
     return render_template("forgot.html")

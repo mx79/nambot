@@ -39,7 +39,6 @@ app.add_url_rule("/logout", "logout", logout)
 app.add_url_rule("/chatbot-receiver", "chatbot_receiver", chatbot_receiver, methods=["POST"])
 app.add_url_rule("/chat-receiver/{promo}", "chat_receiver", chat_receiver, methods=["GET", "POST"])
 
-
 # Launch webserver
 if __name__ == '__main__':
     app.run()

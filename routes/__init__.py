@@ -1,8 +1,11 @@
 import os
+import time
 import redis
+import threading
 from os import getenv
 from config import env
 from functools import wraps
+from pkg.authlib.auth import db
 from googletrans import Translator
 from flask import redirect, session, url_for
 from pkg.bot.nlu import IntentClassifier, EntityExtractor
@@ -12,6 +15,24 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 # App init
 env.verify()
+
+
+def clean_url():
+    """
+    Description: Deletes any temporary url than have more than 10 minutes of existence.
+    This thread is run every 10 seconds.
+    """
+    threading.Timer(10.0, clean_url).start()
+    print("Cleaning Temporary URL...")
+    actual_time = int(time.time())
+    for doc in db.tmp_email_validation_url.find():
+        diff = actual_time - doc["created_at"]
+        if diff >= 600:
+            db.tmp_email_validation_url.delete_one({"created_at": doc["created_at"]})
+    for doc in db.tmp_forgot_url.find():
+        diff = actual_time - doc["created_at"]
+        if diff >= 600:
+            db.tmp_forgot_url.delete_one({"created_at": doc["created_at"]})
 
 
 def redis_init() -> redis.client.Redis:
@@ -80,3 +101,6 @@ cls = IntentClassifier("base_keras.pkl")
 
 # Instantiate an entity extractor
 ext = EntityExtractor("regex.json")
+
+# Launch thread cleaning temporary url
+clean_url()
