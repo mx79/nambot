@@ -1,9 +1,35 @@
 {% extends "./layouts/base_layout.html" %}
 
 {% block title %}Mot de passe oublié{% endblock %}
+<!-- Loading Login form CSS-->
+{% block login_stylesheet %}
+    <link href="{{ url_for('static', filename='./css/login.css') }}" rel="stylesheet">
+{% endblock %}
 
 {% block page_title %}Mot de passe oublié{% endblock %}
-{% block page_desc %}{% endblock %}
+{% block page_desc %}
+    <div class="card-3d-wrap mx-auto" style="height: 300px">
+        <div class="card-3d-wrapper">
+            <div class="card-front">
+                <div class="center-wrap">
+                    <form action="/forgot-password" class="section text-center" method="post">
+                        <div class="form-group mt-2">
+                            <h5 class="mb-4 pb-3">Saisissez l'email CNAM avec lequel vous vous êtes inscrit :</h5>
+                            <input type="email" name="forgot_email" class="form-style"
+                                   placeholder="Adresse email CNAM" id="forgot_email"
+                                   title="Une adresse auditeur du CNAM ressemble à : prenom.nom.auditeur@lecnam.net"
+                                   pattern="[\w]{1,}[.]{1}[\w]{1,}[.]{1}auditeur@lecnam.net"
+                                   autocomplete="off" required>
+                            <i class="input-icon uil uil-at"></i>
+                            <input type="submit" name="submit" class="btn mt-4"
+                                   value="Envoyer" id="forgot_button">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
 {% block content %}
 

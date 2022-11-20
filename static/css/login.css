@@ -36,6 +36,11 @@ h4 {
     color: #f0f0f0;
 }
 
+h5 {
+    font-weight: 600;
+    color: #f0f0f0;
+}
+
 h6 span {
     padding: 0 20px;
     text-transform: uppercase;
@@ -326,8 +331,8 @@ h6 span {
 }
 
 #email-pwd p {
-  padding: 10px 35px;
-  font-size: 18px;
+    padding: 10px 35px;
+    font-size: 18px;
 }
 
 /* Add a green text color and a checkmark when the requirements are right */

@@ -7,7 +7,6 @@ from email.utils import formatdate
 from email.message import EmailMessage
 from passlib.context import CryptContext
 
-
 # =================================================== VARIABLES =================================================== #
 
 
@@ -59,20 +58,29 @@ def get_password_hash(password: str) -> str:
 # =============================================== DATABASES FUNCTIONS =============================================== #
 
 
-def create_user(username: str, promo: str, email: str, pwd: str):
+def create_user(username: str, promo: str, email: str, pwd: str, tmp: bool = False):
     """
-    Description:
-    :param username:
-    :param promo:
-    :param email:
-    :param pwd:
+    Description: Basic function to create a json file for a new user, temporary or not.
+    :param username: Unique username
+    :param promo: Promotion to choose in a drop-down list
+    :param email: CNAM email
+    :param pwd: Password to hash
+    :param tmp: Temporary parameter used to create an entry in tmp_users if true or users by default if false
     """
-    db.users.insert_one({
-        "username": username,
-        "promo": promo,
-        "email": email,
-        "password": get_password_hash(pwd),
-    })
+    if tmp:
+        db.tmp_users.insert_one({
+            "username": username,
+            "promo": promo,
+            "email": email,
+            "password": get_password_hash(pwd),
+        })
+    else:
+        db.users.insert_one({
+            "username": username,
+            "promo": promo,
+            "email": email,
+            "password": get_password_hash(pwd),
+        })
 
 
 def user_in_db(name: str, email: str):
@@ -80,23 +88,31 @@ def user_in_db(name: str, email: str):
     Description:
     :param name:
     :param email:
-    :return:
+    :return: Error message to print on user screen if the user already exist
     """
     for doc in db.users.find():
+        if name == doc["username"] and email == doc["email"]:
+            return "Ce nom d'utilisateur et cette adresse email sont déjà utilisés sur CnamBot !"
         if name == doc["username"]:
             return "Ce nom d'utilisateur est déjà pris sur CnamBot !"
         if email == doc["email"]:
-            return "Vous êtes déjà inscrit sur CnamBot !"
+            return "Cette adresse email est déjà utilisée sur CnamBot !"
     return
 
 
 # ============================================= EMAIL RELATED FUNCTIONS ============================================= #
 
 
-def send_email_verif(email: str):
+def send_email(email: str, option: str):
     """
     Description: Function used to send email from CnamBot address when we are validating user email address.
+    :param email:
+    :param option:
     """
+    # Exit func if option param is wrong
+    if option not in ["verification", "forgot"]:
+        return KeyError("Invalid option for func send_email")
+
     # Server start and login with credentials
     server = smtplib.SMTP('SMTP.gmail.com', 587)
     server.connect('SMTP.gmail.com', 587)
@@ -112,23 +128,36 @@ def send_email_verif(email: str):
     msg['From'] = f'CnamBot <{getenv("CNAMBOT_EMAIL")}>'
     msg['To'] = email
     msg["Date"] = formatdate(localtime=True)
-    msg['Subject'] = "Votre lien de validation d'email"
-    msg.set_content("""\
-    Bonjour,
-    
-    Bienvenue sur CnamBot, voici le lien à suivre pour achever la validation de votre adresse email :
-    
-    Une fois cela fait, vous pourrez profitez pleinement des services de la plateforme.
-    
-    Bonne journée,
-    L'équipe de développement
-    """)
+    if option == "verification":
+        msg['Subject'] = "Votre lien de validation d'email"
+        msg.set_content("""\
+        Bonjour,
+        
+        Bienvenue sur CnamBot, voici le lien à suivre pour achever la validation de votre adresse email :
+        
+        Une fois cela fait, vous pourrez profitez pleinement des services de la plateforme.
+        
+        Bonne journée,
+        L'équipe de développement
+        """)
+    elif option == "forgot":
+        msg['Subject'] = "Votre lien de réinitialisation de mot de passe"
+        msg.set_content("""\
+        Bonjour,
+
+        Voici votre lien de réinitialisation de mot de passe :
+
+        Bonne journée,
+        L'équipe de développement
+        """)
 
     # Trying to send the message, catch if there are any error
     try:
         server.send_message(msg)
+        print(option)
         print('{0} : send'.format(email))
     except smtplib.SMTPException as e:
+        print(option)
         print('{0} : {1}'.format(email, e))
 
     server.quit()
