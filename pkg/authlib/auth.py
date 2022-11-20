@@ -11,17 +11,14 @@ from passlib.context import CryptContext
 # =================================================== VARIABLES =================================================== #
 
 
-# Env var
-SECRET_KEY = getenv("SECRET_KEY")
-
 # DB file
 client = MongoClient(getenv("MONGO_CLUSTER"))
 db = client.cnambot
 
-# Hashing
+# Hashing method
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# Characters to generate password from
+# Characters to generate password or temporary url from
 characters = list(string.ascii_letters + string.digits)
 characters_with_punct = list(string.ascii_letters + string.digits + string.punctuation)
 
@@ -40,19 +37,21 @@ def pwd_generator() -> str:
     return "".join(password)
 
 
-def verify_password(plain_password: str, hashed_password: str):
+def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
-    Description: Verify password
-    :return:
+    Description: Verify password between one not hashed and its hashed representation.
+    :param plain_password: Password to test, as plain string
+    :param hashed_password: Password hashed
+    :return: ``True`` if the password matched the hash, else ``False``
     """
     return pwd_context.verify(plain_password, hashed_password)
 
 
 def get_password_hash(password: str) -> str:
     """
-    Description:
-    :param password
-    :return:
+    Description: Function used to transform plain string password to hashed password.
+    :param password: Password to hash
+    :return: Hashed password
     """
     return pwd_context.hash(password)
 
@@ -193,7 +192,7 @@ def send_email(email: str, option: str):
         """)
         create_forgot_url(key)
 
-    # Trying to send the message, catch if there are any error
+    # Try to send the message, catch if there are any error
     try:
         server.send_message(msg)
         print(option)

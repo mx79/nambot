@@ -32,8 +32,8 @@ def login():
         if signup_username and signup_email and signup_pwd != "":
             indb = user_in_db(signup_username, signup_email)
             if indb is None:
-                session["user_id"] = signup_username
                 # Create a temporary user while waiting for an email verification
+                session["tmp_user"] = True
                 create_user(signup_username, signup_email, signup_promo, signup_pwd, tmp=True)
                 send_email(signup_email, option="verification")
                 return redirect("/")

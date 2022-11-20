@@ -19,7 +19,7 @@ env.verify()
 
 def clean_url():
     """
-    Description: Deletes any temporary url than have more than 10 minutes of existence.
+    Description: Deletes any temporary url that have more than 10 minutes of existence.
     This thread is run every 10 seconds.
     """
     threading.Timer(10.0, clean_url).start()
@@ -59,9 +59,9 @@ def redis_init() -> redis.client.Redis:
 
 def auth_required(func):
     """
-    Description: Decorator implementing authentication system.
+    Description: Decorator for authentication system.
     It performs url blocking if the user is not connected.
-    :return: wrapper func
+    :return: Wrapper
     """
 
     @wraps(func)
@@ -73,11 +73,27 @@ def auth_required(func):
     return wrapper
 
 
+def tmp_auth_required(func):
+    """
+    Description: Decorator for authentication system.
+    It performs url blocking if the user is connected as a temporary user.
+    :return: Wrapper
+    """
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if session.get("tmp_user") is None:
+            return redirect(url_for("/"))
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
 def no_auth_required(func):
     """
-    Description: Decorator extending authentication system.
+    Description: Decorator for authentication system.
     It performs url blocking if the user is connected.
-    :return: wrapper func
+    :return: Wrapper
     """
 
     @wraps(func)

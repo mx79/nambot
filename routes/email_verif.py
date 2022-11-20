@@ -1,15 +1,12 @@
-from routes import no_auth_required
+from flask import session
+from routes import tmp_auth_required
 
 
-@no_auth_required
-def email_verification():
+@tmp_auth_required
+def email_verification(tmp_string: str = None):
     """
     Description:
     """
 
-
-@no_auth_required
-def generated_link():
-    """
-    Description:
-    """
+    # Drop tmp_user key of user session when link is GET by HTTP method
+    # session.pop("tmp_user", None)

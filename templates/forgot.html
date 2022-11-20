@@ -6,34 +6,77 @@
     <link href="{{ url_for('static', filename='./css/login.css') }}" rel="stylesheet">
 {% endblock %}
 
-{% block page_title %}Mot de passe oublié{% endblock %}
-{% block page_desc %}
-    {% if not send %}
+{% if not arg %}
+    {% block page_title %}Mot de passe oublié{% endblock %}
+    {% block page_desc %}
+        {% if not send %}
+            <div class="card-3d-wrap mx-auto" style="height: 300px">
+                <div class="card-3d-wrapper">
+                    <div class="card-front">
+                        <div class="center-wrap">
+                            <form action="/forgot-password" class="section text-center" method="post">
+                                <div class="form-group mt-2">
+                                    <h5 class="mb-4 pb-3">Saisissez l'email CNAM avec lequel vous vous êtes inscrit
+                                        :</h5>
+                                    <input type="email" name="forgot_email" class="form-style"
+                                           placeholder="Adresse email CNAM" id="forgot_email"
+                                           title="Une adresse auditeur du CNAM ressemble à : prenom.nom.auditeur@lecnam.net"
+                                           pattern="[\w]{1,}[.]{1}[\w]{1,}[.]{1}auditeur@lecnam.net"
+                                           autocomplete="off" required>
+                                    <i class="input-icon uil uil-at"></i>
+                                    <input type="submit" name="submit" class="btn mt-4"
+                                           value="Envoyer" id="forgot_button">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            Un email contenant un lien de réinitialisation de votre mot de passe vient de vous être envoyé.
+        {% endif %}
+    {% endblock %}
+{% else %}
+    {% block page_title %}Réinitialisation du mot de passe{% endblock %}
+    {% block page_desc %}
         <div class="card-3d-wrap mx-auto" style="height: 300px">
             <div class="card-3d-wrapper">
                 <div class="card-front">
                     <div class="center-wrap">
-                        <form action="/forgot-password" class="section text-center" method="post">
+                        <form action="/forgot-password/{% arg %}" class="section text-center" method="post">
                             <div class="form-group mt-2">
-                                <h5 class="mb-4 pb-3">Saisissez l'email CNAM avec lequel vous vous êtes inscrit :</h5>
-                                <input type="email" name="forgot_email" class="form-style"
-                                       placeholder="Adresse email CNAM" id="forgot_email"
-                                       title="Une adresse auditeur du CNAM ressemble à : prenom.nom.auditeur@lecnam.net"
-                                       pattern="[\w]{1,}[.]{1}[\w]{1,}[.]{1}auditeur@lecnam.net"
+                                <h5 class="mb-4 pb-3">Veuillez entrer votre nouveau mot de passe et le confirmer.
+                                    :</h5>
+                                <input type="password" name="new_password" class="form-style"
+                                       placeholder="Mot de passe" id="new_password"
+                                       title="Votre mot de passe doit contenir au minimum :
+                                                           une lettre minuscule,
+                                                           une lettre majuscule,
+                                                           1 chiffre,
+                                                           10 caractères"
+                                       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{10,}"
                                        autocomplete="off" required>
-                                <i class="input-icon uil uil-at"></i>
+                                <i class="input-icon uil uil-lock-alt"></i>
+                                <input type="password" name="verified_new_password" class="form-style"
+                                       placeholder="Mot de passe" id="verified_new_password"
+                                       title="Votre mot de passe doit contenir au minimum :
+                                                           une lettre minuscule,
+                                                           une lettre majuscule,
+                                                           1 chiffre,
+                                                           10 caractères"
+                                       pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{10,}"
+                                       autocomplete="off" required>
+                                <i class="input-icon uil uil-lock-alt"></i>
                                 <input type="submit" name="submit" class="btn mt-4"
-                                       value="Envoyer" id="forgot_button">
+                                       value="Modifier" id="new_pwd_button">
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-    {% else %}
-        Un email contenant un lien de réinitialisation de votre mot de passe vient de vous être envoyé.
-    {% endif %}
-{% endblock %}
+    {% endblock %}
+{% endif %}
 
 {% block content %}
 
