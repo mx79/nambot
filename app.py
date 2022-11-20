@@ -16,6 +16,7 @@ app.config.from_pyfile("./config/config.py")
 
 # TODO: Email verification, manque le lien à envoyer et l'activation du compte gmail avec smtp
 # TODO: Email forgot password process
+# TODO: Regroup some routes to reduce the quantity of .py files
 # TODO: Uppercase first letter of entity "VILLE"
 # TODO: Discussion de groupe avec Redis
 
