@@ -1,5 +1,5 @@
-from flask import redirect, render_template, request, session, url_for
 from routes import no_auth_required
+from flask import redirect, render_template, request, session
 from pkg.authlib.auth import db, send_email, update_password
 
 
