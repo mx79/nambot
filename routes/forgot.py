@@ -1,6 +1,6 @@
 from flask import redirect, render_template, request, session, url_for
 from routes import no_auth_required
-from pkg.authlib.auth import send_email
+from pkg.authlib.auth import db, send_email, update_password
 
 
 @no_auth_required
@@ -17,8 +17,14 @@ def forgot_password(tmp_string: str = None):
             return render_template("forgot.html", send=True)
         else:
             new_pwd = request.form.get("new_password")
-            create_user()
-            session["user_id"] =
-            return redirect(url_for("/"))
+            doc = db.tmp_forgot_url.find_one({"url": tmp_string})
+            update_password(doc["email"], new_pwd)
+            session["user_id"] = db.users.find_one({"email": doc["email"]})["username"]
+            return redirect("/")
 
-    return render_template("forgot.html", arg=tmp_string)
+    if tmp_string:
+        if db.tmp_forgot_url.find_one({"url": tmp_string}):
+            return render_template("forgot.html", arg=tmp_string)
+        return redirect("/")
+
+    return render_template("forgot.html")

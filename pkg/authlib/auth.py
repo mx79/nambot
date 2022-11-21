@@ -8,6 +8,7 @@ from email.utils import formatdate
 from email.message import EmailMessage
 from passlib.context import CryptContext
 
+
 # =================================================== VARIABLES =================================================== #
 
 
@@ -84,6 +85,16 @@ def create_user(username: str, promo: str, email: str, pwd: str, tmp: bool = Fal
         })
 
 
+def update_password(email: str, new_password: str):
+    """
+    Description: Function that handles the forgot password process.
+    :param email:
+    :param new_password:
+    """
+    db.users.update_one(filter={"email": email},
+                        update={"$set": {"password": get_password_hash(new_password)}})
+
+
 def user_in_db(name: str, email: str):
     """
     Description: Check whether a user is in database or not.
@@ -91,35 +102,39 @@ def user_in_db(name: str, email: str):
     :param email: CNAM email
     :return: Error message to print on user screen if the user already exist
     """
-    for doc in db.users.find():
-        if name == doc["username"] and email == doc["email"]:
-            return "Ce nom d'utilisateur et cette adresse email sont déjà utilisés sur CnamBot !"
-        if name == doc["username"]:
-            return "Ce nom d'utilisateur est déjà pris sur CnamBot !"
-        if email == doc["email"]:
-            return "Cette adresse email est déjà utilisée sur CnamBot !"
+    if db.users.find_one({"username": name, "email": email}):
+        return "Ce nom d'utilisateur et cette adresse email sont déjà utilisés sur CnamBot !"
+    elif db.users.find_one({"username": name}):
+        return "Ce nom d'utilisateur est déjà pris sur CnamBot !"
+    elif db.users.find_one({"email": email}):
+        return "Cette adresse email est déjà utilisée sur CnamBot !"
+
     return
 
 
-def create_email_validation_url(key: str):
+def create_email_validation_url(key: str, email: str):
     """
     Description:
     :param key:
+    :param email:
     """
     db.tmp_email_validation_url.insert_one({
         "url": key,
-        "created_at": int(time.time())
+        "created_at": int(time.time()),
+        "email": email
     })
 
 
-def create_forgot_url(key: str):
+def create_forgot_url(key: str, email: str):
     """
     Description:
     :param key:
+    :param email:
     """
     db.tmp_forgot_url.insert_one({
         "url": key,
-        "created_at": int(time.time())
+        "created_at": int(time.time()),
+        "email": email
     })
 
 
@@ -142,7 +157,7 @@ def send_email(email: str, option: str):
     Description: Function used to send email from CnamBot address when we are validating
     user email address or following the process of the forgotten email.
     :param email: CNAM email
-    :param option: <verification> or <forgot> email sending process
+    :param option: ``verification`` or ``forgot`` email sending process
     """
     # Exit func if option param is wrong
     if option not in ["verification", "forgot"]:
@@ -171,26 +186,26 @@ def send_email(email: str, option: str):
         Bonjour,
         
         Bienvenue sur CnamBot, voici le lien à suivre pour achever la validation de votre adresse email :
-        {dynamic_url}
+        http://localhost:5000/email-verified/{key}
         
         Une fois cela fait, vous pourrez profitez pleinement des services de la plateforme.
         
         Bonne journée,
         L'équipe de développement
         """)
-        create_email_validation_url(key)
+        create_email_validation_url(key, email)
     elif option == "forgot":
         msg['Subject'] = "Votre lien de réinitialisation de mot de passe"
         msg.set_content(f"""\
         Bonjour,
 
         Voici votre lien de réinitialisation de mot de passe :
-        {dynamic_url}
+        http://localhost:5000/forgot-password/{key}
 
         Bonne journée,
         L'équipe de développement
         """)
-        create_forgot_url(key)
+        create_forgot_url(key, email)
 
     # Try to send the message, catch if there are any error
     try:
