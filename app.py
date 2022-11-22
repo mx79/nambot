@@ -10,9 +10,7 @@ app.config.from_pyfile("./config/config.py")
 
 
 # TODO: Ajouter des textes aux pages concernées
-# TODO: Uppercase first letter of entity "VILLE"
 # TODO: Discussion de groupe avec Redis
-# TODO: Ajouter nos liens Linkedin en dessous de nos avatars
 
 
 # ============================================= CUSTOM HANDLERS ============================================= #

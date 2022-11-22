@@ -51,18 +51,20 @@ class Transcript:
 
     def resp(self):
         """
-        Description: Orchestration of the Nambot responses
+        Description: Orchestration of the Cnambot responses
         """
         # Entities
         # User say something like "hello"
         if "YO" in self.entities.keys():
             self.response += choice(["Yo", "Salut", "Hey"]) + "\n"
-        # User say something like "comment ça va"
+        # User say something like "T'es un batard le bot"
         if "AGGRO" in self.entities.keys():
-            self.response += choice(["Ce n'est pas très gentil", "Pas sympa", "T'es pas cool"]) + "\n"
+            self.response += choice(["Ce n'est pas très gentil !", "Pas sympa...", "T'es pas cool !",
+                                     "Je ne te permets pas de me parler comme cela."]) + "\n"
             return
 
         # Intents
+        # User say something like "Comment tu vas ?"
         if self.intent == "CCV":
             self.response += choice(["Ça va très bien et toi ?", "Impeccable et toi ?",
                                      "Ça roule et toi ?"])
@@ -91,10 +93,13 @@ class Transcript:
         elif self.intent == "MEILLEURCHATBOT":
             self.response += "Je suis un très bon ChatBot, mais pour être honnête, " \
                              "je vous recommande plutôt Alexa ou Siri."
-        #
+        # User say something like ""
         elif self.intent == "GEOGUESSR":
             jeu.get_jeu(self.intent)
             self.response += "Voici Geoguessr"
+        # Default response from the Cnambot, if no intent or entity has been detected
+        else:
+            self.response += "Désolé, je n'ai pas compris ce que tu m'as dit."
 
 
 class Conversation:

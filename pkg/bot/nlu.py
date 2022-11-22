@@ -125,7 +125,7 @@ class EntityExtractor:
         pattern_list = []
         for key, value in self.regex_dict.items():
             for pattern in value:
-                m = re.search(pattern, cleaned_text)
+                m = re.search(pattern, cleaned_text, flags=re.IGNORECASE)
                 if m:
                     pattern_list.append(m.group())
                     pattern_list = sorted(set(pattern_list))
