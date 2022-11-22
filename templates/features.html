@@ -3,8 +3,23 @@
 {% block title %}Features{% endblock %}
 
 {% block page_title %}Les features du projet{% endblock %}
-{% block page_desc %}Chatbot IA - Chat groupé en temps réel - (...){% endblock %}
+
+{% block page_desc %}
+    <div class="list-group">
+        <a href="#chatbot_desc" class="list-group-item list-group-item-action">ChatBot</a>
+        <a href="#chat_desc" class="list-group-item list-group-item-action">Messagerie en temps réelle</a>
+        <a href="#games_desc" class="list-group-item list-group-item-action">Les différents jeux disponibles</a>
+    </div>
+{% endblock %}
 
 {% block content %}
-
+    <div>
+        <p id="chatbot_desc"></p>
+    </div>
+    <div>
+        <p id="chat_desc"></p>
+    </div>
+    <div>
+        <p id="games_desc"></p>
+    </div>
 {% endblock %}
