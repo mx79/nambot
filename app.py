@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+from flask_socketio import SocketIO
 from routes.base import bugs, features, root, user_profile
 from routes.auth import email_verification, forgot_password, login, logout
 from routes.chatbot import chatbot_receiver
@@ -7,10 +8,12 @@ from routes.chat import chat_receiver
 # Flask app init
 app = Flask(__name__)
 app.config.from_pyfile("./config/config.py")
+socketio = SocketIO(app)
 
 
 # TODO: Ajouter des textes aux pages concernées
 # TODO: Discussion de groupe avec Redis
+# TODO: Save conversation with the CnamBot maybe
 
 
 # ============================================= CUSTOM HANDLERS ============================================= #
@@ -55,4 +58,4 @@ app.add_url_rule("/chat-receiver", view_func=chat_receiver, methods=["POST"])
 
 # Launch webserver
 if __name__ == '__main__':
-    app.run()
+    socketio.run(app)
