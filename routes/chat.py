@@ -10,7 +10,7 @@ def chat_receiver():
     :return:
     """
     current_id = session.get("user_id")
-    for doc in db.users.find():
-        if doc["username"] == current_id:
-            promo = doc["promo"]
+    doc = db.users.find_one({"username": current_id})
+    if doc:
+        promo = doc["promo"]
     return

@@ -27,16 +27,16 @@ def login():
                                                                          doc["password"]):
                     session["user_id"] = login_username
                     return redirect("/")
-            return render_template("login.html", pwd_validation="Adresse email ou mot de passe invalide")
+            return render_template("login.html", pwd_validation="Nom d'utilisateur ou mot de passe invalide")
         # Starting test tree for signup form
         if signup_username and signup_email and signup_pwd != "":
             indb = user_in_db(signup_username, signup_email)
             if indb is None:
                 # Create a temporary user while waiting for an email verification
                 session["tmp_user"] = True
-                create_user(signup_username, signup_email, signup_promo, signup_pwd, tmp=True)
+                create_user(signup_username, signup_promo,  signup_email, signup_pwd, tmp=True)
                 send_email(signup_email, option="verification")
-                return redirect("/")
+                return render_template("email-verification.html")
             else:
                 return render_template("login.html", msg=indb, card_back=True)
 

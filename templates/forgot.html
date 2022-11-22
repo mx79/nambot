@@ -1,11 +1,17 @@
 {% extends "./layouts/base_layout.html" %}
 
-{% block title %}Mot de passe oublié{% endblock %}
+{% block title %}
+    {% if not arg %}
+        Mot de passe oublié
+    {% else %}
+        Réinitialisation du mot de passe
+    {% endif %}
+{% endblock %}
+
 <!-- Loading Login form CSS-->
 {% block login_stylesheet %}
     <link href="{{ url_for('static', filename='./css/login.css') }}" rel="stylesheet">
 {% endblock %}
-
 
 {% block page_title %}
     {% if not arg %}
@@ -41,7 +47,13 @@
                 </div>
             </div>
         {% else %}
-            Un email contenant un lien de réinitialisation de votre mot de passe vient de vous être envoyé.
+            {% if pwd_changed %}
+                Votre mot de passe a bien été changé !
+                <br><br>
+                Vous pouvez désormais vous connecter.
+            {% else %}
+                Un email contenant un lien de réinitialisation de votre mot de passe vient de vous être envoyé.
+            {% endif %}
         {% endif %}
     {% else %}
         <div class="card-3d-wrap mx-auto" style="height: 350px">
@@ -72,8 +84,17 @@
                                                            1 chiffre,
                                                            10 caractères"
                                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{10,}"
-                                       autocomplete="off" required>
+                                       autocomplete="off" oninput="check(this)" required>
                                 <i class="input-icon uil uil-lock-alt"></i>
+                                <script type='text/javascript'>
+                                    function check(input) {
+                                        if (input.value !== document.getElementById('new_password').value) {
+                                            input.setCustomValidity('Les mots de passe entrés doivent être identiques !');
+                                        } else {
+                                            // input is valid, reset the error message
+                                            input.setCustomValidity('');
+                                        }
+                                    }</script>
                                 <input type="submit" name="submit" class="btn mt-4"
                                        value="Modifier" id="new_pwd_button">
                             </div>
@@ -85,7 +106,4 @@
     {% endif %}
 {% endblock %}
 
-
-{% block content %}
-
-{% endblock %}
+{% block content %}{% endblock %}

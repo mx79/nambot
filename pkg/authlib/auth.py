@@ -8,7 +8,6 @@ from email.utils import formatdate
 from email.message import EmailMessage
 from passlib.context import CryptContext
 
-
 # =================================================== VARIABLES =================================================== #
 
 
@@ -81,7 +80,7 @@ def create_user(username: str, promo: str, email: str, pwd: str, tmp: bool = Fal
             "username": username,
             "promo": promo,
             "email": email,
-            "password": get_password_hash(pwd),
+            "password": pwd,
         })
 
 
@@ -102,11 +101,9 @@ def user_in_db(name: str, email: str):
     :param email: CNAM email
     :return: Error message to print on user screen if the user already exist
     """
-    if db.users.find_one({"username": name, "email": email}):
-        return "Ce nom d'utilisateur et cette adresse email sont déjà utilisés sur CnamBot !"
-    elif db.users.find_one({"username": name}):
+    if db.users.find_one({"username": name}) or db.tmp_users.find_one({"username": name}):
         return "Ce nom d'utilisateur est déjà pris sur CnamBot !"
-    elif db.users.find_one({"email": email}):
+    elif db.users.find_one({"email": email}) or db.tmp_users.find_one({"email": email}):
         return "Cette adresse email est déjà utilisée sur CnamBot !"
 
     return
@@ -179,7 +176,6 @@ def send_email(email: str, option: str):
     msg['To'] = email
     msg["Date"] = formatdate(localtime=True)
     key = get_random_string(16)
-    dynamic_url = "http://localhost:5000/{}".format(key)
     if option == "verification":
         msg['Subject'] = "Votre lien de validation d'email"
         msg.set_content(f"""\

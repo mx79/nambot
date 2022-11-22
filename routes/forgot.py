@@ -7,6 +7,7 @@ from pkg.authlib.auth import db, send_email, update_password
 def forgot_password(tmp_string: str = None):
     """
     Description:
+    :param tmp_string:
     :return:
     """
     # Checking HTTP method used
@@ -19,12 +20,11 @@ def forgot_password(tmp_string: str = None):
             new_pwd = request.form.get("new_password")
             doc = db.tmp_forgot_url.find_one({"url": tmp_string})
             update_password(doc["email"], new_pwd)
-            session["user_id"] = db.users.find_one({"email": doc["email"]})["username"]
-            return redirect("/")
+            return render_template("forgot.html", pwd_changed=True, send=True)
 
     if tmp_string:
         if db.tmp_forgot_url.find_one({"url": tmp_string}):
             return render_template("forgot.html", arg=tmp_string)
-        return redirect("/")
+        return render_template("404.html")
 
     return render_template("forgot.html")
