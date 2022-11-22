@@ -1,21 +1,14 @@
 from flask import Flask, render_template
-from routes.home import root
-from routes.bugs import bugs
-from routes.features import features
-from routes.forgot import forgot_password
-from routes.login import login
-from routes.logout import logout
+from routes.base import bugs, features, root, user_profile
+from routes.auth import email_verification, forgot_password, login, logout
 from routes.chatbot import chatbot_receiver
 from routes.chat import chat_receiver
-from routes.email_verif import email_verification
-from routes.profile import user_profile
 
 # Flask app init
 app = Flask(__name__)
 app.config.from_pyfile("./config/config.py")
 
-# TODO: Email verification, manque le lien à envoyer et l'activation du compte gmail avec smtp
-# TODO: Regroup some routes to reduce the quantity of .py files
+
 # TODO: Ajouter des textes aux pages concernées
 # TODO: Uppercase first letter of entity "VILLE"
 # TODO: Discussion de groupe avec Redis
@@ -55,8 +48,10 @@ app.add_url_rule("/email-verified/<tmp_string>", view_func=email_verification)
 app.add_url_rule("/login", view_func=login, methods=["GET", "POST"])
 app.add_url_rule("/logout", view_func=logout)
 
-# Chatting methods
+# ChatBot
 app.add_url_rule("/chatbot-receiver", view_func=chatbot_receiver, methods=["POST"])
+
+# Conversation chat for CNAM promos
 app.add_url_rule("/chat-receiver", view_func=chat_receiver, methods=["POST"])
 
 

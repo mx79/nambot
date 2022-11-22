@@ -2,7 +2,11 @@
 
 {% block title %}
     {% if not arg %}
-        Mot de passe oublié
+        {% if pwd_changed %}
+            Réinitialisation du mot de passe
+        {% else %}
+            Mot de passe oublié
+        {% endif %}
     {% else %}
         Réinitialisation du mot de passe
     {% endif %}
@@ -15,7 +19,11 @@
 
 {% block page_title %}
     {% if not arg %}
-        Mot de passe oublié
+        {% if pwd_changed %}
+            Réinitialisation du mot de passe
+        {% else %}
+            Mot de passe oublié
+        {% endif %}
     {% else %}
         Réinitialisation du mot de passe
     {% endif %}
@@ -62,8 +70,7 @@
                     <div class="center-wrap">
                         <form action="/forgot-password/{{ arg }}" class="section text-center" method="post">
                             <div class="form-group mt-2">
-                                <h5 class="mb-4 pb-3">Veuillez entrer votre nouveau mot de passe et le confirmer.
-                                    :</h5>
+                                <h5 class="mb-4 pb-3">Veuillez entrer votre nouveau mot de passe et le confirmer :</h5>
                                 <input type="password" name="new_password" class="form-style"
                                        placeholder="Mot de passe" id="new_password"
                                        title="Votre mot de passe doit contenir au minimum :
@@ -105,5 +112,3 @@
         </div>
     {% endif %}
 {% endblock %}
-
-{% block content %}{% endblock %}
