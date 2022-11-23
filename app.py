@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO
-from routes.base import bugs, features, root, user_profile
+from routes.base import root, user_profile
 from routes.auth import email_verification, forgot_password, login, logout
 from routes.chatbot import chatbot_receiver
 from routes.chat import chat_receiver
@@ -11,9 +11,8 @@ app.config.from_pyfile("./config/config.py")
 socketio = SocketIO(app)
 
 
-# TODO: Ajouter des textes aux pages concernées
+# TODO: Afficher les profils par username
 # TODO: Discussion de groupe avec Redis
-# TODO: Save conversation with the CnamBot maybe
 
 
 # ============================================= CUSTOM HANDLERS ============================================= #
@@ -37,8 +36,6 @@ def page_not_found(error):
 
 # Basic routes
 app.add_url_rule("/", view_func=root)
-app.add_url_rule("/bugs", view_func=bugs, methods=["GET", "POST"])
-app.add_url_rule("/features", view_func=features)
 app.add_url_rule("/profile/<username>", view_func=user_profile)
 
 # Authentication
@@ -53,7 +50,7 @@ app.add_url_rule("/logout", view_func=logout)
 app.add_url_rule("/chatbot-receiver", view_func=chatbot_receiver, methods=["POST"])
 
 # Conversation chat for CNAM promos
-app.add_url_rule("/chat-receiver", view_func=chat_receiver, methods=["POST"])
+app.add_url_rule("/chat", view_func=chat_receiver, methods=["GET", "POST"])
 
 
 # Launch webserver

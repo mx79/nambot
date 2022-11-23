@@ -20,6 +20,8 @@
     {% block login_stylesheet %}{% endblock %}
     <!-- Loading ChatBot CSS-->
     <link href="{{ url_for('static', filename='./css/chatbot.css') }}" rel="stylesheet">
+    <!-- Custom links-->
+    {% block custom_link %}{% endblock %}
 </head>
 <body id="page-top">
 <!-- Audio-->
@@ -36,15 +38,15 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="/features">Features</a>
-                </li>
-                {% if session.get("user_id") %}
+                {% if session.get("username") %}
                     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded"
-                                                         href="/bugs">Rapporter un bug</a></li>
+                                                         href="/profile/{{ session.get("username") }}">Profil</a></li>
+                    <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded"
+                                                         href="/chat">Messagerie</a></li>
                     <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded"
                                                          href="/logout">Logout</a></li>
                 {% endif %}
-                {% if not session.get("user_id") %}
+                {% if not session.get("username") %}
                     <li class="nav-item mx-0 mx-lg-1">
                     <a class="nav-link py-3 px-0 px-lg-3 rounded" href="/login">Login</a>
                 {% endif %}
@@ -70,7 +72,7 @@
     </header>
 {% endblock %}
 <!-- Chatbot-->
-{% if session.get("user_id") %}
+{% if session.get("username") %}
     <div class="chatbox" id="nambot">
         <div class="chatbox__support">
             <div class="chatbox__header">

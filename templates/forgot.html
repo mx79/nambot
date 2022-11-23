@@ -17,6 +17,19 @@
     <link href="{{ url_for('static', filename='./css/login.css') }}" rel="stylesheet">
 {% endblock %}
 
+{% block custom_link %}
+    <!-- Check if the two passwords input are the same-->
+    <script type='text/javascript'>
+        function check(input) {
+            if (input.value !== document.getElementById('new_password').value) {
+                input.setCustomValidity('Les mots de passe entrés doivent être identiques !');
+            } else {
+                // input is valid, reset the error message
+                input.setCustomValidity('');
+            }
+        }</script>
+{% endblock %}
+
 {% block page_title %}
     {% if not arg %}
         {% if pwd_changed %}
@@ -93,15 +106,6 @@
                                        pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{10,}"
                                        autocomplete="off" oninput="check(this)" required>
                                 <i class="input-icon uil uil-lock-alt"></i>
-                                <script type='text/javascript'>
-                                    function check(input) {
-                                        if (input.value !== document.getElementById('new_password').value) {
-                                            input.setCustomValidity('Les mots de passe entrés doivent être identiques !');
-                                        } else {
-                                            // input is valid, reset the error message
-                                            input.setCustomValidity('');
-                                        }
-                                    }</script>
                                 <input type="submit" name="submit" class="btn mt-4"
                                        value="Modifier" id="new_pwd_button">
                             </div>

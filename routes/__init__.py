@@ -66,7 +66,7 @@ def auth_required(func):
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if session.get("user_id") is None:
+        if session.get("username") is None:
             return redirect(url_for("login"))
         return func(*args, **kwargs)
 
@@ -98,7 +98,7 @@ def no_auth_required(func):
 
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if session.get("user_id") is not None:
+        if session.get("username") is not None:
             return redirect("/")
         return func(*args, **kwargs)
 
@@ -118,5 +118,7 @@ cls = IntentClassifier("base_keras.pkl")
 # Instantiate an entity extractor
 ext = EntityExtractor("regex.json")
 
-# Launch thread cleaning temporary url
+# Launch the thread who is cleaning temporary urls
 clean_url()
+
+# Launch the thread who is cleaning temporary users

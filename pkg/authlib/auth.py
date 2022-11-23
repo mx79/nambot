@@ -101,9 +101,9 @@ def user_in_db(name: str, email: str):
     :param email: CNAM email
     :return: Error message to print on user screen if the user already exist
     """
-    if db.users.find_one({"username": name}) or db.tmp_users.find_one({"username": name}):
+    if db.users.find_one({"username": name}):
         return "Ce nom d'utilisateur est déjà pris sur CnamBot !"
-    elif db.users.find_one({"email": email}) or db.tmp_users.find_one({"email": email}):
+    elif db.users.find_one({"email": email}):
         return "Cette adresse email est déjà utilisée sur CnamBot !"
 
     return

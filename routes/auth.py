@@ -25,7 +25,10 @@ def login():
             for doc in db.users.find():
                 if login_username == doc["username"] and verify_password(request.form['login_password'],
                                                                          doc["password"]):
-                    session["user_id"] = login_username
+                    user = db.users.find_one({"username": login_username})
+                    session["username"] = login_username
+                    session["promo"] = user["promo"]
+                    session["email"] = user["email"]
                     return redirect("/")
             return render_template("login.html", pwd_validation="Nom d'utilisateur ou mot de passe invalide")
         # Starting test tree for signup form
@@ -49,7 +52,7 @@ def logout():
     Description:
     :return:
     """
-    session.pop("user_id", None)
+    session.pop("username", None)
     return render_template("logout.html")
 
 

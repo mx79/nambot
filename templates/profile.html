@@ -1,0 +1,19 @@
+{% extends "./layouts/base_layout.html" %}
+
+{% block title %}
+    {% if not user_infos %}
+        Profil de {{ session.get("username") }}
+    {% else %}
+        Profil de {{ user_infos }}
+    {% endif %}
+{% endblock %}
+
+{% block page_title %}
+    {% if not user_infos %}
+        Profil de {{ session.get("username") }}
+    {% else %}
+        Profil de {{ user_infos }}
+    {% endif %}
+{% endblock %}
+
+{% block page_desc %}{% endblock %}
