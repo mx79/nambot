@@ -36,7 +36,7 @@ def page_not_found(error):
 
 # Basic routes
 app.add_url_rule("/", view_func=root)
-app.add_url_rule("/profile/<username>", view_func=user_profile)
+app.add_url_rule("/profile/<username>", view_func=user_profile, methods=["GET", "POST"])
 
 # Authentication
 app.add_url_rule("/forgot-password", view_func=forgot_password, methods=["GET", "POST"])
@@ -53,6 +53,10 @@ app.add_url_rule("/chatbot-receiver", view_func=chatbot_receiver, methods=["POST
 app.add_url_rule("/chat", view_func=chat_receiver, methods=["GET", "POST"])
 
 
+# Jinja function
+
+
 # Launch webserver
 if __name__ == '__main__':
     socketio.run(app)
+    app.jinja_env.globals.update()

@@ -1,19 +1,77 @@
 {% extends "./layouts/base_layout.html" %}
 
 {% block title %}
-    {% if not user_infos %}
-        Profil de {{ session.get("username") }}
-    {% else %}
-        Profil de {{ user_infos }}
-    {% endif %}
+    Profil de {{ user_infos["username"] }}
 {% endblock %}
 
 {% block page_title %}
-    {% if not user_infos %}
-        Profil de {{ session.get("username") }}
-    {% else %}
-        Profil de {{ user_infos }}
-    {% endif %}
+    Profil de {{ user_infos["username"] }}
 {% endblock %}
 
-{% block page_desc %}{% endblock %}
+{% block custom_link %}
+    <script type="text/javascript">
+        $(document).on('submit', '#updateInfos', function (e) {
+            console.log('hello');
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/profile/{{ session.get("username") }}',
+                data: {
+                    firstname: $("#update_firstname").val(),
+                    lastname: $("#update_lastname").val(),
+                    promo: $("#update_promo").val()
+                },
+                success: function () {
+                    alert('saved');
+                }
+            })
+        });
+    </script>
+{% endblock %}
+
+{% block page_desc %}
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <img class="avatar" src="{{ url_for('static', filename='./assets/img/avatars/max.png') }}"
+                     alt="avatar-max"/>
+                <br>
+                <a href="https://getavataaars.com/">
+                    <button type="button" class="btn btn-secondary">Créer son avatar</button>
+                </a>
+            </div>
+            <div class="col">
+                <form method="post" id="updateInfos">
+                    <br>
+                    <h5> Prénom : {{ user_infos["firstname"] }}
+                        {% if user_infos["username"] == session.get("username") %}
+                            <input type="text" class="form-style"
+                                   placeholder="Prénom" id="update_firstname">
+                        {% endif %}
+                    </h5>
+                    <br>
+                    <h5>
+                        Nom : {{ user_infos["lastname"] }}
+                        {% if user_infos["username"] == session.get("username") %}
+                            <input type="text" class="form-style"
+                                   placeholder="Nom" id="update_lastname">
+                        {% endif %}
+                    </h5>
+                    <br>
+                    <h5>
+                        Promotion : {{ user_infos["promo"] }}
+                        {% if user_infos["username"] == session.get("username") %}
+                            <input type="text" class="form-style"
+                                   placeholder="Promotion" id="update_promo">
+                        {% endif %}
+                    </h5>
+                    <br>
+                    <h5> Email : {{ user_infos["email"] }}</h5>
+                    <br>
+                    <button type="submit" class="btn btn-secondary">Actualiser mes infos</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

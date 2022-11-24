@@ -84,6 +84,27 @@ def create_user(username: str, promo: str, email: str, pwd: str, tmp: bool = Fal
         })
 
 
+def update_user(user_to_update: str, firstname: str, lastname: str, promo: str):
+    """
+    Description: Updates the user information.
+    :param user_to_update: The user we want to update
+    :param firstname: Updated firstname
+    :param lastname: Updated lastname
+    :param promo: Updated promo
+    """
+    user = db.users.find_one({"username": user_to_update})
+    db.users.update_one(
+        filter={
+            "username": user_to_update
+        },
+        update={
+            "firstname": user["firstname"] if firstname == "" else firstname,
+            "lastname": user["lastname"] if lastname == "" else lastname,
+            "promo": user["promo"] if promo == "" else promo
+        }
+    )
+
+
 def update_password(email: str, new_password: str):
     """
     Description: Function that handles the forgot password process.
