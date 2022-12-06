@@ -13,6 +13,7 @@ socketio = SocketIO(app)
 
 # TODO: Afficher les profils par username
 # TODO: Discussion de groupe avec Redis
+# TODO: Créer des parties d'échecs en invitant des utilisateurs
 
 
 # ============================================= CUSTOM HANDLERS ============================================= #
@@ -21,7 +22,8 @@ socketio = SocketIO(app)
 @app.errorhandler(404)
 def page_not_found(error):
     """
-    Description: Handle ``error 404 not found``
+    Handle `error 404 not found`.
+
     :return: Custom template of error 404
     """
     return render_template("404.html")
@@ -52,11 +54,10 @@ app.add_url_rule("/chatbot-receiver", view_func=chatbot_receiver, methods=["POST
 # Conversation chat for CNAM promos
 app.add_url_rule("/chat", view_func=chat_receiver, methods=["GET", "POST"])
 
-
 # Jinja function
 
 
 # Launch webserver
 if __name__ == '__main__':
     socketio.run(app)
-    app.jinja_env.globals.update()
+    # app.jinja_env.globals.update()

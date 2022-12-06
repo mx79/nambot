@@ -10,7 +10,6 @@ from passlib.context import CryptContext
 
 # =================================================== VARIABLES =================================================== #
 
-
 # DB file
 client = MongoClient(getenv("MONGO_CLUSTER"))
 db = client.cnambot
@@ -21,7 +20,6 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 # Characters to generate password or temporary url from
 characters = list(string.ascii_letters + string.digits)
 characters_with_punct = list(string.ascii_letters + string.digits + string.punctuation)
-
 
 # =============================================== PASSWORDS FUNCTIONS =============================================== #
 
