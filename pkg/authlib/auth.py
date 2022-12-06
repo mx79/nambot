@@ -21,12 +21,14 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 characters = list(string.ascii_letters + string.digits)
 characters_with_punct = list(string.ascii_letters + string.digits + string.punctuation)
 
+
 # =============================================== PASSWORDS FUNCTIONS =============================================== #
 
 
 def pwd_generator() -> str:
     """
-    Description: Generates a password for those user who have no idea
+    Description: Generates a password for those user who have no idea.
+
     :return: Password of length 10
     """
     random.shuffle(characters_with_punct)
@@ -38,6 +40,7 @@ def pwd_generator() -> str:
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """
     Description: Verify password between one not hashed and its hashed representation.
+
     :param plain_password: Password to test, as plain string
     :param hashed_password: Password hashed
     :return: ``True`` if the password matched the hash, else ``False``
@@ -48,6 +51,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 def get_password_hash(password: str) -> str:
     """
     Description: Function used to transform plain string password to hashed password.
+
     :param password: Password to hash
     :return: Hashed password
     """
@@ -60,6 +64,7 @@ def get_password_hash(password: str) -> str:
 def create_user(username: str, promo: str, email: str, pwd: str, tmp: bool = False):
     """
     Description: Basic function to create a json file for a new user, temporary or not.
+
     :param username: Unique username
     :param promo: Promotion to choose in a drop-down list
     :param email: CNAM email
@@ -72,40 +77,23 @@ def create_user(username: str, promo: str, email: str, pwd: str, tmp: bool = Fal
             "promo": promo,
             "email": email,
             "password": get_password_hash(pwd),
+            "created_at": int(time.time())
         })
     else:
         db.users.insert_one({
             "username": username,
+            "firstname": email.split(".")[0].capitalize(),
+            "lastname": email.split(".")[1].capitalize(),
             "promo": promo,
             "email": email,
-            "password": pwd,
+            "password": pwd
         })
-
-
-def update_user(user_to_update: str, firstname: str, lastname: str, promo: str):
-    """
-    Description: Updates the user information.
-    :param user_to_update: The user we want to update
-    :param firstname: Updated firstname
-    :param lastname: Updated lastname
-    :param promo: Updated promo
-    """
-    user = db.users.find_one({"username": user_to_update})
-    db.users.update_one(
-        filter={
-            "username": user_to_update
-        },
-        update={
-            "firstname": user["firstname"] if firstname == "" else firstname,
-            "lastname": user["lastname"] if lastname == "" else lastname,
-            "promo": user["promo"] if promo == "" else promo
-        }
-    )
 
 
 def update_password(email: str, new_password: str):
     """
     Description: Function that handles the forgot password process.
+
     :param email:
     :param new_password:
     """
@@ -116,6 +104,7 @@ def update_password(email: str, new_password: str):
 def user_in_db(name: str, email: str):
     """
     Description: Check whether a user is in database or not.
+
     :param name: Unique username
     :param email: CNAM email
     :return: Error message to print on user screen if the user already exist
@@ -131,6 +120,7 @@ def user_in_db(name: str, email: str):
 def create_email_validation_url(key: str, email: str):
     """
     Description:
+
     :param key:
     :param email:
     """
@@ -144,6 +134,7 @@ def create_email_validation_url(key: str, email: str):
 def create_forgot_url(key: str, email: str):
     """
     Description:
+
     :param key:
     :param email:
     """
@@ -159,7 +150,8 @@ def create_forgot_url(key: str, email: str):
 
 def get_random_string(length: int):
     """
-    Description: Generates a random string for dynamic link
+    Description: Generates a random string for dynamic link.
+
     :return: Random string of desired length
     """
     random.shuffle(characters)
@@ -172,6 +164,7 @@ def send_email(email: str, option: str):
     """
     Description: Function used to send email from CnamBot address when we are validating
     user email address or following the process of the forgotten email.
+
     :param email: CNAM email
     :param option: ``verification`` or ``forgot`` email sending process
     """

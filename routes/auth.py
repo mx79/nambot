@@ -27,6 +27,8 @@ def login():
                                                                          doc["password"]):
                     user = db.users.find_one({"username": login_username})
                     session["username"] = login_username
+                    session["firstname"] = user["email"].split(".")[0].capitalize()
+                    session["lastname"] = user["email"].split(".")[1].capitalize()
                     session["promo"] = user["promo"]
                     session["email"] = user["email"]
                     return redirect("/")
@@ -78,7 +80,7 @@ def email_verification(tmp_string: str = None):
             db.tmp_users.delete_one({"email": doc["email"]})
             return render_template("email-verification.html", arg=tmp_string)
     else:
-        return render_template("email-verification.html")
+        return render_template("404.html")
 
 
 @no_auth_required

@@ -23,7 +23,7 @@ def clean_url():
     This thread is run every 10 seconds.
     """
     threading.Timer(10.0, clean_url).start()
-    print("Cleaning Temporary URL...")
+    print("Cleaning of urls and temporary users...")
     actual_time = int(time.time())
     for doc in db.tmp_email_validation_url.find():
         diff = actual_time - doc["created_at"]
@@ -33,6 +33,10 @@ def clean_url():
         diff = actual_time - doc["created_at"]
         if diff >= 600:
             db.tmp_forgot_url.delete_one({"created_at": doc["created_at"]})
+    for doc in db.tmp_users.find():
+        diff = actual_time - doc["created_at"]
+        if diff >= 600:
+            db.tmp_users.delete_one({"created_at": doc["created_at"]})
 
 
 def redis_init() -> redis.client.Redis:
@@ -83,7 +87,7 @@ def tmp_auth_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         if session.get("tmp_user") is None:
-            return redirect(url_for("/"))
+            return redirect("/")
         return func(*args, **kwargs)
 
     return wrapper

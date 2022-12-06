@@ -1,30 +1,32 @@
-from pkg.authlib.auth import db, update_user
+from pkg.authlib.auth import db
 from routes import auth_required
-from flask import render_template, request
+from flask import render_template, request, session
 
 
 @auth_required
 def root():
     """
     Description:
+
     :return:
     """
+    if request.method == "POST":
+        promo = session.get("promo")
+
     return render_template("home.html")
 
 
 @auth_required
-def user_profile(username: str, firstname: str = "", lastname: str = "", promo: str = ""):
+def user_profile(username: str):
     """
     Description: Route to the profile of a user.
-    :return: The selected user profile if it exists
-    :param username: User profile provided in url
-    :param firstname: Updated firstname
-    :param lastname: Updated lastname
-    :param promo: Updated promo
-    """
 
+    :param username: User profile provided in url
+    :return: The selected user profile if it exists
+    """
     if request.method == "POST":
-        update_user(username, firstname, lastname, promo)
+        pass
+        # avatar upload function
 
     if username:
         user = db.users.find_one({"username": username})

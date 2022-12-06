@@ -3,7 +3,6 @@ from flask_socketio import SocketIO
 from routes.base import root, user_profile
 from routes.auth import email_verification, forgot_password, login, logout
 from routes.chatbot import chatbot_receiver
-from routes.chat import chat_receiver
 
 # Flask app init
 app = Flask(__name__)
@@ -37,7 +36,7 @@ def page_not_found(error):
 
 
 # Basic routes
-app.add_url_rule("/", view_func=root)
+app.add_url_rule("/", view_func=root, methods=["GET", "POST"])
 app.add_url_rule("/profile/<username>", view_func=user_profile, methods=["GET", "POST"])
 
 # Authentication
@@ -50,9 +49,6 @@ app.add_url_rule("/logout", view_func=logout)
 
 # ChatBot
 app.add_url_rule("/chatbot-receiver", view_func=chatbot_receiver, methods=["POST"])
-
-# Conversation chat for CNAM promos
-app.add_url_rule("/chat", view_func=chat_receiver, methods=["GET", "POST"])
 
 # Jinja function
 

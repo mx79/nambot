@@ -42,35 +42,12 @@
                 </a>
             </div>
             <div class="col">
-                <form method="post" id="updateInfos">
-                    <br>
-                    <h5> Prénom : {{ user_infos["firstname"] }}
-                        {% if user_infos["username"] == session.get("username") %}
-                            <input type="text" class="form-style"
-                                   placeholder="Prénom" id="update_firstname">
-                        {% endif %}
-                    </h5>
-                    <br>
-                    <h5>
-                        Nom : {{ user_infos["lastname"] }}
-                        {% if user_infos["username"] == session.get("username") %}
-                            <input type="text" class="form-style"
-                                   placeholder="Nom" id="update_lastname">
-                        {% endif %}
-                    </h5>
-                    <br>
-                    <h5>
-                        Promotion : {{ user_infos["promo"] }}
-                        {% if user_infos["username"] == session.get("username") %}
-                            <input type="text" class="form-style"
-                                   placeholder="Promotion" id="update_promo">
-                        {% endif %}
-                    </h5>
-                    <br>
-                    <h5> Email : {{ user_infos["email"] }}</h5>
-                    <br>
-                    <button type="submit" class="btn btn-secondary">Actualiser mes infos</button>
-                </form>
+                <ul class="list-group">
+                    <li class="list-group-item">Prénom : {{ user_infos["firstname"] }}</li>
+                    <li class="list-group-item">Nom : {{ user_infos["lastname"] }}</li>
+                    <li class="list-group-item">Promotion : {{ user_infos["promo"] }}</li>
+                    <li class="list-group-item">Email : {{ user_infos["email"] }}</li>
+                </ul>
             </div>
         </div>
     </div>
