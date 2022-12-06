@@ -59,4 +59,4 @@ app.add_url_rule("/chat", view_func=chat_receiver, methods=["GET", "POST"])
 # Launch webserver
 if __name__ == '__main__':
     socketio.run(app)
-    app.jinja_env.globals.update()
+    # app.jinja_env.globals.update()

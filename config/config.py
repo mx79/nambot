@@ -1,9 +1,8 @@
-"""Flask configuration."""
 import redis
 from os import getenv
 from datetime import timedelta
 
-# ======== CONFIG OF FLASK APP ======== #
+# ======================== CONFIG OF FLASK APP ========================= #
 
 # Global
 TESTING = True

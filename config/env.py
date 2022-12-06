@@ -1,3 +1,4 @@
+import os
 from os import environ as osenv
 from os.path import abspath, dirname, join
 from dotenv import load_dotenv, find_dotenv
@@ -10,13 +11,11 @@ osenv["PERMANENT_SESSION_LIFETIME"] = "1"
 osenv["SESSION_TYPE"] = "redis"
 
 # Load environment vars (from .env)
-ENV_FILE = find_dotenv()
-if ENV_FILE:
-    load_dotenv(ENV_FILE)
+load_dotenv(find_dotenv())
 
 
 # Print some var to verify if env is loaded
 def verify():
     print(f'>>> Environment loading status <<<')
     print(f'--  Application base directory: {BASE_DIR}')
-    print(f'--  Dotenv file: {ENV_FILE}')
+    print(f'--  Application name: {os.getenv("APP_NAME")}')
