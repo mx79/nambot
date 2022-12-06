@@ -92,7 +92,7 @@ def forgot_password(tmp_string: str = None):
     if request.method == "POST":
         if tmp_string is None:
             forgot_email = request.form.get("forgot_email", "")
-            send_email(forgot_email, "forgot")
+            send_email(forgot_email, option="forgot")
             return render_template("forgot.html", send=True)
         else:
             new_pwd = request.form.get("new_password")
