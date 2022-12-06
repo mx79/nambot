@@ -22,7 +22,8 @@ socketio = SocketIO(app)
 @app.errorhandler(404)
 def page_not_found(error):
     """
-    Description: Handle ``error 404 not found``
+    Handle `error 404 not found`.
+
     :return: Custom template of error 404
     """
     return render_template("404.html")
@@ -52,7 +53,6 @@ app.add_url_rule("/chatbot-receiver", view_func=chatbot_receiver, methods=["POST
 
 # Conversation chat for CNAM promos
 app.add_url_rule("/chat", view_func=chat_receiver, methods=["GET", "POST"])
-
 
 # Jinja function
 
