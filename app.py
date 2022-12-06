@@ -13,6 +13,7 @@ socketio = SocketIO(app)
 
 # TODO: Afficher les profils par username
 # TODO: Discussion de groupe avec Redis
+# TODO: Créer des parties d'échecs en invitant des utilisateurs
 
 
 # ============================================= CUSTOM HANDLERS ============================================= #
