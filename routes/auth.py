@@ -1,4 +1,4 @@
-from routes import auth_required, no_auth_required, tmp_auth_required
+from routes import auth_required, no_auth_required
 from flask import redirect, render_template, request, session
 from pkg.authlib.auth import db, create_user, send_email, verify_password, update_password, user_in_db
 
@@ -58,7 +58,7 @@ def logout():
     return render_template("logout.html")
 
 
-@tmp_auth_required
+@no_auth_required
 def email_verification(tmp_string: str = None):
     """
     Description:

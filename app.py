@@ -10,9 +10,13 @@ app.config.from_pyfile("./config/config.py")
 socketio = SocketIO(app)
 
 
-# TODO: Afficher les profils par username
-# TODO: Discussion de groupe avec Redis
-# TODO: Créer des parties d'échecs en invitant des utilisateurs
+# TODO: Afficher les profils par username.
+# TODO: Upload un avatar par utilisateur et le stocker dans le user correspondant.
+# TODO: Essayer de réduire le thread cleaner avec un zip() sur les collections.
+
+# TODO: Créer des parties d'échecs en invitant des utilisateurs.
+
+# TODO: Discussion de groupe avec Redis.
 
 
 # ============================================= CUSTOM HANDLERS ============================================= #

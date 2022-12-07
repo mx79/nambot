@@ -65,6 +65,7 @@ def auth_required(func):
     """
     Description: Decorator for authentication system.
     It performs url blocking if the user is not connected.
+
     :return: Wrapper
     """
 
@@ -77,26 +78,11 @@ def auth_required(func):
     return wrapper
 
 
-def tmp_auth_required(func):
-    """
-    Description: Decorator for authentication system.
-    It performs url blocking if the user is connected as a temporary user.
-    :return: Wrapper
-    """
-
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        if session.get("tmp_user") is None:
-            return redirect("/")
-        return func(*args, **kwargs)
-
-    return wrapper
-
-
 def no_auth_required(func):
     """
     Description: Decorator for authentication system.
     It performs url blocking if the user is connected.
+
     :return: Wrapper
     """
 
@@ -124,5 +110,3 @@ ext = EntityExtractor("regex.json")
 
 # Launch the thread who is cleaning temporary urls
 clean_url()
-
-# Launch the thread who is cleaning temporary users
