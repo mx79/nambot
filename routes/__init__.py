@@ -17,12 +17,12 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 env.verify()
 
 
-def clean_url():
+def clean_url_and_users():
     """
     Description: Deletes any temporary url that have more than 10 minutes of existence.
     This thread is run every 10 seconds.
     """
-    threading.Timer(10.0, clean_url).start()
+    threading.Timer(10.0, clean_url_and_users).start()
     print("Cleaning of urls and temporary users...")
     actual_time = int(time.time())
     for doc in db.tmp_email_validation_url.find():
@@ -109,4 +109,4 @@ cls = IntentClassifier("base_keras.pkl")
 ext = EntityExtractor("regex.json")
 
 # Launch the thread who is cleaning temporary urls
-clean_url()
+clean_url_and_users()

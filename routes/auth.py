@@ -7,6 +7,7 @@ from pkg.authlib.auth import db, create_user, send_email, verify_password, updat
 def login():
     """
     Description:
+
     :return:
     """
     session.permanent = True
@@ -25,12 +26,7 @@ def login():
             for doc in db.users.find():
                 if login_username == doc["username"] and verify_password(request.form['login_password'],
                                                                          doc["password"]):
-                    user = db.users.find_one({"username": login_username})
                     session["username"] = login_username
-                    session["firstname"] = user["email"].split(".")[0].capitalize()
-                    session["lastname"] = user["email"].split(".")[1].capitalize()
-                    session["promo"] = user["promo"]
-                    session["email"] = user["email"]
                     return redirect("/")
             return render_template("login.html", pwd_validation="Nom d'utilisateur ou mot de passe invalide")
         # Starting test tree for signup form
@@ -38,7 +34,6 @@ def login():
             indb = user_in_db(signup_username, signup_email)
             if indb is None:
                 # Create a temporary user while waiting for an email verification
-                session["tmp_user"] = True
                 create_user(signup_username, signup_promo, signup_email, signup_pwd, tmp=True)
                 send_email(signup_email, option="verification")
                 return render_template("email-verification.html")
@@ -52,6 +47,7 @@ def login():
 def logout():
     """
     Description:
+
     :return:
     """
     session.pop("username", None)
@@ -62,6 +58,7 @@ def logout():
 def email_verification(tmp_string: str = None):
     """
     Description:
+
     :param tmp_string:
     :return:
     """
@@ -69,7 +66,6 @@ def email_verification(tmp_string: str = None):
         doc = db.tmp_email_validation_url.find_one({"url": tmp_string})
         if doc:
             # Drop tmp_user key of user session when link is GET by HTTP method
-            session.pop("tmp_user", None)
             user = db.tmp_users.find_one({"email": doc["email"]})
             create_user(
                 user["username"],
@@ -79,14 +75,15 @@ def email_verification(tmp_string: str = None):
             )
             db.tmp_users.delete_one({"email": doc["email"]})
             return render_template("email-verification.html", arg=tmp_string)
-    else:
         return render_template("404.html")
 
+    return render_template("404.html")
 
-@no_auth_required
+
 def forgot_password(tmp_string: str = None):
     """
     Description:
+
     :param tmp_string:
     :return:
     """

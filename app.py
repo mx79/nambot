@@ -3,6 +3,7 @@ from flask_socketio import SocketIO
 from routes.base import root, user_profile
 from routes.auth import email_verification, forgot_password, login, logout
 from routes.chatbot import chatbot_receiver
+from routes.chess import chess
 
 # Flask app init
 app = Flask(__name__)
@@ -15,6 +16,10 @@ socketio = SocketIO(app)
 # TODO: Essayer de réduire le thread cleaner avec un zip() sur les collections.
 
 # TODO: Créer des parties d'échecs en invitant des utilisateurs.
+# 1) : Créer un système d'URL temporaire comme j'ai déjà fait, sauf qu'elles se finissent à la fin de la partie
+# 2) : Faire en sorte que ces URL aient l'adresse de l'emetteur et celle du receveur, pour identifier qui est spectateur
+# ou non.
+# 3) : Créer le plateau qui sera 8*8 raw et col avec des pièce en code HTML dessus, avec un code javascript draggable.
 
 # TODO: Discussion de groupe avec Redis.
 
@@ -46,13 +51,16 @@ app.add_url_rule("/profile/<username>", view_func=user_profile, methods=["GET", 
 # Authentication
 app.add_url_rule("/forgot-password", view_func=forgot_password, methods=["GET", "POST"])
 app.add_url_rule("/forgot-password/<tmp_string>", view_func=forgot_password, methods=["GET", "POST"])
-app.add_url_rule("/email-verification", view_func=email_verification)
 app.add_url_rule("/email-verified/<tmp_string>", view_func=email_verification)
 app.add_url_rule("/login", view_func=login, methods=["GET", "POST"])
 app.add_url_rule("/logout", view_func=logout)
 
 # ChatBot
 app.add_url_rule("/chatbot-receiver", view_func=chatbot_receiver, methods=["POST"])
+
+# Chess
+app.add_url_rule("/chess", view_func=chess)
+app.add_url_rule("/chess/<tmp_string>", view_func=chess)
 
 # Jinja function
 
