@@ -4,10 +4,6 @@
     Profil de {{ user_infos["username"] }}
 {% endblock %}
 
-{% block page_title %}
-    Profil de {{ user_infos["username"] }}
-{% endblock %}
-
 {#{% block custom_link %}#}
 {#    <script type="text/javascript">#}
 {#        $(document).on('submit', '#updateInfos', function (e) {#}
@@ -28,6 +24,10 @@
 {#        });#}
 {#    </script>#}
 {#{% endblock %}#}
+
+{% block page_title %}
+    Profil de {{ user_infos["username"] }}
+{% endblock %}
 
 {% block page_desc %}
     <br>

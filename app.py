@@ -1,9 +1,10 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO
+from routes.chess import chess
+from routes.chat import chat_receiver
+from routes.chatbot import chatbot_receiver
 from routes.base import root, user_profile
 from routes.auth import email_verification, forgot_password, login, logout
-from routes.chatbot import chatbot_receiver
-from routes.chess import chess
 
 # Flask app init
 app = Flask(__name__)
@@ -11,9 +12,8 @@ app.config.from_pyfile("./config/config.py")
 socketio = SocketIO(app)
 
 
-# TODO: Afficher les profils par username.
 # TODO: Upload un avatar par utilisateur et le stocker dans le user correspondant.
-# TODO: Essayer de réduire le thread cleaner avec un zip() sur les collections.
+# TODO: Finir intégration MongoDB avec le package `pkg.mongo`.
 
 # TODO: Créer des parties d'échecs en invitant des utilisateurs.
 # 1) : Créer un système d'URL temporaire comme j'ai déjà fait, sauf qu'elles se finissent à la fin de la partie
@@ -55,7 +55,8 @@ app.add_url_rule("/email-verified/<tmp_string>", view_func=email_verification)
 app.add_url_rule("/login", view_func=login, methods=["GET", "POST"])
 app.add_url_rule("/logout", view_func=logout)
 
-# ChatBot
+# Chat methods
+app.add_url_rule("/chat-receiver", view_func=chat_receiver, methods=["POST"])
 app.add_url_rule("/chatbot-receiver", view_func=chatbot_receiver, methods=["POST"])
 
 # Chess

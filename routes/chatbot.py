@@ -8,7 +8,8 @@ from pkg.bot.conversation import Transcript, Conversation
 
 def transform(username: str, msg: str) -> Transcript:
     """
-    Description: The function that get intent from redis message and return a dict with infos
+    Description: The function that get intent from redis message and return a dict with infos.
+
     :param username: The name of the channel used (user id)
     :param msg: The content of the message published on Redis
     :return: A dict with some information
@@ -22,12 +23,14 @@ def transform(username: str, msg: str) -> Transcript:
     transcript = Transcript(username, msg, intent, entities)
     conv.add_transcript(transcript)
     conv_list[username] = conv
+
     return transcript
 
 
 def primary_handler(message: Dict):
     """
-    Description: The function that first processes the message retrieved from the Redis channel
+    Description: The function that first processes the message retrieved from the Redis channel.
+
     :param message: Redis incoming message
     """
     user = message["channel"].replace("ongoing_conversation_", "")
@@ -54,6 +57,7 @@ def chatbot_receiver():
     Once message is received, publish on the right redis channel.
     Then get response on another redis channel.
     Finally, post the Nambot response to the frontend.
+
     :return: Nambot response's
     """
     # Subscribe to incoming bot response
@@ -65,8 +69,8 @@ def chatbot_receiver():
         msg_fr = translator.translate(user_msg, dest="fr").text
         publisher.publish("ongoing_conversation_" + session.get("username"), msg_fr)
         # Listen to redis worker response
-        for i in subscriber.listen():
-            message = json.loads(i["data"])
+        for m in subscriber.listen():
+            message = json.loads(m["data"])
             try:
                 new_msg = {"response": translator.translate(message["infos"]["response"], dest=detected_lang).text}
                 return new_msg
@@ -75,6 +79,6 @@ def chatbot_receiver():
                 return message["infos"]
     publisher.publish("ongoing_conversation_" + session.get("username"), user_msg)
     # Listen to redis worker response
-    for i in subscriber.listen():
-        message = json.loads(i["data"])
+    for m in subscriber.listen():
+        message = json.loads(m["data"])
         return message["infos"]

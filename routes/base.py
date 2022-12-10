@@ -1,6 +1,6 @@
 from pkg.authlib.auth import db
 from routes import auth_required
-from flask import render_template, request, session
+from flask import render_template, request
 
 
 @auth_required
@@ -10,9 +10,6 @@ def root():
 
     :return:
     """
-    if request.method == "POST":
-        promo = session.get("promo")
-
     return render_template("home.html")
 
 

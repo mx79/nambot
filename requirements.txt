@@ -10,8 +10,10 @@ nltk
 numpy
 openpyxl
 pandas
-passlib[bcrypt]
-pymongo[srv]
+passlib
+bcrypt
+pymongo
+srv
 python_dotenv
 redis
 requests
