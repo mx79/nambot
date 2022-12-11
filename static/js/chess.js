@@ -33,7 +33,7 @@ function checkPossibleMoveForThisPiece(piece, game_id) {
         {
             method: 'POST',
             // Stringify the payload into JSON:
-            body: JSON.stringify({message: instruction}),
+            body: JSON.stringify({piece_type: piece_type_short}),
             mode: 'cors',
             headers: {
                 'Content-type': 'application/json',
@@ -42,7 +42,6 @@ function checkPossibleMoveForThisPiece(piece, game_id) {
         }).then(r => r.json())
         .then(jsonResponse => {
             console.log(jsonResponse)
-
         }).catch((error) => {
         console.error('Error:', error)
     });

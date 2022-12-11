@@ -11,7 +11,6 @@ def login():
     :return:
     """
     session.permanent = True
-    # Checking HTTP method used
     if request.method == "POST":
         # Login form data
         login_username = request.form.get("login_username", "")
@@ -88,7 +87,6 @@ def forgot_password(tmp_string: str = None):
     :param tmp_string:
     :return:
     """
-    # Checking HTTP method used
     if request.method == "POST":
         if tmp_string is None:
             forgot_email = request.form.get("forgot_email", "")

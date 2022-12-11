@@ -60,8 +60,8 @@ app.add_url_rule("/chat-receiver", view_func=chat_receiver, methods=["POST"])
 app.add_url_rule("/chatbot-receiver", view_func=chatbot_receiver, methods=["POST"])
 
 # Chess
-app.add_url_rule("/chess", view_func=chess)
-app.add_url_rule("/chess/<tmp_string>", view_func=chess)
+app.add_url_rule("/chess", view_func=chess, methods=["GET", "POST"])
+app.add_url_rule("/chess/<tmp_string>", view_func=chess, methods=["GET", "POST"])
 
 # Jinja function
 
