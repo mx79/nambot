@@ -1,5 +1,5 @@
 // TTS integration
-let vocal = new SpeechSynthesisUtterance()
+const vocal = new SpeechSynthesisUtterance()
 vocal.lang = "fr";
 
 // STT: Disable button if navigator is Firefox

@@ -27,6 +27,7 @@ def login():
                 if login_username == doc["username"] and verify_password(request.form['login_password'],
                                                                          doc["password"]):
                     session["username"] = login_username
+                    session["email"] = doc["email"]
                     return redirect("/")
             return render_template("login.html", pwd_validation="Nom d'utilisateur ou mot de passe invalide")
         # Starting test tree for signup form

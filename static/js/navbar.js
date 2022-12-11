@@ -1,6 +1,6 @@
-//
-
-//
+/**
+ *
+ */
 window.addEventListener('DOMContentLoaded', () => {
     // Navbar shrink function
     let navbarShrink = function () {
