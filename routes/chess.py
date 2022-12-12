@@ -7,7 +7,6 @@ from pkg.authlib.auth import db, get_random_string
 
 def create_chess_url(key: str, sender_email: str, opponent_email: str):
     """
-    Description:
 
     :param key:
     :param sender_email:
@@ -21,26 +20,21 @@ def create_chess_url(key: str, sender_email: str, opponent_email: str):
     })
 
 
-def check_possible_move_for_this_piece(game_id: str, piece_type: str):
+def check_possible_move_for_this_piece(game_id: str, chess_case: str):
     """
-    Description:
 
     :param game_id:
-    :param piece_type:
+    :param chess_case:
     :return: A list of all possible move for this piece.
     """
     board = all_chess_games[game_id]
-    moves = [str(legal_move) for legal_move in list(board.legal_moves) if piece_type == str(legal_move)[0]]
-    pawn_moves = [str(legal_move) for legal_move in list(board.legal_moves)
-                  if str(legal_move)[0] in ["a", "b", "c", "d", "e", "f", "g", "h"]]
-    res = {"possible_moves": moves} if moves else {"possible_moves": pawn_moves}
+    moves = [str(legal_move) for legal_move in board.legal_moves if chess_case == str(legal_move)[:2]]
 
-    return res
+    return {"possible_moves": moves}
 
 
 def update_chess_board(game_id: str):
     """
-    Description:
 
     :param game_id:
     """
@@ -49,7 +43,6 @@ def update_chess_board(game_id: str):
 @auth_required
 def chess(tmp_string: str = None):
     """
-    Description:
 
     :return:
     """
@@ -64,7 +57,7 @@ def chess(tmp_string: str = None):
             # if request.headers.get("") == "check":
             return check_possible_move_for_this_piece(
                 game_id=tmp_string,
-                piece_type=request.get_json()["piece_type"]
+                chess_case=request.get_json()["chess_case"]
             )
             # elif request.headers.get("") == "update":
             # return update_chess_board(game_id=tmp_string)
