@@ -1,4 +1,5 @@
 import json
+
 from typing import Dict
 from routes import auth_required
 from flask import request, session
@@ -7,8 +8,7 @@ from pkg.bot.conversation import Transcript, Conversation
 
 
 def transform(username: str, msg: str) -> Transcript:
-    """
-    Description: The function that get intent from redis message and return a dict with infos.
+    """The function that get intent from redis message and return a dict with infos.
 
     :param username: The name of the channel used (user id)
     :param msg: The content of the message published on Redis
@@ -28,20 +28,18 @@ def transform(username: str, msg: str) -> Transcript:
 
 
 def primary_handler(message: Dict):
-    """
-    Description: The function that first processes the message retrieved from the Redis channel.
+    """The function that first processes the message retrieved from the Redis channel.
 
     :param message: Redis incoming message
     """
     user = message["channel"].replace("ongoing_conversation_", "")
     data = message["data"]
     res = transform(user, data).as_dict()
-    publisher.publish("ongoing_infos_" + user,
-                      f'{json.dumps(eval(str(res)))!s}')
+    publisher.publish(f"ongoing_infos_{user}", f'{json.dumps(eval(str(res)))!s}')
 
 
 # Dict of all conversation
-conv_list = dict()
+conv_list = {}
 
 # Listen to all channels matching the pattern below
 subscriber.psubscribe(**{"ongoing_conversation_*": primary_handler})
@@ -52,8 +50,7 @@ subscriber.run_in_thread()
 
 @auth_required
 def chatbot_receiver():
-    """
-    Description: Endpoint waiting to receive user message from frontend.
+    """Endpoint waiting to receive user message from frontend.
     Once message is received, publish on the right redis channel.
     Then get response on another redis channel.
     Finally, post the Nambot response to the frontend.
@@ -72,9 +69,7 @@ def chatbot_receiver():
         for m in subscriber.listen():
             message = json.loads(m["data"])
             try:
-                new_msg = {"response": translator.translate(message["infos"]["response"], dest=detected_lang).text}
-                return new_msg
-            # TODO: Changer la langue du tts en fonction de la langue détectée
+                return {"response": translator.translate(message["infos"]["response"], dest=detected_lang).text}
             except TypeError:
                 return message["infos"]
     publisher.publish("ongoing_conversation_" + session.get("username"), user_msg)
