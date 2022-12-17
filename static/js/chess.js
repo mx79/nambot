@@ -19,7 +19,7 @@ function checkPossibleMoveForThisPiece(piece, game_id) {
             `http://localhost:5000/chess/${game_id}`,
             {
                 method: 'POST',
-                body: JSON.stringify({chess_case: chessCase}),
+                body: JSON.stringify({check: true, chess_case: chessCase}),
                 mode: 'cors',
                 headers: {
                     'Content-type': 'application/json',
@@ -33,6 +33,7 @@ function checkPossibleMoveForThisPiece(piece, game_id) {
                     const elem = document.getElementById(possibility.slice(2, 4));
                     elem.setAttribute("class", "col d-flex justify-content-center");
                     elem.setAttribute("style", "background-color: #f8f9fa");
+                    elem.addEventListener("click", () => updateChessBoard(possibility, game_id));
                 }
             }).catch((error) => {
             console.error('Error:', error)
@@ -46,7 +47,29 @@ function checkPossibleMoveForThisPiece(piece, game_id) {
                 elem.setAttribute("class", "col bg-secondary d-flex justify-content-center");
             }
             elem.removeAttribute("style");
+            elem.removeEventListener("click", () => updateChessBoard(possibility, game_id));
         }
         movesArray = [];
     }
+}
+
+function updateChessBoard(move, game_id) {
+    console.log(move);
+    // Do a request to check possible move for this case:
+    fetch(
+        `http://localhost:5000/chess/${game_id}`,
+        {
+            method: 'POST',
+            body: JSON.stringify({update: true, move: move}),
+            mode: 'cors',
+            headers: {
+                'Content-type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }).then(r => r.json())
+        .then(jsonResponse => {
+            console.log(jsonResponse);
+        }).catch((error) => {
+        console.error('Error:', error)
+    });
 }
