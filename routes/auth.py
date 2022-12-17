@@ -6,7 +6,6 @@ from pkg.authlib.auth import db, create_user, send_email, verify_password, updat
 @no_auth_required
 def login():
     """
-    Description:
 
     :return:
     """
@@ -31,14 +30,13 @@ def login():
             return render_template("login.html", pwd_validation="Nom d'utilisateur ou mot de passe invalide")
         # Starting test tree for signup form
         if signup_username and signup_email and signup_pwd != "":
-            indb = user_in_db(signup_username, signup_email)
-            if indb is None:
-                # Create a temporary user while waiting for an email verification
-                create_user(signup_username, signup_promo, signup_email, signup_pwd, tmp=True)
-                send_email(signup_email, option="verification")
-                return render_template("email-verification.html")
-            else:
+            if indb := user_in_db(signup_username, signup_email):
                 return render_template("login.html", msg=indb, card_back=True)
+
+            # Create a temporary user while waiting for an email verification
+            create_user(signup_username, signup_promo, signup_email, signup_pwd, tmp=True)
+            send_email(signup_email, option="verification")
+            return render_template("email-verification.html")
 
     return render_template("login.html")
 
@@ -46,7 +44,6 @@ def login():
 @auth_required
 def logout():
     """
-    Description:
 
     :return:
     """
@@ -57,14 +54,12 @@ def logout():
 @no_auth_required
 def email_verification(tmp_string: str = None):
     """
-    Description:
 
     :param tmp_string:
     :return:
     """
     if tmp_string:
-        doc = db.tmp_email_validation_url.find_one({"url": tmp_string})
-        if doc:
+        if doc := db.tmp_email_validation_url.find_one({"url": tmp_string}):
             # Drop tmp_user key of user session when link is GET by HTTP method
             user = db.tmp_users.find_one({"email": doc["email"]})
             create_user(
@@ -82,7 +77,6 @@ def email_verification(tmp_string: str = None):
 
 def forgot_password(tmp_string: str = None):
     """
-    Description:
 
     :param tmp_string:
     :return:

@@ -1,8 +1,14 @@
 // Chess functions:
 
+const primaryBgCases = [
+    "g1", "e1", "c1", "a1", "h2", "f2", "d2", "b2",
+    "g3", "e3", "c3", "a3", "h4", "f4", "d4", "b4",
+    "g5", "e5", "c5", "a5", "h6", "f6", "d6", "b6",
+    "g7", "e7", "c7", "a7", "h8", "f8", "d8", "b8"
+];
+
 let flag = false;
 let movesArray = [];
-let oldBg = "";
 
 function checkPossibleMoveForThisPiece(piece, game_id) {
     flag = !flag;
@@ -34,7 +40,12 @@ function checkPossibleMoveForThisPiece(piece, game_id) {
     } else {
         for (const possibility of movesArray) {
             const elem = document.getElementById(possibility.slice(2, 4));
-            elem.setAttribute("class", "col bg-secondary d-flex justify-content-center");
+            if (primaryBgCases.includes(elem.id)) {
+                elem.setAttribute("class", "col bg-primary d-flex justify-content-center");
+            } else {
+                elem.setAttribute("class", "col bg-secondary d-flex justify-content-center");
+            }
+            elem.removeAttribute("style");
         }
         movesArray = [];
     }
