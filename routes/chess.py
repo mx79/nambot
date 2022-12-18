@@ -36,11 +36,12 @@ def check_possible_move_for_this_piece(game_id: str, chess_case: str) -> Dict:
     return {"possible_moves": moves}
 
 
-def update_chess_board(game_id: str, move: str):
+def update_chess_board(game_id: str, move: str) -> Dict:
     """
 
     :param game_id:
     :param move:
+    :rtype: Dict
     :return:
     """
     board = all_chess_games[game_id]
@@ -51,6 +52,15 @@ def update_chess_board(game_id: str, move: str):
         pass
 
     return {"Success": True}
+
+
+def load_chess_board(game_id: str) -> Dict:
+    """
+
+    :param game_id:
+    :rtype: Dict
+    :return:
+    """
 
 
 @auth_required
@@ -71,6 +81,10 @@ def chess(tmp_string: str = None):
                 return update_chess_board(
                     game_id=tmp_string,
                     move=body["move"],
+                )
+            elif body.get("load"):
+                return load_chess_board(
+                    game_id=tmp_string
                 )
         key = get_random_string(16)
         opponent_username = request.form.get("opponent_username")
