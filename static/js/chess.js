@@ -9,7 +9,7 @@ const primaryBgCases = [
 ];
 
 // When we want to set a case with an empty img after the move
-const emptyImg = document.querySelector('img[alt="empty"]')
+// const emptyImg =
 
 // Overridable var contributing to script logic
 let flag = false;
@@ -93,9 +93,8 @@ function forwardPiece(move) {
     console.log(move);
     const fromChessCase = document.getElementById(move.slice(0, 2));
     const toChessCase = document.getElementById(move.slice(2, 4));
-    // Logic to pursue if there is a piece on the possibly clickable case or not
     toChessCase.removeChild(toChessCase.firstElementChild);
-    fromChessCase.appendChild(emptyImg);
+    fromChessCase.appendChild(document.querySelector('img[alt="empty"]').cloneNode());
     toChessCase.appendChild(fromChessCase.firstElementChild);
 }
 
