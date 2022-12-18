@@ -9,7 +9,7 @@ const primaryBgCases = [
 ];
 
 // When we want to set a case with an empty img after the move
-// const emptyImg =
+const emptyImg = document.querySelector('img[alt="empty"]');
 
 // Overridable var contributing to script logic
 let flag = false;
@@ -90,11 +90,10 @@ function removeLightOnCase(gameId) {
  * @param move
  */
 function forwardPiece(move) {
-    console.log(move);
     const fromChessCase = document.getElementById(move.slice(0, 2));
     const toChessCase = document.getElementById(move.slice(2, 4));
     toChessCase.removeChild(toChessCase.firstElementChild);
-    fromChessCase.appendChild(document.querySelector('img[alt="empty"]').cloneNode());
+    fromChessCase.appendChild(emptyImg.cloneNode());
     toChessCase.appendChild(fromChessCase.firstElementChild);
 }
 
