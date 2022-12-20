@@ -69,7 +69,7 @@ def update_chess_board(game_id: str, move: str) -> Dict[str, bool]:
     if board.is_checkmate():
         res["checkmate"] = True
     if board.is_check():
-        res["checkmate"] = True
+        res["check"] = True
 
     return res
 
