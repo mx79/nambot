@@ -48,7 +48,7 @@ def update_chess_board(game_id: str, move: str) -> Dict[str, bool]:
     mv = board.push_san(move)
 
     res = {
-        "castling": False,
+        "kingside_castling": False,
         "queenside_castling": False,
         "en_passant": False,
         "draw": False,
@@ -56,8 +56,9 @@ def update_chess_board(game_id: str, move: str) -> Dict[str, bool]:
         "check": False,
     }
 
-    if board.is_castling(mv):
-        res["castling"] = True
+    # TODO: implement the promotion of a piece
+    if board.is_kingside_castling(mv):
+        res["kingside_castling"] = True
     if board.is_queenside_castling(mv):
         res["queenside_castling"] = True
     if board.is_en_passant(mv):
