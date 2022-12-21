@@ -88,13 +88,23 @@ function removeLightOnCase(gameId) {
 /**
  *
  * @param move
+ * @param kingsideCastling
+ * @param queensideCastling
+ * @param enPassant
  */
-function forwardPiece(move) {
+function forwardPiece(move, kingsideCastling = false, queensideCastling = false, enPassant = false) {
     const fromChessCase = document.getElementById(move.slice(0, 2));
     const toChessCase = document.getElementById(move.slice(2, 4));
     toChessCase.removeChild(toChessCase.firstElementChild);
     fromChessCase.appendChild(emptyImg.cloneNode());
     toChessCase.appendChild(fromChessCase.firstElementChild);
+    if (kingsideCastling) {
+        console.log("Yo");
+    } else if (queensideCastling) {
+        console.log("Yo");
+    } else if (enPassant) {
+        console.log("Yo");
+    }
 }
 
 /**
@@ -121,13 +131,13 @@ function updateChessBoard(event) {
             removeLightOnCase(gameId);
             // First we deal with exotic moves
             if (jsonResponse["kingside_castling"]) {
-                forwardPiece(move);
+                forwardPiece(move, true);
                 console.log("Yo");
             } else if (jsonResponse["queenside_castling"]) {
-                forwardPiece(move);
+                forwardPiece(move, false, true);
                 console.log("Yo");
             } else if (jsonResponse["en_passant"]) {
-                forwardPiece(move);
+                forwardPiece(move, false, false, true);
                 console.log("Yo");
             } else {
                 forwardPiece(move);
