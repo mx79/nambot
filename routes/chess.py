@@ -82,6 +82,10 @@ def load_chess_board(game_id: str) -> Dict:
     :rtype: Dict
     :return:
     """
+    board = all_chess_games[game_id]
+    fen = board.board_fen()
+
+    return {"fen": fen}
 
 
 @auth_required
@@ -107,6 +111,7 @@ def chess(tmp_string: str = None):
                 return load_chess_board(
                     game_id=tmp_string
                 )
+            return
         key = get_random_string(16)
         opponent_username = request.form.get("opponent_username")
         create_chess_url(key, session.get("username"), opponent_username)

@@ -104,8 +104,6 @@ function forwardPiece(move) {
 function updateChessBoard(event) {
     const move = event.currentTarget.possibility;
     const gameId = event.currentTarget.gameId;
-    removeLightOnCase(gameId);
-    forwardPiece(move);
     // Do a request to update the chess board status
     fetch(
         `http://localhost:5000/chess/${gameId}`,
@@ -117,7 +115,28 @@ function updateChessBoard(event) {
                 'Content-type': 'application/json',
                 'Accept': 'application/json'
             }
-        }).then().catch((error) => {
+        }).then(r => r.json())
+        .then(jsonResponse => {
+            // Removing the white case because our piece will move very soon
+            removeLightOnCase(gameId);
+            // First we deal with exotic moves
+            if (jsonResponse["kingside_castling"]) {
+
+            } else if (jsonResponse["queenside_castling"]) {
+
+            } else if (jsonResponse["en_passant"]) {
+
+            }
+            forwardPiece(move); // args
+            // After we deal with the draw or checkmate mechanism
+            if (jsonResponse["draw"]) {
+
+            } else if (jsonResponse["check"]) {
+
+            } else if (jsonResponse["checkmate"]) {
+
+            }
+        }).catch((error) => {
         console.error('Error:', error);
     });
 }
@@ -136,7 +155,12 @@ function loadChessBoard(gameId) {
                 'Content-type': 'application/json',
                 'Accept': 'application/json'
             }
-        }).then().catch((error) => {
+        }).then(r => r.json())
+        .then(jsonResponse => {
+            // Load the FEN string representing the current game
+            const fen = jsonResponse["fen"];
+            console.log(fen);
+        }).catch((error) => {
         console.error('Error:', error);
     });
 }
