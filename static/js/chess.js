@@ -121,13 +121,17 @@ function updateChessBoard(event) {
             removeLightOnCase(gameId);
             // First we deal with exotic moves
             if (jsonResponse["kingside_castling"]) {
-
+                forwardPiece(move);
+                console.log("Yo");
             } else if (jsonResponse["queenside_castling"]) {
-
+                forwardPiece(move);
+                console.log("Yo");
             } else if (jsonResponse["en_passant"]) {
-
+                forwardPiece(move);
+                console.log("Yo");
+            } else {
+                forwardPiece(move);
             }
-            forwardPiece(move); // args
             // After we deal with the draw or checkmate mechanism
             const chessArea = document.getElementById("chess-area");
             if (jsonResponse["draw"]) {
