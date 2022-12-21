@@ -129,6 +129,7 @@ function updateChessBoard(event) {
         .then(jsonResponse => {
             // Removing the white case because our piece will move very soon
             removeLightOnCase(gameId);
+            console.log(jsonResponse);
             // First we deal with exotic moves
             if (jsonResponse["kingside_castling"]) {
                 forwardPiece(move, true);
@@ -145,11 +146,11 @@ function updateChessBoard(event) {
             // After we deal with the draw or checkmate mechanism
             const chessArea = document.getElementById("chess-area");
             if (jsonResponse["draw"]) {
-                chessArea.innerHTML += '<h2> La partie se solde par un nul !</h2>';
-            } else if (jsonResponse["check"]) {
-                chessArea.innerHTML += '<h2>Echec !</h2>';
+                chessArea.innerHTML += '<br><br><h1 class="text-center text-primary"> La partie se solde par un nul !</h1>';
             } else if (jsonResponse["checkmate"]) {
-                chessArea.innerHTML += '<h2>Echec et mat !</h2>';
+                chessArea.innerHTML += '<br><br><h1 class="text-center text-primary">Echec et mat !</h1>';
+            } else if (jsonResponse["check"]) {
+                chessArea.innerHTML += '<br><br><h1 class="text-center text-primary">Echec !</h1>';
             }
         }).catch((error) => {
         console.error('Error:', error);
