@@ -145,11 +145,11 @@ function updateChessBoard(event) {
             // After we deal with the draw or checkmate mechanism
             const chessArea = document.getElementById("chess-area");
             if (jsonResponse["draw"]) {
-                chessArea.innerHTML += <h2>La partie se solde par un nul !</h2>;
+                chessArea.innerHTML += '<h2> La partie se solde par un nul !</h2>';
             } else if (jsonResponse["check"]) {
-                chessArea.innerHTML += <h2>Echec !</h2>;
+                chessArea.innerHTML += '<h2>Echec !</h2>';
             } else if (jsonResponse["checkmate"]) {
-                chessArea.innerHTML += <h2>Echec et mat !</h2>;
+                chessArea.innerHTML += '<h2>Echec et mat !</h2>';
             }
         }).catch((error) => {
         console.error('Error:', error);
