@@ -102,7 +102,6 @@ function forwardPiece(move) {
             forwardPiece("a1d1")
         } else if (move.slice(1, 2) === "1" && move.slice(2, 3) === "g") {
             // White kingside castling
-            // const rook = document.getElementById("h1");
             forwardPiece("h1f1")
         } else if (move.slice(1, 2) === "8" && move.slice(2, 3) === "c") {
             // Black queenside castling
