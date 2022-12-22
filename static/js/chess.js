@@ -94,25 +94,39 @@ function forwardPiece(move) {
     const toChessCase = document.getElementById(move.slice(2, 4));
     // TODO: Implement castling and en_passant
     // Castling
-    if (fromChessCase.firstElementChild.alt.slice(6) === "king" && ["c", "g"].includes(move.slice(2, 3)) && move.slice(0, 1) === "e") {
+    if (
+        fromChessCase.firstElementChild.alt.slice(6) === "king"
+        && ["c", "g"].includes(move.slice(2, 3))
+        && move.slice(0, 1) === "e"
+    ) {
         // black_king: e8 and white_king: e1
         // 4 different type of castling
         if (move.slice(1, 2) === "1" && move.slice(2, 3) === "c") {
             // White queenside castling
-            forwardPiece("a1d1")
+            forwardPiece("a1d1");
         } else if (move.slice(1, 2) === "1" && move.slice(2, 3) === "g") {
             // White kingside castling
-            forwardPiece("h1f1")
+            forwardPiece("h1f1");
         } else if (move.slice(1, 2) === "8" && move.slice(2, 3) === "c") {
             // Black queenside castling
-            forwardPiece("a8d8")
+            forwardPiece("a8d8");
         } else if (move.slice(1, 2) === "8" && move.slice(2, 3) === "g") {
             // Black kingside castling
-            forwardPiece("h8f8")
+            forwardPiece("h8f8");
         }
     }
     // En passant
-
+    if (
+        fromChessCase.firstElementChild.alt.slice(6) === "pawn"
+        && move.slice(0, 1) !== move.slice(2, 3)
+        && move.slice(1, 2) !== move.slice(3, 4)
+        && toChessCase.firstElementChild.alt === "empty"
+    ) {
+        const enPassantCase = document.getElementById(move.slice(2, 3) + move.slice(1, 2));
+        console.log(enPassantCase);
+        enPassantCase.removeChild(enPassantCase.firstElementChild);
+        enPassantCase.appendChild(emptyImg.cloneNode());
+    }
     // Moving Piece and remove the opponent one if any
     toChessCase.removeChild(toChessCase.firstElementChild);
     fromChessCase.appendChild(emptyImg.cloneNode());
@@ -163,6 +177,7 @@ function updateChessBoard(event) {
 
 /**
  *
+ * @param gameId
  */
 function loadChessBoard(gameId) {
     fetch(
