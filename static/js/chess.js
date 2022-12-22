@@ -123,7 +123,6 @@ function forwardPiece(move) {
         && toChessCase.firstElementChild.alt === "empty"
     ) {
         const enPassantCase = document.getElementById(move.slice(2, 3) + move.slice(1, 2));
-        console.log(enPassantCase);
         enPassantCase.removeChild(enPassantCase.firstElementChild);
         enPassantCase.appendChild(emptyImg.cloneNode());
     }
