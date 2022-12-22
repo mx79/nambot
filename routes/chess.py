@@ -45,32 +45,24 @@ def update_chess_board(game_id: str, move: str) -> Dict[str, bool]:
     :return:
     """
     board = all_chess_games[game_id]
-    mv = board.push_san(move)
+    board.push_san(move)
+    print(board.board_fen())
 
     res = {
-        "kingside_castling": False,
-        "queenside_castling": False,
-        "en_passant": False,
         "draw": False,
-        "checkmate": False,
         "check": False,
+        "checkmate": False,
     }
 
     # TODO: implement the promotion of a piece
-    if board.is_kingside_castling(mv):
-        res["kingside_castling"] = True
-    if board.is_queenside_castling(mv):
-        res["queenside_castling"] = True
-    if board.is_en_passant(mv):
-        res["en_passant"] = True
     if board.is_insufficient_material():
         res["draw"] = True
     if board.is_fivefold_repetition():
         res["draw"] = True
-    if board.is_checkmate():
-        res["checkmate"] = True
     if board.is_check():
         res["check"] = True
+    if board.is_checkmate():
+        res["checkmate"] = True
 
     return res
 

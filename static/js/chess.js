@@ -88,23 +88,36 @@ function removeLightOnCase(gameId) {
 /**
  *
  * @param move
- * @param kingsideCastling
- * @param queensideCastling
- * @param enPassant
  */
-function forwardPiece(move, kingsideCastling = false, queensideCastling = false, enPassant = false) {
+function forwardPiece(move) {
     const fromChessCase = document.getElementById(move.slice(0, 2));
     const toChessCase = document.getElementById(move.slice(2, 4));
+    // TODO: Implement castling and en_passant
+    // Castling
+    if (fromChessCase.firstElementChild.alt.slice(6) === "king" && ["c", "g"].includes(move.slice(2, 3)) && move.slice(0, 1) === "e") {
+        // black_king: e8 and white_king: e1
+        // 4 different type of castling
+        if (move.slice(1, 2) === "1" && move.slice(2, 3) === "c") {
+            // White queenside castling
+            forwardPiece("a1d1")
+        } else if (move.slice(1, 2) === "1" && move.slice(2, 3) === "g") {
+            // White kingside castling
+            // const rook = document.getElementById("h1");
+            forwardPiece("h1f1")
+        } else if (move.slice(1, 2) === "8" && move.slice(2, 3) === "c") {
+            // Black queenside castling
+            forwardPiece("a8d8")
+        } else if (move.slice(1, 2) === "8" && move.slice(2, 3) === "g") {
+            // Black kingside castling
+            forwardPiece("h8f8")
+        }
+    }
+    // En passant
+
+    // Moving Piece and remove the opponent one if any
     toChessCase.removeChild(toChessCase.firstElementChild);
     fromChessCase.appendChild(emptyImg.cloneNode());
     toChessCase.appendChild(fromChessCase.firstElementChild);
-    if (kingsideCastling) {
-        console.log("Yo");
-    } else if (queensideCastling) {
-        console.log("Yo");
-    } else if (enPassant) {
-        console.log("Yo");
-    }
 }
 
 /**
@@ -127,30 +140,22 @@ function updateChessBoard(event) {
             }
         }).then(r => r.json())
         .then(jsonResponse => {
-            // Removing the white case because our piece will move very soon
-            removeLightOnCase(gameId);
-            console.log(jsonResponse);
-            // First we deal with exotic moves
-            if (jsonResponse["kingside_castling"]) {
-                forwardPiece(move, true);
-                console.log("Yo");
-            } else if (jsonResponse["queenside_castling"]) {
-                forwardPiece(move, false, true);
-                console.log("Yo");
-            } else if (jsonResponse["en_passant"]) {
-                forwardPiece(move, false, false, true);
-                console.log("Yo");
-            } else {
-                forwardPiece(move);
+            // Check if there is a message displaying `Echec` or something like this and deletes it
+            const chessTmp = document.getElementById("chess-tmp");
+            if (chessTmp) {
+                chessTmp.remove();
             }
+            // Removing the white case and forward the piece
+            removeLightOnCase(gameId);
+            forwardPiece(move);
             // After we deal with the draw or checkmate mechanism
             const chessArea = document.getElementById("chess-area");
             if (jsonResponse["draw"]) {
-                chessArea.innerHTML += '<br><br><h1 class="text-center text-primary"> La partie se solde par un nul !</h1>';
+                chessArea.innerHTML += '<div id="chess-tmp"><br><br><h1 class="text-center text-primary"> La partie se solde par un nul !</h1></div>';
             } else if (jsonResponse["checkmate"]) {
-                chessArea.innerHTML += '<br><br><h1 class="text-center text-primary">Echec et mat !</h1>';
+                chessArea.innerHTML += '<div id="chess-tmp"><br><br><h1 class="text-center text-primary">Echec et mat !</h1></div>';
             } else if (jsonResponse["check"]) {
-                chessArea.innerHTML += '<br><br><h1 class="text-center text-primary">Echec !</h1>';
+                chessArea.innerHTML += '<div id="chess-tmp"><br><br><h1 class="text-center text-primary">Echec !</h1></div>';
             }
         }).catch((error) => {
         console.error('Error:', error);
