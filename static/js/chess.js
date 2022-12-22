@@ -92,7 +92,6 @@ function removeLightOnCase(gameId) {
 function forwardPiece(move) {
     const fromChessCase = document.getElementById(move.slice(0, 2));
     const toChessCase = document.getElementById(move.slice(2, 4));
-    // TODO: Implement castling and en_passant
     // Castling
     if (
         fromChessCase.firstElementChild.alt.slice(6) === "king"
