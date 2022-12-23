@@ -1,0 +1,422 @@
+{% extends "./layouts/base_layout.html" %}
+
+{% block title %}Chess{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block custom_link %}
+    <script type="text/javascript">
+        // Check the size of the window and do something with it to make it responsive.
+        function checkWindowSize() {
+            const chessContainer = document.getElementById("chess-container");
+            if (window.innerWidth < 720) {
+                chessContainer?.setAttribute("style", "margin-top: 60px");
+            } else {
+                chessContainer?.setAttribute("style", "margin-top: 60px;max-width: 720px;max-height: 720px");
+            }
+        }
+
+        window.addEventListener("resize", checkWindowSize);
+        checkWindowSize();
+
+        // Load the corresponding chess game
+        document.addEventListener("DOMContentLoaded", () => {
+            if ('{{ game_id }}') {
+                const emptyImgg = document.querySelector('img[alt="empty"]');
+                const blackRook = document.querySelector('img[alt="black_rook"]');
+                const blackKnight = document.querySelector('img[alt="black_knight"]');
+                const blackBishop = document.querySelector('img[alt="black_bishop"]');
+                const blackQueen = document.querySelector('img[alt="black_queen"]');
+                const blackKing = document.querySelector('img[alt="black_king"]');
+                const blackPawn = document.querySelector('img[alt="black_pawn"]');
+                const whiteRook = document.querySelector('img[alt="white_rook"]');
+                const whiteKnight = document.querySelector('img[alt="white_knight"]');
+                const whiteBishop = document.querySelector('img[alt="white_bishop"]');
+                const whiteQueen = document.querySelector('img[alt="white_queen"]');
+                const whiteKing = document.querySelector('img[alt="white_king"]');
+                const whitePawn = document.querySelector('img[alt="white_pawn"]');
+                fetch(
+                    'http://localhost:5000/chess/' + '{{ game_id }}',
+                    {
+                        method: 'POST',
+                        body: JSON.stringify({load: true}),
+                        mode: 'cors',
+                        headers: {
+                            'Content-type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    }).then(r => r.json())
+                    .then(jsonResponse => {
+                        // Load the FEN string representing the current game
+                        const fenLines = jsonResponse["fen"].split("/");
+                        console.log(fenLines);
+                        // Iterate through chessContainer and set the piece at the corresponding place
+                        let rowCount = 0;
+                        let caseCount = 0;
+                        const chessContainer = document.getElementById("chess-container");
+                        // Remove all piece from the chess board
+                        for (const row of chessContainer.children) {
+                            for (const chessCase of row.children) {
+                                chessCase.firstElementChild.remove();
+                            }
+                        }
+                        // Append all piece from the current game
+                        for (const row of chessContainer.children) {
+                            for (const chessCase of row.children) {
+                                const fenVal = fenLines[rowCount].slice(caseCount, caseCount + 1);
+                                let pieceToAppend;
+                                console.log(fenVal);
+                                if (fenVal === "r") {
+                                    pieceToAppend = blackRook;
+                                } else if (fenVal === "n") {
+                                    pieceToAppend = blackKnight;
+                                } else if (fenVal === "b") {
+                                    pieceToAppend = blackBishop;
+                                } else if (fenVal === "q") {
+                                    pieceToAppend = blackQueen;
+                                } else if (fenVal === "k") {
+                                    pieceToAppend = blackKing;
+                                } else if (fenVal === "p") {
+                                    pieceToAppend = blackPawn;
+                                } else if (fenVal === "R") {
+                                    pieceToAppend = whiteRook;
+                                } else if (fenVal === "N") {
+                                    pieceToAppend = whiteKnight;
+                                } else if (fenVal === "B") {
+                                    pieceToAppend = whiteBishop;
+                                } else if (fenVal === "Q") {
+                                    pieceToAppend = whiteQueen;
+                                } else if (fenVal === "K") {
+                                    pieceToAppend = whiteKing;
+                                } else if (fenVal === "P") {
+                                    pieceToAppend = whitePawn;
+                                } else {
+                                    pieceToAppend = emptyImgg;
+                                }
+                                chessCase.appendChild(pieceToAppend.cloneNode());
+                                caseCount++
+                            }
+                            caseCount = 0;
+                            rowCount++
+                        }
+                    }).catch((error) => {
+                    console.error('Error:', error);
+                });
+            }
+        })
+    </script>
+{% endblock %}
+
+{% block content %}
+    <section class="page-section" id="chess-area">
+        <div class="section">
+            <div class="container border border-dark border-3"
+                 style="margin-top: 60px;max-width: 720px;max-height: 720px" id="chess-container">
+                <div class="row">
+                    <div class="col bg-secondary d-flex justify-content-center" id="a8">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/black_rook.png') }}"
+                             alt="black_rook">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="b8">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/black_knight.png') }}"
+                             alt="black_knight">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="c8">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/black_bishop.png') }}"
+                             alt="black_bishop">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="d8">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/black_queen.png') }}"
+                             alt="black_queen">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="e8">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/black_king.png') }}"
+                             alt="black_king">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="f8">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/black_bishop.png') }}"
+                             alt="black_bishop">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="g8">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/black_knight.png') }}"
+                             alt="black_knight">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="h8">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/black_rook.png') }}"
+                             alt="black_rook">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col bg-primary d-flex justify-content-center" id="a7">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
+                             alt="black_pawn">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="b7">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
+                             alt="black_pawn">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="c7">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
+                             alt="black_pawn">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="d7">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
+                             alt="black_pawn">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="e7">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
+                             alt="black_pawn">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="f7">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
+                             alt="black_pawn">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="g7">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
+                             alt="black_pawn">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="h7">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
+                             alt="black_pawn">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col bg-secondary d-flex justify-content-center" id="a6">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="b6">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="c6">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="d6">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="e6">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="f6">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="g6">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="h6">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col bg-primary d-flex justify-content-center" id="a5">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="b5">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="c5">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="d5">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="e5">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="f5">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="g5">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="h5">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col bg-secondary d-flex justify-content-center" id="a4">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="b4">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="c4">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="d4">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="e4">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="f4">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="g4">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="h4">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col bg-primary d-flex justify-content-center" id="a3">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="b3">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="c3">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="d3">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="e3">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="f3">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="g3">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="h3">
+                        <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
+                             alt="empty">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col bg-secondary d-flex justify-content-center" id="a2">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
+                             alt="white_pawn">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="b2">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
+                             alt="white_pawn">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="c2">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
+                             alt="white_pawn">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="d2">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
+                             alt="white_pawn">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="e2">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
+                             alt="white_pawn">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="f2">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
+                             alt="white_pawn">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="g2">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
+                             alt="white_pawn">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="h2">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
+                             alt="white_pawn">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col bg-primary d-flex justify-content-center" id="a1">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/white_rook.png') }}"
+                             alt="white_rook">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="b1">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/white_knight.png') }}"
+                             alt="white_knight">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="c1">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/white_bishop.png') }}"
+                             alt="white_bishop">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="d1">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/white_queen.png') }}"
+                             alt="white_queen">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="e1">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/white_king.png') }}"
+                             alt="white_king">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="f1">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/white_bishop.png') }}"
+                             alt="white_bishop">
+                    </div>
+                    <div class="col bg-primary d-flex justify-content-center" id="g1">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/white_knight.png') }}"
+                             alt="white_knight">
+                    </div>
+                    <div class="col bg-secondary d-flex justify-content-center" id="h1">
+                        <img class="card-img" onclick="checkPossibleMoveForThisPiece(this, '{{ game_id }}')"
+                             src="{{ url_for('static', filename='./assets/img/chess/256px/white_rook.png') }}"
+                             alt="white_rook">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

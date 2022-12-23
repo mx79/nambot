@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO
-from routes.chess import chess
+from routes.chess import chess_game
 from routes.chat import chat_receiver
 from routes.chatbot import chatbot_receiver
 from routes.base import root, user_profile
@@ -13,7 +13,6 @@ socketio = SocketIO(app)
 
 
 # TODO: Upload un avatar par utilisateur et le stocker dans le user correspondant.
-# TODO: Finir intégration MongoDB avec le package `pkg.mongo`.
 
 # TODO: Créer des parties d'échecs en invitant des utilisateurs.
 # 1) : Créer un système d'URL temporaire comme j'ai déjà fait, sauf qu'elles se finissent à la fin de la partie
@@ -60,13 +59,9 @@ app.add_url_rule("/chat-receiver", view_func=chat_receiver, methods=["POST"])
 app.add_url_rule("/chatbot-receiver", view_func=chatbot_receiver, methods=["POST"])
 
 # Chess
-app.add_url_rule("/chess", view_func=chess, methods=["GET", "POST"])
-app.add_url_rule("/chess/<tmp_string>", view_func=chess, methods=["GET", "POST"])
-
-# Jinja function
-
+app.add_url_rule("/chess", view_func=chess_game, methods=["GET", "POST"])
+app.add_url_rule("/chess/<tmp_string>", view_func=chess_game, methods=["GET", "POST"])
 
 # Launch webserver
 if __name__ == '__main__':
     socketio.run(app)
-    # app.jinja_env.globals.update()

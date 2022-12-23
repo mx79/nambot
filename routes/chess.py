@@ -1,24 +1,29 @@
 import time
 import chess
+import random
 
 from typing import Dict
 from routes import all_chess_games, auth_required
 from pkg.authlib.auth import db, get_random_string
-from flask import redirect, render_template, request, session
+from flask import redirect, render_template, request, session, url_for
 
 
-def create_chess_url(key: str, sender_email: str, opponent_email: str):
+def create_chess_url(key: str, sender_email: str, opponent_email: str, sender_color: str, opponent_color: str):
     """
 
     :param key:
     :param sender_email:
     :param opponent_email:
+    :param sender_color:
+    :param opponent_color:
     """
     db.tmp_chess_url.insert_one({
         "url": key,
         "created_at": int(time.time()),
         "sender_username": sender_email,
-        "receiver_username": opponent_email
+        "receiver_username": opponent_email,
+        "sender_color": sender_color,
+        "receiver_color": opponent_color
     })
 
 
@@ -103,7 +108,7 @@ def load_chess_board(game_id: str) -> Dict:
 
 
 @auth_required
-def chess(tmp_string: str = None):
+def chess_game(tmp_string: str = None):
     """
 
     :return:
@@ -127,14 +132,21 @@ def chess(tmp_string: str = None):
                 )
             return
         key = get_random_string(16)
-        opponent_username = request.form.get("opponent_username")
-        create_chess_url(key, session.get("username"), opponent_username)
+        opponent_username = request.form.get("chess_opponent_username")
+        sender_color = random.choice(["white", "black"])
+        opponent_color = "white" if sender_color == "black" else "black"
+        create_chess_url(key, session.get("username"), opponent_username, sender_color, opponent_color)
         all_chess_games[key] = chess.Board()
-        return redirect(f"/chess/{key}")
+        return redirect(url_for("chess_game", game_id=key))  # f"/chess/{key}"
 
     if tmp_string:
-        if db.tmp_chess_url.find_one({"url": tmp_string}):
-            return render_template("chess.html", game_id=tmp_string)
+        if doc := db.tmp_chess_url.find_one({"url": tmp_string}):
+            return render_template(
+                "chess_game.html",
+                game_id=tmp_string,
+                sender_color=doc["sender_color"],
+                receiver_color=doc["receiver_color"]
+            )
         return render_template("404.html")
 
     return render_template("chess.html")
