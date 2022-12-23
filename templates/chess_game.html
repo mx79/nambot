@@ -32,6 +32,7 @@
         // Load the corresponding chess game
         document.addEventListener("DOMContentLoaded", () => {
             if ('{{ game_id }}') {
+                const chessContainer = document.getElementById("chess-container");
                 const emptyImgg = document.querySelector('img[alt="empty"]');
                 const blackRook = document.querySelector('img[alt="black_rook"]');
                 const blackKnight = document.querySelector('img[alt="black_knight"]');
@@ -61,14 +62,12 @@
                         // Taking the right fen representation for the right color
                         if (('{{ session.get("username") }}' !== '{{ receiver_username }}' && ('{{ sender_color }}' === "black" || '{{ session.get("sender_color") }}' === "black")) || ('{{ session.get("username") }}' === '{{ receiver_username }}' && '{{ receiver_color }}' === "black")) {
                             fen = reverseFen(fen);
-                            console.log(fen);
                         }
                         // Load the FEN string representing the current game
                         const fenLines = fen.split("/");
                         // Set some variable
                         let rowCount = 0;
                         let caseCount = 0;
-                        const chessContainer = document.getElementById("chess-container");
                         // Remove all piece from the chess board
                         for (const row of chessContainer.children) {
                             for (const chessCase of row.children) {
@@ -80,7 +79,6 @@
                             for (const chessCase of row.children) {
                                 const fenVal = fenLines[rowCount].slice(caseCount, caseCount + 1);
                                 let pieceToAppend;
-                                console.log(fenVal);
                                 if (fenVal === "r") {
                                     pieceToAppend = blackRook;
                                 } else if (fenVal === "n") {
@@ -113,6 +111,26 @@
                             }
                             caseCount = 0;
                             rowCount++
+                        }
+                        // Allow access to chess pieces only to those who have
+                        if ('{{ session.get("username") }}' === '{{ sender_username }}') {
+                            for (const row of chessContainer.children) {
+                                for (const chessCase of row.children) {
+                                    const elem = chessCase.firstElementChild;
+                                    if (elem.alt !== "empty") {
+                                        elem.setAttribute("onclick", "");
+                                    }
+                                }
+                            }
+                        } else if ('{{ session.get("username") }}' === '{{ receiver_username }}') {
+                            for (const row of chessContainer.children) {
+                                for (const chessCase of row.children) {
+                                    const elem = chessCase.firstElementChild;
+                                    if (elem.alt.slice(0, 5) !== "empty") {
+                                        elem.setAttribute("onclick", "");
+                                    }
+                                }
+                            }
                         }
                     }).catch((error) => {
                     console.error('Error:', error);

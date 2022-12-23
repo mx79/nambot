@@ -146,6 +146,7 @@ def chess_game(tmp_string: str = None):
             return render_template(
                 "chess_game.html",
                 game_id=tmp_string,
+                sender_username=doc["sender_username"],
                 receiver_username=doc["receiver_username"],
                 sender_color=doc["sender_color"],
                 receiver_color=doc["receiver_color"]
