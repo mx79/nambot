@@ -19,6 +19,7 @@
         window.addEventListener("resize", checkWindowSize);
         checkWindowSize();
 
+
         // Used when the color view side is black
         function reverseFen(fen) {
             const reversedFen = [];
@@ -27,6 +28,19 @@
                 reversedFen.push(row.split("").reverse().join(""));
             }
             return reversedFen.join("/")
+        }
+
+        // Used to check which `onclick listener` we should add or not
+        function checkPlayerRights(color) {
+            const chessContainer = document.getElementById("chess-container");
+            for (const row of chessContainer.children) {
+                for (const chessCase of row.children) {
+                    const elem = chessCase.firstElementChild;
+                    if (elem.alt.slice(0, 5) === color) {
+                        elem.setAttribute("onclick", "checkPossibleMoveForThisPiece(this, '{{ game_id }}')");
+                    }
+                }
+            }
         }
 
         // Load the corresponding chess game
@@ -114,25 +128,9 @@
                         }
                         // Allow access to chess pieces only to those who have
                         if ('{{ session.get("username") }}' === '{{ sender_username }}') {
-                            const color = '{{ sender_color }}';
-                            for (const row of chessContainer.children) {
-                                for (const chessCase of row.children) {
-                                    const elem = chessCase.firstElementChild;
-                                    if (elem.alt.slice(0, 5) === color) {
-                                        elem.setAttribute("onclick", "checkPossibleMoveForThisPiece(this, '{{ game_id }}')");
-                                    }
-                                }
-                            }
+                            checkPlayerRights('{{ sender_color }}');
                         } else if ('{{ session.get("username") }}' === '{{ receiver_username }}') {
-                            const color = '{{ receiver_color }}';
-                            for (const row of chessContainer.children) {
-                                for (const chessCase of row.children) {
-                                    const elem = chessCase.firstElementChild;
-                                    if (elem.alt.slice(0, 5) === color) {
-                                        elem.setAttribute("onclick", "checkPossibleMoveForThisPiece(this, '{{ game_id }}')");
-                                    }
-                                }
-                            }
+                            checkPlayerRights('{{ receiver_color }}');
                         }
                     }).catch((error) => {
                     console.error('Error:', error);
