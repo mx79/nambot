@@ -5,7 +5,7 @@ import random
 from typing import Dict
 from routes import all_chess_games, auth_required
 from pkg.authlib.auth import db, get_random_string
-from flask import redirect, render_template, request, session, url_for
+from flask import redirect, render_template, request, session
 
 
 def create_chess_url(key: str, sender_email: str, opponent_email: str, sender_color: str, opponent_color: str):
@@ -108,7 +108,12 @@ def load_chess_board(game_id: str) -> Dict:
 
 
 def got_a_chess_move(data):
-    print(f"Got data from game: {data}")
+    """WebSocket function to make the game fluid, Player A has played a move, Player B will receive the information
+    and the data is updated in real-time.
+
+    :param data: The websocket payload
+    """
+    print(data["gameId"])
 
 
 @auth_required

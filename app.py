@@ -9,7 +9,7 @@ from routes.auth import email_verification, forgot_password, login, logout
 # Flask app init
 app = Flask(__name__)
 app.config.from_pyfile("./config/config.py")
-socketio = SocketIO(app)
+socketio = SocketIO(app, logger=True, engineio_logger=True)
 
 
 # TODO: Upload un avatar par utilisateur et le stocker dans le user correspondant.
@@ -21,13 +21,16 @@ socketio = SocketIO(app)
 
 @app.errorhandler(404)
 def page_not_found(error):
-    """
-    Handle `error 404 not found`.
+    """Handle `error 404 not found`.
 
     :return: Custom template of error 404
     """
     return render_template("404.html")
 
+
+@socketio.on_error_default
+def default_error_handler(error):
+    print(f"Got an error on WebSocket: {error}")
 
 # @app.before_request
 # def make_session_permanent():

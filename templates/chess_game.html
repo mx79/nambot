@@ -9,12 +9,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
             integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
             crossorigin="anonymous"></script>
+    <!-- Some custom behaviour-->
     <script type="text/javascript">
         // WebSocket
-        const socket = io('ws://localhost:5000/chess/' + '{{ game_id }}');
+        const socket = io('ws://localhost:5000/chess');
         socket.on('connect', () => {
             console.log('connected!');
-            socket.emit('chess_move', {data: '{{ game_id }}'});
+            socket.emit('chess_move', {gameId: '{{ game_id }}'});
         });
 
         // Check the size of the window and do something with it to make it responsive.
