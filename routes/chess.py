@@ -81,7 +81,7 @@ def load_chess_board(game_id: str) -> Dict:
     :return:
     """
 
-    def transform(row):
+    def transform(row: str) -> str:
         for char in row:
             if char not in "rnbqkpRNBQKP":
                 if char == "2":
@@ -135,15 +135,18 @@ def chess_game(tmp_string: str = None):
         opponent_username = request.form.get("chess_opponent_username")
         sender_color = random.choice(["white", "black"])
         opponent_color = "white" if sender_color == "black" else "black"
+        session["sender_color"] = sender_color
+        session["receiver_color"] = opponent_color
         create_chess_url(key, session.get("username"), opponent_username, sender_color, opponent_color)
         all_chess_games[key] = chess.Board()
-        return redirect(url_for("chess_game", game_id=key))  # f"/chess/{key}"
+        return redirect(f"/chess/{key}")
 
     if tmp_string:
         if doc := db.tmp_chess_url.find_one({"url": tmp_string}):
             return render_template(
                 "chess_game.html",
                 game_id=tmp_string,
+                receiver_username=doc["receiver_username"],
                 sender_color=doc["sender_color"],
                 receiver_color=doc["receiver_color"]
             )
