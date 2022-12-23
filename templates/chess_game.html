@@ -19,6 +19,16 @@
         window.addEventListener("resize", checkWindowSize);
         checkWindowSize();
 
+        // Used when the color view side is black
+        function reverseFen(fen) {
+            const reversedFen = [];
+            const fenSplitted = fen.split("/").reverse();
+            for (const row of fenSplitted) {
+                reversedFen.push(row.split("").reverse().join(""));
+            }
+            return reversedFen.join("/")
+        }
+
         // Load the corresponding chess game
         document.addEventListener("DOMContentLoaded", () => {
             if ('{{ game_id }}') {
@@ -47,8 +57,14 @@
                         }
                     }).then(r => r.json())
                     .then(jsonResponse => {
+                        let fen = jsonResponse["fen"];
+                        // Taking the right fen representation for the right color
+                        if (('{{ session.get("username") }}' !== '{{ receiver_username }}' && ('{{ sender_color }}' === "black" || '{{ session.get("sender_color") }}' === "black")) || ('{{ session.get("username") }}' === '{{ receiver_username }}' && '{{ receiver_color }}' === "black")) {
+                            fen = reverseFen(fen);
+                            console.log(fen);
+                        }
                         // Load the FEN string representing the current game
-                        const fenLines = jsonResponse["fen"].split("/");
+                        const fenLines = fen.split("/");
                         // Set some variable
                         let rowCount = 0;
                         let caseCount = 0;
@@ -108,7 +124,7 @@
 
 {% block content %}
     {% if (session.get("username") != receiver_username and (sender_color == "black" or session.get("sender_color") == "black")) or (session.get("username") == receiver_username and receiver_color == "black") %}
-        <section class="page-section" id="chess-area">
+        <section class="page-section" id="chess-area" onload="">
             <div class="section">
                 <div class="container border border-dark border-3"
                      style="margin-top: 60px;max-width: 720px;max-height: 720px" id="chess-container">
