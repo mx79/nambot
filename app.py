@@ -1,9 +1,9 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO
-from routes.chess import chess_game
 from routes.chat import chat_receiver
-from routes.chatbot import chatbot_receiver
 from routes.base import root, user_profile
+from routes.chatbot import chatbot_receiver
+from routes.chess import chess_game, got_a_chess_move
 from routes.auth import email_verification, forgot_password, login, logout
 
 # Flask app init
@@ -13,13 +13,6 @@ socketio = SocketIO(app)
 
 
 # TODO: Upload un avatar par utilisateur et le stocker dans le user correspondant.
-
-# TODO: Créer des parties d'échecs en invitant des utilisateurs.
-# 1) : Créer un système d'URL temporaire comme j'ai déjà fait, sauf qu'elles se finissent à la fin de la partie
-# 2) : Faire en sorte que ces URL aient l'adresse de l'emetteur et celle du receveur, pour identifier qui est spectateur
-# ou non.
-# 3) : Créer le plateau qui sera 8*8 raw et col avec des pièce en code HTML dessus, avec un code javascript draggable.
-
 # TODO: Discussion de groupe avec Redis.
 
 
@@ -61,6 +54,7 @@ app.add_url_rule("/chatbot-receiver", view_func=chatbot_receiver, methods=["POST
 # Chess
 app.add_url_rule("/chess", view_func=chess_game, methods=["GET", "POST"])
 app.add_url_rule("/chess/<tmp_string>", view_func=chess_game, methods=["GET", "POST"])
+socketio.on_event("chess_move", got_a_chess_move, namespace="/chess")
 
 # Launch webserver
 if __name__ == '__main__':

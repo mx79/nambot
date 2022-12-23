@@ -5,7 +5,18 @@
 {% block header %}{% endblock %}
 
 {% block custom_link %}
+    <!-- WebSocket handler-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+            integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+            crossorigin="anonymous"></script>
     <script type="text/javascript">
+        // WebSocket
+        const socket = io('ws://localhost:5000/chess/' + '{{ game_id }}');
+        socket.on('connect', () => {
+            console.log('connected!');
+            socket.emit('chess_move', {data: '{{ game_id }}'});
+        });
+
         // Check the size of the window and do something with it to make it responsive.
         function checkWindowSize() {
             const chessContainer = document.getElementById("chess-container");

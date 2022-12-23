@@ -107,6 +107,10 @@ def load_chess_board(game_id: str) -> Dict:
     return {"fen": custom_fen}
 
 
+def got_a_chess_move(data):
+    print(f"Got data from game: {data}")
+
+
 @auth_required
 def chess_game(tmp_string: str = None):
     """
