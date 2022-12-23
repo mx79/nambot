@@ -46,7 +46,6 @@ def update_chess_board(game_id: str, move: str) -> Dict[str, bool]:
     """
     board = all_chess_games[game_id]
     board.push_san(move)
-    print(board.board_fen())
 
     res = {
         "draw": False,
@@ -76,10 +75,31 @@ def load_chess_board(game_id: str) -> Dict:
     :rtype: Dict
     :return:
     """
-    board = all_chess_games[game_id]
-    fen = board.board_fen()
 
-    return {"fen": fen}
+    def transform(row):
+        for char in row:
+            if char not in "rnbqkpRNBQKP":
+                if char == "2":
+                    row = row.replace(char, "11")
+                elif char == "3":
+                    row = row.replace(char, "111")
+                elif char == "4":
+                    row = row.replace(char, "1111")
+                elif char == "5":
+                    row = row.replace(char, "11111")
+                elif char == "6":
+                    row = row.replace(char, "111111")
+                elif char == "7":
+                    row = row.replace(char, "1111111")
+                elif char == "8":
+                    row = row.replace(char, "11111111")
+        return row
+
+    board = all_chess_games[game_id]
+    fen_splitted = board.board_fen().split("/")
+    custom_fen = '/'.join(transform(row) for row in fen_splitted)
+
+    return {"fen": custom_fen}
 
 
 @auth_required

@@ -14,31 +14,94 @@
             }
         }
 
-
         window.addEventListener("resize", checkWindowSize);
         checkWindowSize();
 
         // Load the corresponding chess game
-        if ('{{ game_id }}') {
-            fetch(
-                "http://localhost:5000/chess/" + '{{ game_id }}',
-                {
-                    method: 'POST',
-                    body: JSON.stringify({load: true}),
-                    mode: 'cors',
-                    headers: {
-                        'Content-type': 'application/json',
-                        'Accept': 'application/json'
-                    }
-                }).then(r => r.json())
-                .then(jsonResponse => {
-                    // Load the FEN string representing the current game
-                    const fenLines = jsonResponse["fen"].split("/");
-                    console.log(fenLines);
-                }).catch((error) => {
-                console.error('Error:', error);
-            });
-        }
+        document.addEventListener("DOMContentLoaded", () => {
+            if ('{{ game_id }}') {
+                const emptyImgg = document.querySelector('img[alt="empty"]');
+                const blackRook = document.querySelector('img[alt="black_rook"]');
+                const blackKnight = document.querySelector('img[alt="black_knight"]');
+                const blackBishop = document.querySelector('img[alt="black_bishop"]');
+                const blackQueen = document.querySelector('img[alt="black_queen"]');
+                const blackKing = document.querySelector('img[alt="black_king"]');
+                const blackPawn = document.querySelector('img[alt="black_pawn"]');
+                const whiteRook = document.querySelector('img[alt="white_rook"]');
+                const whiteKnight = document.querySelector('img[alt="white_knight"]');
+                const whiteBishop = document.querySelector('img[alt="white_bishop"]');
+                const whiteQueen = document.querySelector('img[alt="white_queen"]');
+                const whiteKing = document.querySelector('img[alt="white_king"]');
+                const whitePawn = document.querySelector('img[alt="white_pawn"]');
+                fetch(
+                    'http://localhost:5000/chess/' + '{{ game_id }}',
+                    {
+                        method: 'POST',
+                        body: JSON.stringify({load: true}),
+                        mode: 'cors',
+                        headers: {
+                            'Content-type': 'application/json',
+                            'Accept': 'application/json'
+                        }
+                    }).then(r => r.json())
+                    .then(jsonResponse => {
+                        // Load the FEN string representing the current game
+                        const fenLines = jsonResponse["fen"].split("/");
+                        console.log(fenLines);
+                        // Iterate through chessContainer and set the piece at the corresponding place
+                        let rowCount = 0;
+                        let caseCount = 0;
+                        const chessContainer = document.getElementById("chess-container");
+                        // Remove all piece from the chess board
+                        for (const row of chessContainer.children) {
+                            for (const chessCase of row.children) {
+                                chessCase.firstElementChild.remove();
+                            }
+                        }
+                        // Append all piece from the current game
+                        for (const row of chessContainer.children) {
+                            for (const chessCase of row.children) {
+                                const fenVal = fenLines[rowCount].slice(caseCount, caseCount + 1);
+                                let pieceToAppend;
+                                console.log(fenVal);
+                                if (fenVal === "r") {
+                                    pieceToAppend = blackRook;
+                                } else if (fenVal === "n") {
+                                    pieceToAppend = blackKnight;
+                                } else if (fenVal === "b") {
+                                    pieceToAppend = blackBishop;
+                                } else if (fenVal === "q") {
+                                    pieceToAppend = blackQueen;
+                                } else if (fenVal === "k") {
+                                    pieceToAppend = blackKing;
+                                } else if (fenVal === "p") {
+                                    pieceToAppend = blackPawn;
+                                } else if (fenVal === "R") {
+                                    pieceToAppend = whiteRook;
+                                } else if (fenVal === "N") {
+                                    pieceToAppend = whiteKnight;
+                                } else if (fenVal === "B") {
+                                    pieceToAppend = whiteBishop;
+                                } else if (fenVal === "Q") {
+                                    pieceToAppend = whiteQueen;
+                                } else if (fenVal === "K") {
+                                    pieceToAppend = whiteKing;
+                                } else if (fenVal === "P") {
+                                    pieceToAppend = whitePawn;
+                                } else {
+                                    pieceToAppend = emptyImgg;
+                                }
+                                chessCase.appendChild(pieceToAppend.cloneNode());
+                                caseCount++
+                            }
+                            caseCount = 0;
+                            rowCount++
+                        }
+                    }).catch((error) => {
+                    console.error('Error:', error);
+                });
+            }
+        })
     </script>
 {% endblock %}
 

@@ -12,7 +12,6 @@ const primaryBgCases = [
 const emptyImg = document.querySelector('img[alt="empty"]');
 
 // Overridable var contributing to script logic
-let flag = false;
 let movesArray = [];
 
 /**
