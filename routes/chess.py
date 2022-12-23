@@ -55,6 +55,8 @@ def update_chess_board(game_id: str, move: str) -> Dict[str, bool]:
     }
 
     # TODO: implement the promotion of a piece
+    if board.is_stalemate():
+        res["draw"] = True
     if board.is_insufficient_material():
         res["draw"] = True
     if board.is_fivefold_repetition():

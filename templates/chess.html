@@ -8,15 +8,37 @@
         function checkWindowSize() {
             const chessContainer = document.getElementById("chess-container");
             if (window.innerWidth < 720) {
-                chessContainer.setAttribute("style", "margin-top: 60px");
+                chessContainer?.setAttribute("style", "margin-top: 60px");
             } else {
-                chessContainer.setAttribute("style", "margin-top: 60px;max-width: 720px;max-height: 720px");
+                chessContainer?.setAttribute("style", "margin-top: 60px;max-width: 720px;max-height: 720px");
             }
         }
 
-        window.addEventListener("resize", checkWindowSize);
 
+        window.addEventListener("resize", checkWindowSize);
         checkWindowSize();
+
+        // Load the corresponding chess game
+        if ('{{ game_id }}') {
+            fetch(
+                "http://localhost:5000/chess/" + '{{ game_id }}',
+                {
+                    method: 'POST',
+                    body: JSON.stringify({load: true}),
+                    mode: 'cors',
+                    headers: {
+                        'Content-type': 'application/json',
+                        'Accept': 'application/json'
+                    }
+                }).then(r => r.json())
+                .then(jsonResponse => {
+                    // Load the FEN string representing the current game
+                    const fenLines = jsonResponse["fen"].split("/");
+                    console.log(fenLines);
+                }).catch((error) => {
+                console.error('Error:', error);
+            });
+        }
     </script>
 {% endblock %}
 

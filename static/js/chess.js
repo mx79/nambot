@@ -21,44 +21,41 @@ let movesArray = [];
  * @param gameId
  */
 function checkPossibleMoveForThisPiece(piece, gameId) {
-    flag = !flag;
-    if (flag) {
-        const chessCase = piece.parentNode.id;
-        // Do a request to check possible move for this case:
-        fetch(
-            `http://localhost:5000/chess/${gameId}`,
-            {
-                method: 'POST',
-                body: JSON.stringify({check: true, chess_case: chessCase}),
-                mode: 'cors',
-                headers: {
-                    'Content-type': 'application/json',
-                    'Accept': 'application/json'
+    const chessCase = piece.parentNode.id;
+    // Start by removing any light on case before we make a request
+    removeLightOnCase(gameId);
+    // Do a request to check possible move for this case
+    fetch(
+        `http://localhost:5000/chess/${gameId}`,
+        {
+            method: 'POST',
+            body: JSON.stringify({check: true, chess_case: chessCase}),
+            mode: 'cors',
+            headers: {
+                'Content-type': 'application/json',
+                'Accept': 'application/json'
+            }
+        }).then(r => r.json())
+        .then(jsonResponse => {
+            // Put some light on the chess cases available for the piece selected:
+            movesArray = jsonResponse["possible_moves"];
+            for (const possibility of movesArray) {
+                const elem = document.getElementById(possibility.slice(2, 4));
+                // Change the color of the case if it is a valid move
+                elem.setAttribute("class", "col d-flex justify-content-center");
+                elem.setAttribute("style", "background-color: #f8f9fa");
+                // Remove pointer event if there is a piece on this case
+                if (elem.firstElementChild.alt !== "empty") {
+                    elem.firstElementChild.setAttribute("style", "pointer-events: none");
                 }
-            }).then(r => r.json())
-            .then(jsonResponse => {
-                // Put some light on the chess cases available for the piece selected:
-                movesArray = jsonResponse["possible_moves"];
-                for (const possibility of movesArray) {
-                    const elem = document.getElementById(possibility.slice(2, 4));
-                    // Change the color of the case if it is a valid move
-                    elem.setAttribute("class", "col d-flex justify-content-center");
-                    elem.setAttribute("style", "background-color: #f8f9fa");
-                    // Remove pointer event if there is a piece on this case
-                    if (elem.firstElementChild.alt !== "empty") {
-                        elem.firstElementChild.setAttribute("style", "pointer-events: none");
-                    }
-                    // Add eventListener on click when a possible move case is clicked and ask for the board to update
-                    elem.addEventListener("click", updateChessBoard);
-                    elem.possibility = possibility;
-                    elem.gameId = gameId;
-                }
-            }).catch((error) => {
-            console.error('Error:', error);
-        });
-    } else {
-        removeLightOnCase(gameId);
-    }
+                // Add eventListener on click when a possible move case is clicked and ask for the board to update
+                elem.addEventListener("click", updateChessBoard);
+                elem.possibility = possibility;
+                elem.gameId = gameId;
+            }
+        }).catch((error) => {
+        console.error('Error:', error);
+    });
 }
 
 
@@ -168,31 +165,6 @@ function updateChessBoard(event) {
             } else if (jsonResponse["check"]) {
                 chessArea.innerHTML += '<div id="chess-tmp"><br><br><h1 class="text-center text-primary">Echec !</h1></div>';
             }
-        }).catch((error) => {
-        console.error('Error:', error);
-    });
-}
-
-/**
- *
- * @param gameId
- */
-function loadChessBoard(gameId) {
-    fetch(
-        `http://localhost:5000/chess/${gameId}`,
-        {
-            method: 'POST',
-            body: JSON.stringify({load: true}),
-            mode: 'cors',
-            headers: {
-                'Content-type': 'application/json',
-                'Accept': 'application/json'
-            }
-        }).then(r => r.json())
-        .then(jsonResponse => {
-            // Load the FEN string representing the current game
-            const fen = jsonResponse["fen"];
-            console.log(fen);
         }).catch((error) => {
         console.error('Error:', error);
     });
