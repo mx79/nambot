@@ -126,7 +126,10 @@ def on_chess_move(data):
 
     :param data: The websocket payload
     """
-    print(data["gameId"])
+    username = data["userId"]
+    room = data["gameId"]
+    move = data["move"]
+    send(f"Incoming move from {username}: {move}", to=room)
 
 
 def on_chess_leave(data):
