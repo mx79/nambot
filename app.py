@@ -3,7 +3,7 @@ from flask_socketio import SocketIO
 from routes.chat import chat_receiver
 from routes.base import root, user_profile
 from routes.chatbot import chatbot_receiver
-from routes.chess import chess_game, got_a_chess_move
+from routes.chess import chess_game, on_chess_join, on_chess_move, on_chess_leave
 from routes.auth import email_verification, forgot_password, login, logout
 
 # Flask app init
@@ -13,6 +13,7 @@ socketio = SocketIO(app, logger=True, engineio_logger=True)
 
 
 # TODO: Upload un avatar par utilisateur et le stocker dans le user correspondant.
+# TODO: Liste déroulante noms des utilisateurs => profil.html et chess.html
 # TODO: Discussion de groupe avec Redis.
 
 
@@ -31,6 +32,7 @@ def page_not_found(error):
 @socketio.on_error_default
 def default_error_handler(error):
     print(f"Got an error on WebSocket: {error}")
+
 
 # @app.before_request
 # def make_session_permanent():
@@ -57,7 +59,9 @@ app.add_url_rule("/chatbot-receiver", view_func=chatbot_receiver, methods=["POST
 # Chess
 app.add_url_rule("/chess", view_func=chess_game, methods=["GET", "POST"])
 app.add_url_rule("/chess/<tmp_string>", view_func=chess_game, methods=["GET", "POST"])
-socketio.on_event("chess_move", got_a_chess_move, namespace="/chess")
+socketio.on_event("chess_connect", on_chess_join, namespace="/chess")
+socketio.on_event("chess_move", on_chess_move, namespace="/chess")
+socketio.on_event("chess_disconnect", on_chess_leave, namespace="/chess")
 
 # Launch webserver
 if __name__ == '__main__':

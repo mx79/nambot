@@ -5,6 +5,7 @@ import random
 from typing import Dict
 from routes import all_chess_games, auth_required
 from pkg.authlib.auth import db, get_random_string
+from flask_socketio import send, join_room, leave_room
 from flask import redirect, render_template, request, session
 
 
@@ -107,13 +108,37 @@ def load_chess_board(game_id: str) -> Dict:
     return {"fen": custom_fen}
 
 
-def got_a_chess_move(data):
+def on_chess_join(data):
+    """WebSocket function that makes possible the join of a room. The room is here the chess game ID.
+    User entering the room will be able to see any move played.
+
+    :param data: The websocket payload
+    """
+    username = data["userId"]
+    room = data["gameId"]
+    join_room(room)
+    send(f"{username} has entered the room.", to=room)
+
+
+def on_chess_move(data):
     """WebSocket function to make the game fluid, Player A has played a move, Player B will receive the information
     and the data is updated in real-time.
 
     :param data: The websocket payload
     """
     print(data["gameId"])
+
+
+def on_chess_leave(data):
+    """WebSocket function that makes possible the leave of the room. The room is here the chess game ID.
+    User entering the room will be able to see any move played.
+
+    :param data: The websocket payload
+    """
+    username = data["userId"]
+    room = data["gameId"]
+    leave_room(room)
+    send(f"{username} has leaved the room.", to=room)
 
 
 @auth_required
