@@ -163,6 +163,21 @@
 
         /**
          *
+         * @param jsonResponse
+         */
+        function checkMecanism(jsonResponse) {
+            const chessArea = document.getElementById("chess-area");
+            if (jsonResponse["draw"]) {
+                chessArea.innerHTML += '<div id="chess-tmp"><br><br><h1 class="text-center text-primary"> La partie se solde par un nul !</h1></div>';
+            } else if (jsonResponse["checkmate"]) {
+                chessArea.innerHTML += '<div id="chess-tmp"><br><br><h1 class="text-center text-primary">Echec et mat !</h1></div>';
+            } else if (jsonResponse["check"]) {
+                chessArea.innerHTML += '<div id="chess-tmp"><br><br><h1 class="text-center text-primary">Echec !</h1></div>';
+            }
+        }
+
+        /**
+         *
          * @param event
          */
         function updateChessBoard(event) {
@@ -191,21 +206,16 @@
                     removeLightOnCase(gameId);
                     forwardPiece(move);
                     // After we deal with the draw or checkmate mechanism
-                    const chessArea = document.getElementById("chess-area");
-                    if (jsonResponse["draw"]) {
-                        chessArea.innerHTML += '<div id="chess-tmp"><br><br><h1 class="text-center text-primary"> La partie se solde par un nul !</h1></div>';
-                    } else if (jsonResponse["checkmate"]) {
-                        chessArea.innerHTML += '<div id="chess-tmp"><br><br><h1 class="text-center text-primary">Echec et mat !</h1></div>';
-                    } else if (jsonResponse["check"]) {
-                        chessArea.innerHTML += '<div id="chess-tmp"><br><br><h1 class="text-center text-primary">Echec !</h1></div>';
-                    }
+                    checkMecanism(jsonResponse);
                 }).catch((error) => {
                 console.error('Error:', error);
             });
         }
 
-
-        // Used when the color view side is black
+        /**
+         * Used when the color view side is black
+         * @param fen
+         */
         function reverseFen(fen) {
             const reversedFen = [];
             const fenSplitted = fen.split("/").reverse();
@@ -215,7 +225,10 @@
             return reversedFen.join("/")
         }
 
-        // Used to check which `onclick listener` we should add or not
+        /**
+         * Used to check which `onclick listener` we should add or not
+         * @param color
+         */
         function checkPlayerRights(color) {
             const chessContainer = document.getElementById("chess-container");
             for (const row of chessContainer.children) {
