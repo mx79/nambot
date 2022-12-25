@@ -155,7 +155,6 @@ def chess_game(tmp_string: str = None):
                     chess_case=body["chess_case"]
                 )
             elif body.get("update"):
-                print(body)
                 return update_chess_board(
                     game_id=tmp_string,
                     move=body["move"],
