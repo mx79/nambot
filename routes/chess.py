@@ -5,7 +5,7 @@ import random
 from typing import Dict
 from routes import all_chess_games, auth_required
 from pkg.authlib.auth import db, get_random_string
-from flask_socketio import send, join_room, leave_room
+from flask_socketio import emit, join_room, leave_room
 from flask import redirect, render_template, request, session
 
 
@@ -114,10 +114,8 @@ def on_chess_join(data):
 
     :param data: The websocket payload
     """
-    username = session.get("username")
     room = data["gameId"]
     join_room(room)
-    send(f"{username} has entered the room.", to=room)
 
 
 def on_chess_move(data):
@@ -126,11 +124,9 @@ def on_chess_move(data):
 
     :param data: The websocket payload
     """
-    username = session.get("username")
     room = data["gameId"]
     move = data["move"]
-    print(data)
-    send(f"Incoming move from {username}: {move}", to=room)
+    emit("chess_move_back", {"move": move}, to=room, include_self=False)
 
 
 def on_chess_leave(data):
@@ -139,10 +135,8 @@ def on_chess_leave(data):
 
     :param data: The websocket payload
     """
-    username = session.get("username")
     room = data["gameId"]
     leave_room(room)
-    send(f"{username} has leaved the room.", to=room)
 
 
 @auth_required
