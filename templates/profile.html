@@ -4,27 +4,6 @@
     Profil de {{ user_infos["username"] }}
 {% endblock %}
 
-{#{% block custom_link %}#}
-{#    <script type="text/javascript">#}
-{#        $(document).on('submit', '#updateInfos', function (e) {#}
-{#            console.log('hello');#}
-{#            e.preventDefault();#}
-{#            $.ajax({#}
-{#                type: 'POST',#}
-{#                url: '/profile/{{ session.get("username") }}',#}
-{#                data: {#}
-{#                    firstname: $("#update_firstname").val(),#}
-{#                    lastname: $("#update_lastname").val(),#}
-{#                    promo: $("#update_promo").val()#}
-{#                },#}
-{#                success: function () {#}
-{#                    alert('saved');#}
-{#                }#}
-{#            })#}
-{#        });#}
-{#    </script>#}
-{#{% endblock %}#}
-
 {% block page_title %}
     Profil de {{ user_infos["username"] }}
 {% endblock %}

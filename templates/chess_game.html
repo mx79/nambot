@@ -50,26 +50,34 @@
 
         /**
          *
-         * @param piece
-         * @param gameId
-         * @param socket
+         * @param payload
          */
-        function checkPossibleMoveForThisPiece(piece, gameId, socket) {
-            const chessCase = piece.parentNode.id;
-            // Start by removing any light on case before we make a request
-            removeLightOnCase(gameId);
-            // Do a request to check possible move for this case
-            fetch(
-                `http://localhost:5000/chess/${gameId}`,
+        function chessRequest(payload) {
+            return fetch(
+                'http://localhost:5000/chess/' + '{{ game_id }}',
                 {
                     method: 'POST',
-                    body: JSON.stringify({check: true, chess_case: chessCase}),
+                    body: JSON.stringify(payload),
                     mode: 'cors',
                     headers: {
                         'Content-type': 'application/json',
                         'Accept': 'application/json'
                     }
-                }).then(r => r.json())
+                }
+            );
+        }
+
+        /**
+         *
+         * @param piece
+         */
+        function checkPossibleMoveForThisPiece(piece) {
+            const chessCase = piece.parentNode.id;
+            // Start by removing any light on case before we make a request
+            removeLightOnCase('{{ game_id }}');
+            // Do a request to check possible move for this case
+            chessRequest({check: true, chess_case: chessCase})
+                .then(r => r.json())
                 .then(jsonResponse => {
                     // Put some light on the chess cases available for the piece selected:
                     movesArray = jsonResponse["possible_moves"];
@@ -189,22 +197,12 @@
          */
         function updateChessBoard(event) {
             const move = event.currentTarget.possibility;
-            const gameId = '{{ game_id }}';
             // Do a request to update the chess board status
-            fetch(
-                `http://localhost:5000/chess/${gameId}`,
-                {
-                    method: 'POST',
-                    body: JSON.stringify({update: true, move: move}),
-                    mode: 'cors',
-                    headers: {
-                        'Content-type': 'application/json',
-                        'Accept': 'application/json'
-                    }
-                }).then(r => r.json())
+            chessRequest({update: true, move: move})
+                .then(r => r.json())
                 .then(jsonResponse => {
-                    removeLightOnCase(gameId);
-                    socket.emit('chess_move', {gameId: gameId, move: move, gameStatus: jsonResponse});
+                    removeLightOnCase('{{ game_id }}');
+                    socket.emit('chess_move', {gameId: '{{ game_id }}', move: move, gameStatus: jsonResponse});
                 }).catch((error) => {
                 console.error('Error:', error);
             });
@@ -233,7 +231,7 @@
                 for (const chessCase of row.children) {
                     const elem = chessCase.firstElementChild;
                     if (elem.alt.slice(0, 5) === color) {
-                        elem.setAttribute("onclick", "checkPossibleMoveForThisPiece(this, '{{ game_id }}', socket)");
+                        elem.setAttribute("onclick", "checkPossibleMoveForThisPiece(this)");
                     }
                 }
             }
@@ -243,7 +241,7 @@
         document.addEventListener("DOMContentLoaded", () => {
             if ('{{ game_id }}') {
                 const chessContainer = document.getElementById("chess-container");
-                const emptyImgg = document.querySelector('img[alt="empty"]');
+                const emptyImg = document.querySelector('img[alt="empty"]');
                 const blackRook = document.querySelector('img[alt="black_rook"]');
                 const blackKnight = document.querySelector('img[alt="black_knight"]');
                 const blackBishop = document.querySelector('img[alt="black_bishop"]');
@@ -256,17 +254,8 @@
                 const whiteQueen = document.querySelector('img[alt="white_queen"]');
                 const whiteKing = document.querySelector('img[alt="white_king"]');
                 const whitePawn = document.querySelector('img[alt="white_pawn"]');
-                fetch(
-                    'http://localhost:5000/chess/' + '{{ game_id }}',
-                    {
-                        method: 'POST',
-                        body: JSON.stringify({load: true}),
-                        mode: 'cors',
-                        headers: {
-                            'Content-type': 'application/json',
-                            'Accept': 'application/json'
-                        }
-                    }).then(r => r.json())
+                chessRequest({load: true})
+                    .then(r => r.json())
                     .then(jsonResponse => {
                         let fen = jsonResponse["fen"];
                         // Taking the right fen representation for the right color
@@ -314,7 +303,7 @@
                                 } else if (fenVal === "P") {
                                     pieceToAppend = whitePawn;
                                 } else {
-                                    pieceToAppend = emptyImgg;
+                                    pieceToAppend = emptyImg;
                                 }
                                 chessCase.appendChild(pieceToAppend.cloneNode());
                                 caseCount++
