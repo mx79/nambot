@@ -12,9 +12,9 @@ app.config.from_pyfile("./config/config.py")
 socketio = SocketIO(app, logger=True, engineio_logger=True)
 
 
-# TODO: Upload un avatar par utilisateur et le stocker dans le user correspondant.
+# TODO: Upload un avatar par utilisateur et le stocker dans le user correspondant
 # TODO: Liste déroulante noms des utilisateurs => profil.html et chess.html
-# TODO: Discussion de groupe avec Redis.
+# TODO: Discussion de groupe avec WebSocket
 
 
 # ============================================= CUSTOM HANDLERS ============================================= #
