@@ -33,6 +33,7 @@
         socket.on('chess_move_back', (data) => {
             console.log(`Got the move ${data["move"]}`);
             forwardPiece(data["move"]);
+            checkMecanism(data["gameStatus"]);
         });
 
         // Chess functions:
@@ -166,6 +167,12 @@
          * @param jsonResponse
          */
         function checkMecanism(jsonResponse) {
+            // Check if there is a message displaying `Echec` or something like this and deletes it
+            const chessTmp = document.getElementById("chess-tmp");
+            if (chessTmp) {
+                chessTmp.remove();
+            }
+            // After we deal with the draw or checkmate mechanism
             const chessArea = document.getElementById("chess-area");
             if (jsonResponse["draw"]) {
                 chessArea.innerHTML += '<div id="chess-tmp"><br><br><h1 class="text-center text-primary"> La partie se solde par un nul !</h1></div>';
@@ -183,7 +190,6 @@
         function updateChessBoard(event) {
             const move = event.currentTarget.possibility;
             const gameId = '{{ game_id }}';
-            socket.emit('chess_move', {gameId: gameId, move: move});
             // Do a request to update the chess board status
             fetch(
                 `http://localhost:5000/chess/${gameId}`,
@@ -197,16 +203,8 @@
                     }
                 }).then(r => r.json())
                 .then(jsonResponse => {
-                    // Check if there is a message displaying `Echec` or something like this and deletes it
-                    const chessTmp = document.getElementById("chess-tmp");
-                    if (chessTmp) {
-                        chessTmp.remove();
-                    }
-                    // Removing the white case and forward the piece
                     removeLightOnCase(gameId);
-                    forwardPiece(move);
-                    // After we deal with the draw or checkmate mechanism
-                    checkMecanism(jsonResponse);
+                    socket.emit('chess_move', {gameId: gameId, move: move, gameStatus: jsonResponse});
                 }).catch((error) => {
                 console.error('Error:', error);
             });

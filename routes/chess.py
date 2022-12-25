@@ -126,7 +126,8 @@ def on_chess_move(data):
     """
     room = data["gameId"]
     move = data["move"]
-    emit("chess_move_back", {"move": move}, to=room, include_self=False)
+    game_status = data["gameStatus"]
+    emit("chess_move_back", {"move": move, "gameStatus": game_status}, to=room)
 
 
 def on_chess_leave(data):
