@@ -27,7 +27,7 @@
         // WebSocket
         const socket = io('ws://localhost:5000/chess');
         socket.on('connect', () => {
-            console.log('WebSocket connected to chess namespace!');
+            console.log('WebSocket connected to chess namespace: ' + '{{ game_id }}');
             socket.emit('chess_connect', {gameId: '{{ game_id }}'});
         });
         socket.on('chess_move_back', (data) => {
