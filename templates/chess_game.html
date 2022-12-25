@@ -5,6 +5,10 @@
 {% block header %}{% endblock %}
 
 {% block custom_link %}
+    <!-- JQuery-->
+    <script src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+            crossorigin="anonymous"></script>
     <!-- WebSocket handler-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
             integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
@@ -24,7 +28,7 @@
         window.addEventListener("resize", checkWindowSize);
         checkWindowSize();
 
-        // WebSocket
+        // WebSocket for chess
         const socket = io('ws://localhost:5000/chess');
         socket.on('connect', () => {
             console.log('WebSocket connected to chess namespace: ' + '{{ game_id }}');
@@ -33,7 +37,7 @@
         socket.on('chess_move_back', (data) => {
             console.log(`Got the move ${data["move"]}`);
             forwardPiece(data["move"]);
-            checkMecanism(data["gameStatus"]);
+            checkMechanism(data["gameStatus"]);
         });
 
         // Chess functions:
@@ -42,9 +46,13 @@
             "g1", "e1", "c1", "a1", "h2", "f2", "d2", "b2",
             "g3", "e3", "c3", "a3", "h4", "f4", "d4", "b4",
             "g5", "e5", "c5", "a5", "h6", "f6", "d6", "b6",
-            "g7", "e7", "c7", "a7", "h8", "f8", "d8", "b8"
+            "g7", "e7", "c7", "a7", "h8", "f8", "d8", "b8",
         ];
-
+        // Array containing any promotion movement
+        const promotionMoves = [
+            "a7a8", "b7b8", "c7c8", "d7d8", "e7e8", "f7f8", "g7g8", "h7h8",  // White
+            "a2a1", "b2b1", "c2c1", "d2d1", "e2e1", "f2f1", "g2g1", "h2h1",  // Black
+        ];
         // Overridable var contributing to script logic
         let movesArray = [];
 
@@ -98,7 +106,6 @@
                 console.error('Error:', error);
             });
         }
-
 
         /**
          *
@@ -172,9 +179,32 @@
 
         /**
          *
+         * @param move
+         */
+        function checkPromotion(move) {
+            const fromChessCase = document.getElementById(move.slice(0, 2));
+            if (fromChessCase.firstElementChild.alt.slice(6) === "pawn" && promotionMoves.includes(move)) {
+                console.log("It is a promotion move!")
+                return choosePiece();
+            }
+            return move
+        }
+
+        /**
+         *
+         */
+        function choosePiece() {
+            let promotionMove;
+            $('#promotionModal').modal('show');
+
+            return promotionMove
+        }
+
+        /**
+         *
          * @param jsonResponse
          */
-        function checkMecanism(jsonResponse) {
+        function checkMechanism(jsonResponse) {
             // Check if there is a message displaying `Echec` or something like this and deletes it
             const chessTmp = document.getElementById("chess-tmp");
             if (chessTmp) {
@@ -196,7 +226,8 @@
          * @param event
          */
         function updateChessBoard(event) {
-            const move = event.currentTarget.possibility;
+            let move = event.currentTarget.possibility;
+            move = checkPromotion(move);
             // Do a request to update the chess board status
             chessRequest({update: true, move: move})
                 .then(r => r.json())
@@ -327,7 +358,7 @@
 
 {% block content %}
     {% if (session.get("username") != receiver_username and (sender_color == "black" or session.get("sender_color") == "black")) or (session.get("username") == receiver_username and receiver_color == "black") %}
-        <section class="page-section" id="chess-area" onload="">
+        <section class="page-section" id="chess-area">
             <div class="section">
                 <div class="container border border-dark border-3"
                      style="margin-top: 60px;max-width: 720px;max-height: 720px" id="chess-container">
@@ -951,4 +982,62 @@
             </div>
         </section>
     {% endif %}
+    <!-- Modal -->
+    <div class="modal fade" id="promotionModal" tabindex="-1" role="dialog"
+         aria-labelledby="promotionModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Promotion de pièce</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        {% if (session.get("username") != receiver_username and (sender_color == "black" or session.get("sender_color") == "black")) or (session.get("username") == receiver_username and receiver_color == "black") %}
+                            <div class="col">
+                                <img class="card-img" id="promotedToBlackBishop"
+                                     src="{{ url_for('static', filename='./assets/img/chess/256px/black_bishop.png') }}"
+                                     alt="black_bishop">
+                            </div>
+                            <div class="col">
+                                <img class="card-img" id="promotedToBlackKnight"
+                                     src="{{ url_for('static', filename='./assets/img/chess/256px/black_knight.png') }}"
+                                     alt="black_knight">
+                            </div>
+                            <div class="col">
+                                <img class="card-img" id="promotedToBlackRook"
+                                     src="{{ url_for('static', filename='./assets/img/chess/256px/black_rook.png') }}"
+                                     alt="black_rook">
+                            </div>
+                            <div class="col">
+                                <img class="card-img" id="promotedToBlackQueen"
+                                     src="{{ url_for('static', filename='./assets/img/chess/256px/black_queen.png') }}"
+                                     alt="black_queen">
+                            </div>
+                        {% else %}
+                            <div class="col">
+                                <img class="card-img" id="promotedToWhiteBishop"
+                                     src="{{ url_for('static', filename='./assets/img/chess/256px/white_bishop.png') }}"
+                                     alt="white_bishop">
+                            </div>
+                            <div class="col">
+                                <img class="card-img" id="promotedToWhiteKnight"
+                                     src="{{ url_for('static', filename='./assets/img/chess/256px/white_knight.png') }}"
+                                     alt="white_knight">
+                            </div>
+                            <div class="col">
+                                <img class="card-img" id="promotedToWhiteRook"
+                                     src="{{ url_for('static', filename='./assets/img/chess/256px/white_rook.png') }}"
+                                     alt="white_rook">
+                            </div>
+                            <div class="col">
+                                <img class="card-img" id="promotedToWhiteQueen"
+                                     src="{{ url_for('static', filename='./assets/img/chess/256px/white_queen.png') }}"
+                                     alt="white_queen">
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
