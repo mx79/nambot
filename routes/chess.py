@@ -114,7 +114,7 @@ def on_chess_join(data):
 
     :param data: The websocket payload
     """
-    username = data["userId"]
+    username = session.get("username")
     room = data["gameId"]
     join_room(room)
     send(f"{username} has entered the room.", to=room)
@@ -126,9 +126,10 @@ def on_chess_move(data):
 
     :param data: The websocket payload
     """
-    username = data["userId"]
+    username = session.get("username")
     room = data["gameId"]
     move = data["move"]
+    print(data)
     send(f"Incoming move from {username}: {move}", to=room)
 
 
@@ -138,7 +139,7 @@ def on_chess_leave(data):
 
     :param data: The websocket payload
     """
-    username = data["userId"]
+    username = session.get("username")
     room = data["gameId"]
     leave_room(room)
     send(f"{username} has leaved the room.", to=room)

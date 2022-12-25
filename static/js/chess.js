@@ -17,8 +17,9 @@ let movesArray = [];
  *
  * @param piece
  * @param gameId
+ * @param socket
  */
-function checkPossibleMoveForThisPiece(piece, gameId) {
+function checkPossibleMoveForThisPiece(piece, gameId, socket) {
     const chessCase = piece.parentNode.id;
     // Start by removing any light on case before we make a request
     removeLightOnCase(gameId);
@@ -50,6 +51,7 @@ function checkPossibleMoveForThisPiece(piece, gameId) {
                 elem.addEventListener("click", updateChessBoard);
                 elem.possibility = possibility;
                 elem.gameId = gameId;
+                elem.socket = socket;
             }
         }).catch((error) => {
         console.error('Error:', error);
@@ -133,7 +135,11 @@ function forwardPiece(move) {
 function updateChessBoard(event) {
     const move = event.currentTarget.possibility;
     const gameId = event.currentTarget.gameId;
-    socket.emit('chess_move', {userId: '{{ session.get("username") }}', gameId: '{{ game_id }}', move: move});
+    const socket = event.currentTarget.socket;
+    socket.emit('chess_move', {gameId: gameId, move: move}, (response) => {
+        console.log("Yo mec");
+        console.log(response);
+    });
     // Do a request to update the chess board status
     fetch(
         `http://localhost:5000/chess/${gameId}`,
