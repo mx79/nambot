@@ -16,6 +16,7 @@ socketio = SocketIO(app, logger=True, engineio_logger=True)
 # TODO: Liste déroulante noms des utilisateurs => profil.html et chess.html
 # TODO: Discussion de groupe avec WebSocket + popup de chat simple
 # TODO: Peut-être merge les fonctions de DB avec le WebSocket pour le Chess
+# TODO: Package all
 
 
 # ============================================= CUSTOM HANDLERS ============================================= #
@@ -60,9 +61,9 @@ app.add_url_rule("/chatbot-receiver", view_func=chatbot_receiver, methods=["POST
 # Chess
 app.add_url_rule("/chess", view_func=chess_game, methods=["GET", "POST"])
 app.add_url_rule("/chess/<tmp_string>", view_func=chess_game, methods=["GET", "POST"])
-socketio.on_event("chess_connect", on_chess_join, namespace="/chess")
+socketio.on_event("chess_join", on_chess_join, namespace="/chess")
 socketio.on_event("chess_move", on_chess_move, namespace="/chess")
-socketio.on_event("chess_disconnect", on_chess_leave, namespace="/chess")
+socketio.on_event("chess_leave", on_chess_leave, namespace="/chess")
 
 # Launch webserver
 if __name__ == '__main__':

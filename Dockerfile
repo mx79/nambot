@@ -1,5 +1,5 @@
 # Use python image
-FROM python:3.8
+FROM python:3.10
 
 # Args
 ARG MONGO_CLUSTER
@@ -14,13 +14,11 @@ ENV SECRET_KEY=$SECRET_KEY
 # Use this folder as working directory
 WORKDIR /app
 
-# Install requirements
-COPY requirements.txt /app/
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
-
 # Copy actions folder to working directory
 COPY . /app/
+
+# Install requirements
+RUN bash install.sh
 
 # Run service
 CMD ["python", "app.py"]

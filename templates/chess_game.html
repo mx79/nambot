@@ -32,12 +32,16 @@
         const socket = io('ws://localhost:5000/chess');
         socket.on('connect', () => {
             console.log('WebSocket connected to chess namespace: ' + '{{ game_id }}');
-            socket.emit('chess_connect', {gameId: '{{ game_id }}'});
+            socket.emit('chess_join', {gameId: '{{ game_id }}'});
         });
         socket.on('chess_move_back', (data) => {
             console.log(`Got the move ${data["move"]}`);
             forwardPiece(data["move"]);
             checkMechanism(data["gameStatus"]);
+        });
+        socket.on('disconnect', () => {
+            console.log('WebSocket disconnected from chess namespace: ' + '{{ game_id }}');
+            socket.emit('chess_leave', {gameId: '{{ game_id }}'});
         });
 
         // Chess functions:
@@ -84,7 +88,7 @@
             // Start by removing any light on case before we make a request
             removeLightOnCase('{{ game_id }}');
             // Do a request to check possible move for this case
-            chessRequest({check: true, chess_case: chessCase})
+            chessRequest({check: true, chessCase: chessCase})
                 .then(r => r.json())
                 .then(jsonResponse => {
                     // Put some light on the chess cases available for the piece selected:
@@ -174,7 +178,32 @@
             // Moving Piece and remove the opponent one if any
             toChessCase.removeChild(toChessCase.firstElementChild);
             fromChessCase.appendChild(emptyImg.cloneNode());
-            toChessCase.appendChild(fromChessCase.firstElementChild);
+            // Promotion
+            if (move.length > 4) {
+                let promotedPiece;
+                const promotionType = move.slice(4);
+                if (promotionType === "b") {
+                    promotedPiece = document.querySelector('img[alt="black_bishop"]');
+                } else if (promotionType === "n") {
+                    promotedPiece = document.querySelector('img[alt="black_knight"]');
+                } else if (promotionType === "r") {
+                    promotedPiece = document.querySelector('img[alt="black_rook"]');
+                } else if (promotionType === "q") {
+                    promotedPiece = document.querySelector('img[alt="black_queen"]');
+                } else if (promotionType === "B") {
+                    promotedPiece = document.querySelector('img[alt="white_bishop"]');
+                } else if (promotionType === "N") {
+                    promotedPiece = document.querySelector('img[alt="white_knight"]');
+                } else if (promotionType === "R") {
+                    promotedPiece = document.querySelector('img[alt="white_rook"]');
+                } else if (promotionType === "Q") {
+                    promotedPiece = document.querySelector('img[alt="white_queen"]');
+                }
+                fromChessCase.removeChild(fromChessCase.firstElementChild);
+                toChessCase.appendChild(promotedPiece.cloneNode());
+            } else {
+                toChessCase.appendChild(fromChessCase.firstElementChild);
+            }
         }
 
         /**
@@ -1028,9 +1057,9 @@
     <div class="modal fade" id="promotionModal" tabindex="-1" role="dialog"
          aria-labelledby="promotionModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content text-center">
+            <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Promotion de pièce</h5>
+                    <h5 class="modal-title text-center">Promotion de pièce</h5>
                 </div>
                 <div class="modal-body">
                     <div class="row">

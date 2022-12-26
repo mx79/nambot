@@ -26,8 +26,7 @@ characters_with_punct = list(string.ascii_letters + string.digits + string.punct
 
 
 def pwd_generator() -> str:
-    """
-    Description: Generates a password for those user who have no idea.
+    """Generates a password for those user who have no idea.
 
     :return: Password of length 10
     """
@@ -38,19 +37,17 @@ def pwd_generator() -> str:
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """
-    Description: Verify password between one not hashed and its hashed representation.
+    """Verify password between one not hashed and its hashed representation.
 
     :param plain_password: Password to test, as plain string
     :param hashed_password: Password hashed
-    :return: ``True`` if the password matched the hash, else ``False``
+    :return: `True` if the password matched the hash, else `False`
     """
     return pwd_context.verify(plain_password, hashed_password)
 
 
 def get_password_hash(password: str) -> str:
-    """
-    Description: Function used to transform plain string password to hashed password.
+    """Function used to transform plain string password to hashed password.
 
     :param password: Password to hash
     :return: Hashed password
@@ -62,8 +59,7 @@ def get_password_hash(password: str) -> str:
 
 
 def create_user(username: str, promo: str, email: str, pwd: str, tmp: bool = False):
-    """
-    Description: Basic function to create a json file for a new user, temporary or not.
+    """Basic function to create a json file for a new user, temporary or not.
 
     :param username: Unique username
     :param promo: Promotion to choose in a drop-down list
@@ -91,19 +87,17 @@ def create_user(username: str, promo: str, email: str, pwd: str, tmp: bool = Fal
 
 
 def update_password(email: str, new_password: str):
-    """
-    Description: Function that handles the forgot password process.
+    """Function that handles the forgot password process.
 
-    :param email:
-    :param new_password:
+    :param email: CNAM email
+    :param new_password: The new password wished by the user
     """
     db.users.update_one(filter={"email": email},
                         update={"$set": {"password": get_password_hash(new_password)}})
 
 
 def user_in_db(name: str, email: str):
-    """
-    Description: Check whether a user is in database or not.
+    """Check whether a user is in database or not.
 
     :param name: Unique username
     :param email: CNAM email
@@ -118,11 +112,10 @@ def user_in_db(name: str, email: str):
 
 
 def create_email_validation_url(key: str, email: str):
-    """
-    Description:
+    """It creates the temporary url to validate email address.
 
-    :param key:
-    :param email:
+    :param key: The generated key to construct the URL
+    :param email: CNAM email
     """
     db.tmp_email_validation_url.insert_one({
         "url": key,
@@ -132,11 +125,10 @@ def create_email_validation_url(key: str, email: str):
 
 
 def create_forgot_url(key: str, email: str):
-    """
-    Description:
+    """It creates the temporary url to regenerate the user password.
 
-    :param key:
-    :param email:
+    :param key: The generated key to construct the URL
+    :param email: CNAM email
     """
     db.tmp_forgot_url.insert_one({
         "url": key,
@@ -149,8 +141,7 @@ def create_forgot_url(key: str, email: str):
 
 
 def get_random_string(length: int):
-    """
-    Description: Generates a random string for dynamic link.
+    """Generates a random string for dynamic link.
 
     :return: Random string of desired length
     """
@@ -161,16 +152,15 @@ def get_random_string(length: int):
 
 
 def send_email(email: str, option: str):
-    """
-    Description: Function used to send email from CnamBot address when we are validating
+    """Function used to send email from CnamBot address when we are validating
     user email address or following the process of the forgotten email.
 
     :param email: CNAM email
-    :param option: ``verification`` or ``forgot`` email sending process
+    :param option: `verification` or `forgot` email sending process
     """
     # Exit func if option param is wrong
     if option not in ["verification", "forgot"]:
-        return KeyError("Invalid option for func send_email")
+        raise KeyError("Invalid option for func send_email")
 
     # Server start and login with credentials
     server = smtplib.SMTP('SMTP.gmail.com', 587)
@@ -180,12 +170,12 @@ def send_email(email: str, option: str):
     server.login(getenv("CNAMBOT_EMAIL"), getenv("CNAMBOT_PASSWORD"))
 
     # Strip eventual space in user address
-    email = email.strip()
+    mail = email.strip()
 
     # Headers : cnambot_address, user_address, actual_date, subject, message
     msg = EmailMessage()
     msg['From'] = f'CnamBot <{getenv("CNAMBOT_EMAIL")}>'
-    msg['To'] = email
+    msg['To'] = mail
     msg["Date"] = formatdate(localtime=True)
     key = get_random_string(16)
     if option == "verification":
@@ -201,7 +191,7 @@ def send_email(email: str, option: str):
         Bonne journée,
         L'équipe de développement
         """)
-        create_email_validation_url(key, email)
+        create_email_validation_url(key, mail)
     elif option == "forgot":
         msg['Subject'] = "Votre lien de réinitialisation de mot de passe"
         msg.set_content(f"""\
@@ -213,15 +203,15 @@ def send_email(email: str, option: str):
         Bonne journée,
         L'équipe de développement
         """)
-        create_forgot_url(key, email)
+        create_forgot_url(key, mail)
 
     # Try to send the message, catch if there are any error
     try:
         server.send_message(msg)
         print(option)
-        print('{0} : send'.format(email))
+        print('{0} : send'.format(mail))
     except smtplib.SMTPException as e:
         print(option)
-        print('{0} : {1}'.format(email, e))
+        print('{0} : {1}'.format(mail, e))
 
     server.quit()

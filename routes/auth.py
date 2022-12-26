@@ -75,6 +75,7 @@ def email_verification(tmp_string: str = None):
     return render_template("404.html")
 
 
+@no_auth_required
 def forgot_password(tmp_string: str = None):
     """
 
