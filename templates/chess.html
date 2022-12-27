@@ -20,11 +20,15 @@
                         <div class="form-group mt-2">
                             <h5 class="mb-4 pb-3">Saisissez le nom de l'utilisateur que vous souhaitez
                                 affronter:</h5>
-                            <input type="text" name="chess_opponent_username" class="form-style"
-                                   placeholder="Nom d'utilisateur de l'adversaire"
-                                   id="chess_opponent_username"
-                                   title="Nom d'utilisateur de la personne à affronter"
-                                   autocomplete="off" required>
+                            <label>
+                                <select name="chess_opponent_username" class="form-style" required>
+                                    <option class="form-style"
+                                            value="{{ users[0] }}" selected>{{ users[0] }}</option>
+                                    {% for user in users[1:] %}
+                                        <option value="{{ user }}">{{ user }}</option>
+                                    {% endfor %}
+                                </select>
+                            </label>
                             <i class="input-icon uil uil-at"></i>
                             <input type="submit" name="submit" class="btn mt-4"
                                    value="Envoyer" id="forgot_button">

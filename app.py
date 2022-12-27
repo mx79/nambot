@@ -14,7 +14,6 @@ socketio = SocketIO(app)
 
 # TODO: Voir pour un premier déploiement sur GCP
 
-# TODO: Upload un avatar par utilisateur et le stocker dans le user correspondant
 # TODO: Liste déroulante noms des utilisateurs => profil.html et chess.html
 
 # TODO: Voir pour un autre footer

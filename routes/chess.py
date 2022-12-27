@@ -222,4 +222,5 @@ def chess_game(tmp_string: str = None):
             )
         return render_template("404.html")
 
-    return render_template("chess.html")
+    return render_template("chess.html", users=[user["username"] for user in db.users.find()
+                                                if user["username"] != session.get("username")])
