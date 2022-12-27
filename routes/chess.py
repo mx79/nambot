@@ -5,7 +5,7 @@ import threading
 
 from typing import Dict, List
 from routes import all_chess_games, auth_required
-from pkg.authlib.auth import db, get_random_string
+from pkg.authlib import db, get_random_string
 from flask_socketio import emit, join_room, leave_room
 from flask import redirect, render_template, request, session
 

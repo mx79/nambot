@@ -1,4 +1,4 @@
-from pkg.authlib.auth import db
+from pkg.authlib import db
 from routes import auth_required
 from flask import render_template, request
 
