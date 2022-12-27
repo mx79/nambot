@@ -2,10 +2,11 @@ import time
 import chess
 import random
 import threading
+import pickle as pkl
 
 from typing import Dict, List
-from routes import all_chess_games, auth_required
 from pkg.authlib import db, get_random_string
+from routes import all_chess_games, auth_required
 from flask_socketio import emit, join_room, leave_room
 from flask import redirect, render_template, request, session
 
@@ -107,7 +108,7 @@ def load_chess_board(game_id: str) -> Dict[str, str]:
     try:
         board = all_chess_games[game_id]
     except KeyError:
-        board = db.chess_game.find_one({"url": game_id})["board"]
+        board = pkl.loads(db.chess_game.find_one({"url": game_id})["board"])
     fen_splitted = board.board_fen().split("/")
     custom_fen = '/'.join(transform(row) for row in fen_splitted)
 
@@ -127,8 +128,9 @@ def chess_game_end(game_id: str, winner: str | None):
     current_game = db.tmp_chess_url.find_one({"url": game_id})
     current_game["winner"] = winner
     current_game["move_stack"] = [str(move) for move in board.move_stack]
-    current_game["board"] = board
+    current_game["board"] = pkl.dumps(board)
     db.chess_game.insert_one(current_game)
+    db.tmp_chess_url.delete_one({"url": game_id})
     all_chess_games.pop(game_id, None)
 
 
