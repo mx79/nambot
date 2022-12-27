@@ -2,31 +2,20 @@
 
 ## Lancer le projet en local
 
-Créez votre environnement virtuel, par exemple:
+Lancer les commandes suivantes dans votre terminal,
+cela créera votre environnement virtuel puis y installera
+les packages requis pour faire tourner le projet:
 
 ```commandline
 python -m venv <your_env_name>
 source <your_env_name>/bin/activate 
-```
-
-Sur Mac ou Linux, vous pouvez lancer directement le script install.sh
-(qui sert normalement pour le déploiement sur GCP) :
-
-```commandline
-bash install.sh
-```
-
-Ce script installera tous les requirements python ainsi que les packages compressés contenus dans le répertoire pkg.
-
-Pour les Windows, il suffit de lancer le script suivant dans votre terminal :
-
-```commandline
-install.bat
-```
-
-Dans le cas où cela ne fonctionne pas, lancer à la main :
-
-```commandline
 pip install -r requirements.txt
-pip install pkg/*.tar.gz
 ```
+
+Cependant, vous devez garder à l'esprit que vous faire tourner le site en local,
+il vous faudra accès aux variables d'environnements nécessaires.
+
+Il y a par exemple: le cluster Mongo, il vous faut demander la création d'un identifiant
+par l'admin de CnamBot afin de pouvoir requêter la base et faire des tests.
+
+Ainsi que toutes les autres variables de configuration du projet comme le type de session utlisée, etc.
