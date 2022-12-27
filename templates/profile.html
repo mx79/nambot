@@ -13,22 +13,33 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <img class="avatar" src="{{ url_for('static', filename='./assets/img/avatars/max.png') }}"
-                     alt="avatar-max"/>
+                {% if user_infos["avatar"] %}
+                    <img class="avatar" src="{{ avatar }}"
+                         alt="avatar-{{ user_infos["username"] }}"/>
+                {% else %}
+                    <img class="avatar" src="{{ url_for('static', filename='./assets/img/avatar.png') }}"
+                         alt="avatar-{{ user_infos["username"] }}"/>
+                {% endif %}
                 <br>
-                <div class="row">
-                    <div class="col">
-                        <a href="https://getavataaars.com/">
-                            <button type="button" class="btn btn-secondary">Créer son avatar</button>
-                        </a>
+                {% if user_infos["username"] == session.get("username") %}
+                    <div class="row">
+                        <div class="col">
+                            <a href="https://getavataaars.com/">
+                                <button type="button" class="btn btn-secondary">Créer son avatar</button>
+                            </a>
+                        </div>
+                        <div class="col">
+                            <form action="/profile/{{ user_infos["username"] }}" class="section text-center"
+                                  method="post"
+                                  enctype="multipart/form-data">
+                                <input type="file" name="file" accept=".png" class="btn btn-secondary" required>
+                                <br><br>
+                                <input type="submit" class="btn btn-secondary"
+                                       value="Upload">
+                            </form>
+                        </div>
                     </div>
-                    <div class="col">
-                        <form action="/profile" class="section text-center" method="post">
-                            <input type="submit" name="submit" class="btn btn-secondary"
-                                   value="Upload" id="upload_avatar">
-                        </form>
-                    </div>
-                </div>
+                {% endif %}
             </div>
             <div class="col">
                 <ul class="list-group">
