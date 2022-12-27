@@ -52,7 +52,6 @@ def update_chess_board(game_id: str, move: str) -> Dict[str, bool]:
     """
     board = all_chess_games[game_id]
     board.push_san(move)
-    print(board.move_stack)
 
     res = {
         "draw": False,

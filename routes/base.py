@@ -5,18 +5,16 @@ from flask import render_template, request
 
 @auth_required
 def root():
-    """
-    Description:
+    """Route of the home only for authenticated users.
 
-    :return:
+    :return: The home.html template if user is authenticated
     """
     return render_template("home.html")
 
 
 @auth_required
 def user_profile(username: str):
-    """
-    Description: Route to the profile of a user.
+    """Route to the profile of a user only for authenticated users.
 
     :param username: User profile provided in url
     :return: The selected user profile if it exists

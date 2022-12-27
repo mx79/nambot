@@ -8,9 +8,8 @@ if (navigator.userAgent.indexOf("Firefox") !== -1) {
 }
 
 /**
- * Gets the local audio stream of the current caller
- *
- * If user accept the audio streaming, return true, else false
+ * Gets the local audio stream of the current caller.
+ * If user accept the audio streaming, return true, else false.
  * @return {boolean}
  */
 function getLocalStream() {
@@ -61,6 +60,7 @@ class ChatBox {
 
     /**
      * Change the state of the Chatbot object, extending the chatbox with a bubble.
+     * @param chatbox
      * @return {void}
      */
     toggleState(chatbox) {
@@ -77,8 +77,8 @@ class ChatBox {
     /**
      * Send user message to the NLP worker which is processing the text
      * and get back the response fetched.
-     *
      * Also launch the updateChatText function after any message receive.
+     * @param chatbox
      * @return {void}
      */
     onSendButton(chatbox) {
@@ -125,6 +125,7 @@ class ChatBox {
     /**
      * Allow user to speak in the browser, then get the text transferred
      * to the same NLP worker as for basic message processing.
+     * @param chatbox
      * @return {void}
      */
     onSttButton(chatbox) {

@@ -4,7 +4,7 @@ from typing import Dict
 from routes import auth_required
 from flask import request, session
 from routes import cls, ext, publisher, subscriber, translator
-from pkg.bot.conversation import Transcript, Conversation
+from pkg.bot import Transcript, Conversation
 
 
 def transform(username: str, msg: str) -> Transcript:
@@ -18,6 +18,7 @@ def transform(username: str, msg: str) -> Transcript:
     for c in conv_list.values():
         if c.conv_id == username:
             conv = c
+
     intent = cls.get_intent(msg)
     entities = ext.get_entity(msg)
     transcript = Transcript(username, msg, intent, entities)
@@ -51,7 +52,7 @@ subscriber.run_in_thread()
 @auth_required
 def chatbot_receiver():
     """Endpoint waiting to receive user message from frontend.
-    Once message is received, publish on the right redis channel.
+    Once the message is received, publish on the right redis channel.
     Then get response on another redis channel.
     Finally, post the Nambot response to the frontend.
 
@@ -59,6 +60,7 @@ def chatbot_receiver():
     """
     # Subscribe to incoming bot response
     subscriber.subscribe("ongoing_infos_" + session.get("username"))
+
     # Get user message
     user_msg = request.get_json()["message"]
     detected_lang = translator.detect(user_msg).lang
@@ -73,6 +75,7 @@ def chatbot_receiver():
             except TypeError:
                 return message["infos"]
     publisher.publish("ongoing_conversation_" + session.get("username"), user_msg)
+
     # Listen to redis worker response
     for m in subscriber.listen():
         message = json.loads(m["data"])

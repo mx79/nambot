@@ -9,14 +9,22 @@ from routes.auth import email_verification, forgot_password, login, logout
 # Flask app init
 app = Flask(__name__)
 app.config.from_pyfile("./config/config.py")
-socketio = SocketIO(app, logger=True, engineio_logger=True)
+socketio = SocketIO(app)
 
+
+# TODO: Package all, merge api et conversation dans un repo privé github, authlib aussi
+
+# TODO: Voir pour un premier déploiement sur GCP
 
 # TODO: Upload un avatar par utilisateur et le stocker dans le user correspondant
 # TODO: Liste déroulante noms des utilisateurs => profil.html et chess.html
-# TODO: Discussion de groupe avec WebSocket + popup de chat simple
+
+# TODO: Voir pour un autre footer
+
+# TODO: Voir pour rendre responsive le Chess
 # TODO: Peut-être merge les fonctions de DB avec le WebSocket pour le Chess
-# TODO: Package all
+
+# TODO: Discussion de groupe avec WebSocket + popup de chat simple
 
 
 # ============================================= CUSTOM HANDLERS ============================================= #
@@ -28,12 +36,8 @@ def page_not_found(error):
 
     :return: Custom template of error 404
     """
+    print(error)
     return render_template("404.html")
-
-
-@socketio.on_error_default
-def default_error_handler(error):
-    print(f"Got an error on WebSocket: {error}")
 
 
 # @app.before_request
