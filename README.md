@@ -19,3 +19,13 @@ Il y a par exemple: le cluster Mongo, il vous faut demander la création d'un id
 par l'admin de CnamBot afin de pouvoir requêter la base et faire des tests.
 
 Ainsi que toutes les autres variables de configuration du projet comme le type de session utlisée, etc.
+
+## Le déploiement
+
+Plusieurs sites différents seront sans doute testés pour le déploiement du site CnamBot.
+
+Nous commencerons sans doute par Google Cloud Platform (GCP).
+
+Le cas échéant, la documentation à titre de repère sera inscrite dans cette section.
+
+### GCP (coming soon...)
