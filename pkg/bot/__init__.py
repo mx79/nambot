@@ -22,9 +22,9 @@ def get_jeu(jeu: str):
 
     :param jeu: The game to launch in a new browser tab.
     """
-    # for j in search(query, tld="co.in", num=10, stop=10, pause=2):
-    link = search(jeu, tld="co.in", num=10, stop=1, pause=2)
-    webbrowser.open(link)
+    # TODO: Change this function
+    links = search(jeu, num_results=10)
+    webbrowser.open(links[0])
 
 
 def get_news() -> str:

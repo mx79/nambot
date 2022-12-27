@@ -12,8 +12,6 @@ app.config.from_pyfile("./config/config.py")
 socketio = SocketIO(app)
 
 
-# TODO: Package all, merge api et conversation dans un repo privé github, authlib aussi
-
 # TODO: Voir pour un premier déploiement sur GCP
 
 # TODO: Upload un avatar par utilisateur et le stocker dans le user correspondant
