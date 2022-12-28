@@ -6,9 +6,9 @@
 }
 
 *, html {
-    --primaryGradient: linear-gradient(93.12deg, rgb(45, 18, 18) 0.52%, rgb(14, 12, 12) 100%);
-    --secondaryGradient: linear-gradient(93.12deg, rgb(14, 12, 12) 0.52%, rgb(45, 18, 18) 100%);
-    --primaryBoxShadow: 0px 10px 15px rgba(14, 12, 12, 0.75);
+    --primaryGradient: linear-gradient(93.12deg, rgb(68, 25, 25) 0.52%, rgb(14, 12, 12) 100%);
+    --secondaryGradient: linear-gradient(93.12deg, rgb(14, 12, 12) 0.52%, rgb(68, 25, 25) 100%);
+    --primaryBoxShadow: 0px 10px 15px rgb(45, 18, 18);
 }
 
 /* CHATBOX */
@@ -104,7 +104,7 @@
     background: #f9f9f9;
     height: 450px;
     width: 350px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 15px rgb(45, 18, 18);
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
 }
@@ -201,6 +201,6 @@
     border-top-left-radius: 50px;
     border-top-right-radius: 50px;
     border-bottom-left-radius: 50px;
-    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 10px 15px rgb(45, 18, 18);
     cursor: pointer;
 }

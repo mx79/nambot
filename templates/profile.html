@@ -4,11 +4,6 @@
     Profil de {{ user_infos["username"] }}
 {% endblock %}
 
-<!-- Loading Login form CSS-->
-{% block login_stylesheet %}
-    <link href="{{ url_for('static', filename='./css/login.css') }}" rel="stylesheet">
-{% endblock %}
-
 {% block custom_link %}
     <script type="text/javascript">
         /**
@@ -31,42 +26,36 @@
 {% endblock %}
 
 {% block page_desc %}
-    <div class="form-group mt-2" style="padding-bottom: 40px">
-        <select name="profile_username" class="form-style" onchange="changeUserProfile(this)">
-            <option value="" selected>Consulter un profil</option>
-            {% for user in users %}
-                <option value="{{ user }}">{{ user }}</option>
-            {% endfor %}
-        </select>
-    </div>
+    <select name="profile_username" class="form-select" style="margin-bottom: 40px" onchange="changeUserProfile(this)">
+        <option value="" selected>Consulter un profil</option>
+        {% for user in users %}
+            <option value="{{ user }}">{{ user }}</option>
+        {% endfor %}
+    </select>
     <div class="container">
         <div class="row">
             <div class="col">
                 {% if user_infos["avatar"] %}
-                    <img class="avatar" src="{{ avatar }}"
-                         alt="avatar-{{ user_infos["username"] }}"/>
+                    <a href="https://getavataaars.com/">
+                        <img class="avatar" src="{{ avatar }}"
+                             alt="avatar-{{ user_infos["username"] }}"/>
+                    </a>
                 {% else %}
-                    <img class="avatar" src="{{ url_for('static', filename='./assets/img/avatar.png') }}"
-                         alt="avatar-{{ user_infos["username"] }}"/>
+                    <a href="https://getavataaars.com/">
+                        <img class="avatar" src="{{ url_for('static', filename='./assets/img/avatar.png') }}"
+                             alt="avatar-{{ user_infos["username"] }}"/>
+                    </a>
                 {% endif %}
-                <br>
                 {% if user_infos["username"] == session.get("username") %}
                     <div class="row">
-                        <div class="col">
-                            <a href="https://getavataaars.com/">
-                                <button type="button" class="btn btn-secondary">Créer son avatar</button>
-                            </a>
-                        </div>
-                        <div class="col">
-                            <form action="/profile/{{ user_infos["username"] }}" class="section text-center"
-                                  method="post"
-                                  enctype="multipart/form-data">
-                                <input type="file" name="file" accept=".png" class="btn btn-secondary" required>
-                                <br><br>
-                                <input type="submit" class="btn btn-secondary"
-                                       value="Upload">
-                            </form>
-                        </div>
+                        <form action="/profile/{{ user_infos["username"] }}" class="section text-center"
+                              method="post"
+                              enctype="multipart/form-data">
+                            <input type="file" name="file" accept=".png" class="btn btn-secondary" required>
+                            <br><br>
+                            <input type="submit" class="btn btn-secondary"
+                                   value="Upload">
+                        </form>
                     </div>
                 {% endif %}
             </div>
