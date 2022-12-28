@@ -27,16 +27,12 @@
 {% endblock %}
 
 {% block navbarAddOn %}
-    <form class="section">
-        <div class="form-group mt-2">
-            <select name="profile_username" class="form-style" onchange="changeUserProfile(this)">
-                <option class="form-style" value="" selected>Quel profil souhaitez vous consulter ?</option>
-                {% for user in users %}
-                    <option value="{{ user }}" class="form-style">{{ user }}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </form>
+        <select name="profile_username" class="form-style" onchange="changeUserProfile(this)">
+            <option value="" selected>Quel profil souhaitez vous consulter ?</option>
+            {% for user in users %}
+                <option value="{{ user }}">{{ user }}</option>
+            {% endfor %}
+        </select>
 {% endblock %}
 
 {% block page_title %}

@@ -18,11 +18,9 @@
                 <div class="center-wrap">
                     <form action="/chess" class="section text-center" method="post">
                         <div class="form-group mt-2">
-                            <h5 class="mb-4 pb-3">Saisissez le nom de l'utilisateur que vous souhaitez
-                                affronter:</h5>
+                            <h5 class="mb-4 pb-3">Sélectionnez votre opposant:</h5>
                             <select name="chess_opponent_username" class="form-style" required>
-                                <option class="form-style"
-                                        value="{{ users[0] }}" selected>{{ users[0] }}</option>
+                                <option value="{{ users[0] }}" selected>{{ users[0] }}</option>
                                 {% for user in users[1:] %}
                                     <option value="{{ user }}">{{ user }}</option>
                                 {% endfor %}
