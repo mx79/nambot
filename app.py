@@ -15,7 +15,7 @@ socketio = SocketIO(app)
 # TODO: Voir pour un premier déploiement sur GCP
 
 # TODO: Liste déroulante : tester le rendu avec beaucoup d'utilisateur et faire une barre de recherche si besoin
-# TODO: Passer le site en rouge et noir
+# TODO: Passer le site en rouge et noir => fait mais faut ajuster
 # TODO: Voir pour un autre footer
 
 # TODO: Commenter code chess
