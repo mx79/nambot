@@ -14,15 +14,14 @@ socketio = SocketIO(app)
 
 # TODO: Voir pour un premier déploiement sur GCP
 
-# TODO: Régler la hitbox du chatbot
-
+# TODO: Passer le site en rouge et noir
 # TODO: Voir pour un autre footer
 
-# TODO: Voir pour rendre responsive le Chess
 # TODO: Peut-être merge les fonctions de DB avec le WebSocket pour le Chess
 
 # TODO: Discussion de groupe avec WebSocket + popup de chat simple
 
+# TODO: Responsiveness sur téléphone
 
 # ============================================= CUSTOM HANDLERS ============================================= #
 

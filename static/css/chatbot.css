@@ -14,8 +14,8 @@
 /* CHATBOX */
 .chatbox {
     position: fixed;
-    bottom: 30px;
-    right: 30px;
+    bottom: 40px;
+    right: 40px;
 }
 
 /* CONTENT IS CLOSE */
@@ -41,6 +41,9 @@
 /* BUTTON */
 .chatbox__button {
     text-align: right;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
 }
 
 .microphone__button {
@@ -186,9 +189,9 @@
     color: white;
 }
 
-.chatbox__button button,
-.chatbox__button button:focus,
-.chatbox__button button:visited {
+.chatbox__button,
+.chatbox__button:focus,
+.chatbox__button:visited {
     padding: 10px;
     background: white;
     border: none;
