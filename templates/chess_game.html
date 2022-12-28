@@ -2,8 +2,6 @@
 
 {% block title %}Chess{% endblock %}
 
-{% block header %}{% endblock %}
-
 {% block custom_link %}
     <!-- JQuery-->
     <script src="https://code.jquery.com/jquery-3.5.1.js"
@@ -426,6 +424,8 @@
         })
     </script>
 {% endblock %}
+
+{% block header %}{% endblock %}
 
 {% block content %}
     {% if (session.get("username") != receiver_username and (sender_color == "black" or session.get("sender_color") == "black")) or (session.get("username") == receiver_username and receiver_color == "black") %}

@@ -22,20 +22,23 @@ def user_profile(username: str):
     :return: The selected user profile if it exists
     """
     if request.method == "POST":
-        av = request.files["file"]
+        avatar = request.files["file"]
         db.users.update_one(
             {"username": session.get("username")},
-            {"$set": {"avatar": av.read()}}
+            {"$set": {"avatar": avatar.read()}}
         )
 
     if username:
-        user = db.users.find_one({"username": username})
-        if user:
-            if user.get("avatar", None):
-                avatar = f"data:image/png;charset=utf-8;base64,{base64.b64encode(user['avatar']).decode('utf-8')}"
-            else:
-                avatar = None
-            return render_template("profile.html", user_infos=user, avatar=avatar)
+        docs = list(db.users.find())
+        for doc in docs:
+            if doc["username"] == username:
+                if doc.get("avatar", None):
+                    avatar = f"data:image/png;charset=utf-8;base64,{base64.b64encode(doc['avatar']).decode('utf-8')}"
+                else:
+                    avatar = None
+                return render_template("profile.html", user_infos=doc, avatar=avatar,
+                                       users=[u["username"] for u in docs if
+                                              u["username"] != username])
         return render_template("404.html")
 
     return render_template("404.html")

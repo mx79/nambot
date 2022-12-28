@@ -14,8 +14,6 @@ socketio = SocketIO(app)
 
 # TODO: Voir pour un premier déploiement sur GCP
 
-# TODO: Liste déroulante noms des utilisateurs => profil.html
-
 # TODO: Régler la hitbox du chatbot
 
 # TODO: Voir pour un autre footer

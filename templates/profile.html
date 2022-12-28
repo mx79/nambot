@@ -4,6 +4,41 @@
     Profil de {{ user_infos["username"] }}
 {% endblock %}
 
+<!-- Loading Login form CSS-->
+{% block login_stylesheet %}
+    <link href="{{ url_for('static', filename='./css/login.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block custom_link %}
+    <script type="text/javascript">
+        /**
+         * Change the current URL based on the selected username of the `HTML select tag`.
+         * @param selectForm
+         */
+        function changeUserProfile(selectForm) {
+            const options = selectForm.children;
+            for (const opt of options) {
+                if (opt.selected) {
+                    window.location.href = `/profile/${opt.value}`;
+                }
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block navbarAddOn %}
+    <form class="section">
+        <div class="form-group mt-2">
+            <select name="profile_username" class="form-style" onchange="changeUserProfile(this)">
+                <option class="form-style" value="" selected>Quel profil souhaitez vous consulter ?</option>
+                {% for user in users %}
+                    <option value="{{ user }}" class="form-style">{{ user }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </form>
+{% endblock %}
+
 {% block page_title %}
     Profil de {{ user_infos["username"] }}
 {% endblock %}
