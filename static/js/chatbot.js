@@ -68,9 +68,13 @@ class ChatBox {
         this.state = !this.state;
         // Show or hides the box
         if (this.state) {
-            chatbox.classList.add('chatbox--active')
+            chatbox.classList.add('chatbox--active');
+            // Make the chatbot above everything every element except its own button
+            chatbox.parentNode.setAttribute('style', 'z-index: 9998');
         } else {
-            chatbox.classList.remove('chatbox--active')
+            chatbox.classList.remove('chatbox--active');
+            // Wait 1 sec to remove the z-index in order to see the animation
+            setTimeout(() => chatbox.parentNode.removeAttribute('style'), 1000);
         }
     }
 

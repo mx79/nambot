@@ -14,6 +14,7 @@
 /* CHATBOX */
 .chatbox {
     position: fixed;
+    z-index: -9998;
     bottom: 40px;
     right: 40px;
 }
@@ -26,7 +27,6 @@
     width: 300px;
     height: 350px;
     border-radius: 10px;
-    z-index: -123456;
     opacity: 0;
     transition: all .5s ease-in-out;
     pointer-events: none;
@@ -35,7 +35,6 @@
 /* CONTENT ISOPEN */
 .chatbox--active {
     transform: translateY(-40px);
-    z-index: 123456;
     opacity: 1;
     pointer-events: revert;
 }
@@ -44,6 +43,7 @@
 .chatbox__button {
     text-align: right;
     position: fixed;
+    z-index: 9999;
     bottom: 20px;
     right: 20px;
 }
