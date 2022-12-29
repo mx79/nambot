@@ -13,9 +13,6 @@ app = Flask(__name__)
 app.config.from_pyfile("./config/config.py")
 socketio = SocketIO(app)
 
-
-# TODO: Voir pour un premier déploiement sur Heroku
-
 # TODO: Commenter code chess
 
 # TODO: Discussion de groupe avec WebSocket + popup de chat simple

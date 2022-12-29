@@ -185,7 +185,7 @@ def send_email(email: str, option: str):
         Bonjour,
 
         Bienvenue sur CnamBot, voici le lien à suivre pour achever la validation de votre adresse email :
-        http://localhost:5000/email-verified/{key}
+        https://lecnambot.herokuapp.com/email-verified/{key}
 
         Une fois cela fait, vous pourrez profitez pleinement des services de la plateforme.
 
@@ -199,7 +199,7 @@ def send_email(email: str, option: str):
         Bonjour,
 
         Voici votre lien de réinitialisation de mot de passe :
-        http://localhost:5000/forgot-password/{key}
+        https://lecnambot.herokuapp.com/forgot-password/{key}
 
         Bonne journée,
         L'équipe de développement

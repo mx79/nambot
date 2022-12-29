@@ -99,7 +99,7 @@ class ChatBox {
         textField.value = ''
         // Create an event listener on the button element:
         // Get the receiver endpoint from Python using fetch:
-        fetch("http://localhost:5000/chatbot-receiver",
+        fetch("https://lecnambot.herokuapp.com/chatbot-receiver",
             {
                 method: 'POST',
                 // Stringify the payload into JSON:
@@ -148,7 +148,7 @@ class ChatBox {
                 this.updateChatText(chatbox)
                 // Create an event listener on the button element:
                 // Get the receiver endpoint from Python using fetch:
-                fetch("http://localhost:5000/chatbot-receiver",
+                fetch("https://lecnambot.herokuapp.com/chatbot-receiver",
                     {
                         method: 'POST',
                         // Stringify the payload into JSON:
