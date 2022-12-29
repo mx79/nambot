@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, render_template
 from flask_socketio import SocketIO
 from routes.chat import chat_receiver
@@ -12,7 +14,7 @@ app.config.from_pyfile("./config/config.py")
 socketio = SocketIO(app)
 
 
-# TODO: Voir pour un premier déploiement sur GCP
+# TODO: Voir pour un premier déploiement sur Heroku
 
 # TODO: Commenter code chess
 
@@ -62,6 +64,6 @@ socketio.on_event("chess_join", on_chess_join, namespace="/chess")
 socketio.on_event("chess_move", on_chess_move, namespace="/chess")
 socketio.on_event("chess_leave", on_chess_leave, namespace="/chess")
 
-# Launch webserver
-if __name__ == '__main__':
-    socketio.run(app)
+# Main driver function
+port = int(os.environ.get("PORT", 5000))
+socketio.run(app=app, host='0.0.0.0', port=port)

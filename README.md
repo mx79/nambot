@@ -24,8 +24,8 @@ Ainsi que toutes les autres variables de configuration du projet comme le type d
 
 Plusieurs sites différents seront sans doute testés pour le déploiement du site CnamBot.
 
-Nous commencerons sans doute par Google Cloud Platform (GCP).
+Nous commencerons par Heroku, puis Google Cloud Platform (GCP) pourrait ensuite être testé.
 
 Le cas échéant, la documentation à titre de repère sera inscrite dans cette section.
 
-### GCP (coming soon...)
+### Heroku (coming soon...)

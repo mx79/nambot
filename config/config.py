@@ -5,9 +5,6 @@ from datetime import timedelta
 # ======================== CONFIG OF FLASK APP ========================= #
 
 # Global
-TESTING = True
-DEBUG = True
-FLASK_ENV = 'development'
 SECRET_KEY = getenv('SECRET_KEY')
 
 # Flask-Session

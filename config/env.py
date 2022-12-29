@@ -1,6 +1,6 @@
 import os
 from os import environ as osenv
-from os.path import abspath, dirname, join
+from os.path import abspath, dirname
 
 # Global settings
 BASE_DIR = dirname(dirname(abspath(__file__)))
