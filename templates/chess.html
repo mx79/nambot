@@ -7,6 +7,39 @@
     <link href="{{ url_for('static', filename='./css/login.css') }}" rel="stylesheet">
 {% endblock %}
 
+{% block custom_link %}
+    <!-- Jquery for search bar-->
+    <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"
+          rel="stylesheet" type="text/css"/>
+    <!-- Jquery for search bar-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
+    <script type="text/javascript">
+        // The list of users from CnamBot
+        const availableTags = [
+            {% for user in users %}
+                "{{ user }}",
+            {% endfor %}
+        ];
+
+        // Check if the input is in the users list provided
+        window.addEventListener("DOMContentLoaded", () => {
+            const input = document.getElementById("users");
+            const form = document.getElementById("chess_game_form");
+            form.onsubmit = () => {
+                return availableTags.includes(input.value);
+            };
+        });
+
+        // Autocomplete users from Jquery library
+        $(function () {
+            $("#users").autocomplete({
+                source: availableTags
+            });
+        });
+    </script>
+{% endblock %}
+
 {% block page_title %}
     Jouer aux échecs
 {% endblock %}
@@ -16,17 +49,16 @@
         <div class="card-3d-wrapper">
             <div class="card-front">
                 <div class="center-wrap">
-                    <form action="/chess" class="section text-center" method="post">
+                    <form action="/chess" class="section text-center" id="chess_game_form" method="post">
                         <div class="form-group mt-2">
                             <h5 class="mb-4 pb-3">Sélectionnez votre opposant:</h5>
-                            <select name="chess_opponent_username" class="form-style" required>
-                                <option value="{{ users[0] }}" selected>{{ users[0] }}</option>
-                                {% for user in users[1:] %}
-                                    <option value="{{ user }}">{{ user }}</option>
-                                {% endfor %}
-                            </select>
+                            <div class="input-group">
+                                <input type="search" class="form-control rounded"
+                                       aria-label="Search"
+                                       aria-describedby="search-addon" id="users"/>
+                            </div>
                             <input type="submit" name="submit" class="btn mt-4"
-                                   value="Jouer" id="forgot_button">
+                                   value="Jouer">
                         </div>
                     </form>
                 </div>

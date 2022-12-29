@@ -5,19 +5,43 @@
 {% endblock %}
 
 {% block custom_link %}
+    <!-- Jquery for search bar-->
+    <link href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"
+          rel="stylesheet" type="text/css"/>
+    <!-- Jquery for search bar-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.js"></script>
     <script type="text/javascript">
-        /**
-         * Change the current URL based on the selected username of the `HTML select tag`.
-         * @param selectForm
-         */
-        function changeUserProfile(selectForm) {
-            const options = selectForm.children;
-            for (const opt of options) {
-                if (opt.selected) {
-                    window.location.href = `/profile/${opt.value}`;
+        // The list of users from CnamBot
+        const availableTags = [
+            {% for user in users %}
+                "{{ user }}",
+            {% endfor %}
+        ];
+
+        // Check if the input is in the users list provided
+        window.addEventListener("DOMContentLoaded", () => {
+            const input = document.getElementById("users");
+            input.addEventListener("keypress", (event) => {
+                if (event.key === "Enter") {
+                    if (availableTags.includes(input.value)) {
+                        window.location.href = `/profile/${input.value}`;
+                    }
                 }
-            }
-        }
+            });
+            input.addEventListener("selectionchange", () => {
+                if (availableTags.includes(input.value)) {
+                    window.location.href = `/profile/${input.value}`;
+                }
+            });
+        });
+
+        // Autocomplete users from Jquery library
+        $(function () {
+            $("#users").autocomplete({
+                source: availableTags
+            });
+        });
     </script>
 {% endblock %}
 
@@ -26,37 +50,39 @@
 {% endblock %}
 
 {% block page_desc %}
-    <select name="profile_username" class="form-select" style="margin-bottom: 40px" onchange="changeUserProfile(this)">
-        <option value="" selected>Consulter un profil</option>
-        {% for user in users %}
-            <option value="{{ user }}">{{ user }}</option>
-        {% endfor %}
-    </select>
     <div class="container">
-        <div class="row">
+        <div class="row" style="margin-bottom: 30px">
+            <div class="col"></div>
             <div class="col">
+                <div class="input-group">
+                    <input type="search" class="form-control rounded" placeholder="Chercher un profil"
+                           aria-label="Search"
+                           aria-describedby="search-addon" id="users"/>
+                </div>
+            </div>
+            <div class="col"></div>
+        </div>
+        <div class="row">
+            <div class="col" style="margin-bottom: 30px">
                 {% if user_infos["avatar"] %}
-                    <a href="https://getavataaars.com/">
+                    <a href="https://getavataaars.com/" target="_blank">
                         <img class="avatar" src="{{ avatar }}"
                              alt="avatar-{{ user_infos["username"] }}"/>
                     </a>
                 {% else %}
-                    <a href="https://getavataaars.com/">
+                    <a href="https://getavataaars.com/" target="_blank">
                         <img class="avatar" src="{{ url_for('static', filename='./assets/img/avatar.png') }}"
                              alt="avatar-{{ user_infos["username"] }}"/>
                     </a>
                 {% endif %}
                 {% if user_infos["username"] == session.get("username") %}
-                    <div class="row">
-                        <form action="/profile/{{ user_infos["username"] }}" class="section text-center"
-                              method="post"
-                              enctype="multipart/form-data">
-                            <input type="file" name="file" accept=".png" class="btn btn-secondary" required>
-                            <br><br>
-                            <input type="submit" class="btn btn-secondary"
-                                   value="Upload">
-                        </form>
-                    </div>
+                    <form action="/profile/{{ user_infos["username"] }}" class="section text-center"
+                          method="post"
+                          enctype="multipart/form-data">
+                        <input type="file" name="file" accept=".png" class="btn btn-secondary" required>
+                        <br><br>
+                        <input type="submit" class="btn btn-secondary" value="Changer d'avatar">
+                    </form>
                 {% endif %}
             </div>
             <div class="col">

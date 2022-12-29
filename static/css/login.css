@@ -188,14 +188,14 @@ h6 span {
     border: none;
     -webkit-transition: all 200ms linear;
     transition: all 200ms linear;
-    box-shadow: 0 4px 8px 0 rgb(45, 18, 18);
+    box-shadow: 0 4px 8px 0 rgb(14, 12, 12);
 }
 
 .form-style:focus,
 .form-style:active {
     border: none;
     outline: none;
-    box-shadow: 0 4px 8px 0 rgb(45, 18, 18);
+    box-shadow: 0 4px 8px 0 rgb(14, 12, 12);
 }
 
 .input-icon {
@@ -296,13 +296,13 @@ h6 span {
 .btn:focus {
     background-color: #9d0c0c;
     color: #0e0c0c;
-    box-shadow: 0 4px 12px 0 rgb(45, 18, 18);
+    box-shadow: 0 4px 12px 0 rgb(14, 12, 12);
 }
 
 .btn:hover {
     background-color: #9d0c0c;
     color: #0e0c0c;
-    box-shadow: 0 8px 24px 0 rgb(45, 18, 18);
+    box-shadow: 0 8px 24px 0 rgb(14, 12, 12);
 }
 
 .logo {
