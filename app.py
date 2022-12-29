@@ -1,5 +1,3 @@
-import os
-
 from flask import Flask, render_template
 from flask_socketio import SocketIO
 from routes.chat import chat_receiver
@@ -63,7 +61,3 @@ app.add_url_rule("/chess/<tmp_string>", view_func=chess_game, methods=["GET", "P
 socketio.on_event("chess_join", on_chess_join, namespace="/chess")
 socketio.on_event("chess_move", on_chess_move, namespace="/chess")
 socketio.on_event("chess_leave", on_chess_leave, namespace="/chess")
-
-# Main
-port = int(os.getenv("PORT", 5000))
-socketio.run(app, host='0.0.0.0', port=port, allow_unsafe_werkzeug=True)
