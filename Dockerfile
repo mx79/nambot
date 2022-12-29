@@ -20,4 +20,4 @@ RUN pip install -r requirements.txt
 RUN pip install frtk-0.1.0.tar.gz
 
 # Run service
-CMD gunicorn wsgi:socketio
+CMD gunicorn app:app
