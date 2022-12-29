@@ -17,6 +17,7 @@ WORKDIR /app
 # Install requirements
 COPY requirements.txt /app/
 RUN pip install -r requirements.txt
+RUN pip install frtk-0.1.0.tar.gz
 
 # Copy actions folder to working directory
 COPY . /app/
