@@ -14,8 +14,6 @@ socketio = SocketIO(app)
 
 # TODO: Voir pour un premier déploiement sur GCP
 
-# TODO: Voir pour un autre footer
-
 # TODO: Commenter code chess
 
 # TODO: Discussion de groupe avec WebSocket + popup de chat simple
