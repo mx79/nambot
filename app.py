@@ -1,9 +1,9 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO
-from routes.chess import chess
 from routes.chat import chat_receiver
-from routes.chatbot import chatbot_receiver
 from routes.base import root, user_profile
+from routes.chatbot import chatbot_receiver
+from routes.chess import chess_game, on_chess_join, on_chess_move, on_chess_leave
 from routes.auth import email_verification, forgot_password, login, logout
 
 # Flask app init
@@ -12,28 +12,24 @@ app.config.from_pyfile("./config/config.py")
 socketio = SocketIO(app)
 
 
-# TODO: Upload un avatar par utilisateur et le stocker dans le user correspondant.
-# TODO: Finir intégration MongoDB avec le package `pkg.mongo`.
+# TODO: Voir pour un premier déploiement sur GCP
 
-# TODO: Créer des parties d'échecs en invitant des utilisateurs.
-# 1) : Créer un système d'URL temporaire comme j'ai déjà fait, sauf qu'elles se finissent à la fin de la partie
-# 2) : Faire en sorte que ces URL aient l'adresse de l'emetteur et celle du receveur, pour identifier qui est spectateur
-# ou non.
-# 3) : Créer le plateau qui sera 8*8 raw et col avec des pièce en code HTML dessus, avec un code javascript draggable.
+# TODO: Commenter code chess
 
-# TODO: Discussion de groupe avec Redis.
+# TODO: Discussion de groupe avec WebSocket + popup de chat simple
 
+# TODO: Responsiveness sur téléphone (Pas urgent du tout)
 
 # ============================================= CUSTOM HANDLERS ============================================= #
 
 
 @app.errorhandler(404)
 def page_not_found(error):
-    """
-    Handle `error 404 not found`.
+    """Handle `error 404 not found`.
 
     :return: Custom template of error 404
     """
+    print(error)
     return render_template("404.html")
 
 
@@ -60,13 +56,12 @@ app.add_url_rule("/chat-receiver", view_func=chat_receiver, methods=["POST"])
 app.add_url_rule("/chatbot-receiver", view_func=chatbot_receiver, methods=["POST"])
 
 # Chess
-app.add_url_rule("/chess", view_func=chess, methods=["GET", "POST"])
-app.add_url_rule("/chess/<tmp_string>", view_func=chess, methods=["GET", "POST"])
-
-# Jinja function
-
+app.add_url_rule("/chess", view_func=chess_game, methods=["GET", "POST"])
+app.add_url_rule("/chess/<tmp_string>", view_func=chess_game, methods=["GET", "POST"])
+socketio.on_event("chess_join", on_chess_join, namespace="/chess")
+socketio.on_event("chess_move", on_chess_move, namespace="/chess")
+socketio.on_event("chess_leave", on_chess_leave, namespace="/chess")
 
 # Launch webserver
 if __name__ == '__main__':
     socketio.run(app)
-    # app.jinja_env.globals.update()

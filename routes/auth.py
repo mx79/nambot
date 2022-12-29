@@ -1,6 +1,6 @@
 from routes import auth_required, no_auth_required
 from flask import redirect, render_template, request, session
-from pkg.authlib.auth import db, create_user, send_email, verify_password, update_password, user_in_db
+from pkg.authlib import db, create_user, send_email, verify_password, update_password, user_in_db
 
 
 @no_auth_required
@@ -75,6 +75,7 @@ def email_verification(tmp_string: str = None):
     return render_template("404.html")
 
 
+@no_auth_required
 def forgot_password(tmp_string: str = None):
     """
 

@@ -1,5 +1,5 @@
 # Use python image
-FROM python:3.8
+FROM python:3.10
 
 # Args
 ARG MONGO_CLUSTER
@@ -16,7 +16,6 @@ WORKDIR /app
 
 # Install requirements
 COPY requirements.txt /app/
-RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 # Copy actions folder to working directory

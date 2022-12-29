@@ -1,8 +1,10 @@
+beautifulsoup4
 chess
 flask
 flask-socketio
 google
-googletrans==4.0.0-rc1
+googlesearch-python
+googletrans
 gunicorn
 jinja2
 nltk

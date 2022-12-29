@@ -1,15 +1,13 @@
 import os
 import time
 import redis
-import chess
 import threading
 
 from os import getenv
 from config import env
-from typing import Dict
 from os.path import join
 from functools import wraps
-from pkg.authlib.auth import db
+from pkg.authlib import db
 from googletrans import Translator
 from flask import redirect, session, url_for
 from frtk import SVCIntentClassifier, RegexEntityExtractor
@@ -22,12 +20,11 @@ env.verify()
 
 # Path to models
 
-model_dir = join(os.getenv("PKG_DIR"), "bot", "models", "svc.pkl")
-regex_dir = join(os.getenv("PKG_DIR"), "bot", "data", "regex.json")
+model_dir = join(os.getenv("BASE_DIR"), "resources", "models", "svc.pkl")
+regex_dir = join(os.getenv("BASE_DIR"), "resources", "data", "regex.json")
 
 # Dict in memory containing all the chess games running at the moment:
-all_chess_games: Dict[str, chess.Board] = {}
-all_chess_games["max-test"] = chess.Board()
+all_chess_games = {}
 
 
 def clean_url_and_users():
