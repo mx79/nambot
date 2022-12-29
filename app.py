@@ -11,6 +11,7 @@ from routes.auth import email_verification, forgot_password, login, logout
 # Flask app init
 app = Flask(__name__)
 app.config.from_pyfile("./config/config.py")
+port = int(os.environ.get("PORT", 5000))
 socketio = SocketIO(app)
 
 
@@ -64,6 +65,5 @@ socketio.on_event("chess_join", on_chess_join, namespace="/chess")
 socketio.on_event("chess_move", on_chess_move, namespace="/chess")
 socketio.on_event("chess_leave", on_chess_leave, namespace="/chess")
 
-# Main driver function
-port = int(os.environ.get("PORT", 5000))
+# Launcher
 socketio.run(app=app, host='0.0.0.0', port=port, allow_unsafe_werkzeug=True)
