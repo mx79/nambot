@@ -36,13 +36,5 @@ jobs:
       # Push the Docker image to Heroku Container Registry
       - name: Publish
         run: |
-          heroku container:push web --app $APP_NAME 
-                                    --arg MONGO_CLUSTER=$MONGO_CLUSTER 
-                                    --arg REDIS_URL=$REDIS_URL 
-                                    --arg HASH_ALGORITHM=$HASH_ALGORITHM 
-                                    --arg SECRET_KEY=$SECRET_KEY 
-                                    --arg CNAMBOT_EMAIL=$CNAMBOT_EMAIL
-                                    --arg CNAMBOT_PASSWORD=$CNAMBOT_PASSWORD
-                                    --arg SESSION_TYPE=$SESSION_TYPE
-                                    --arg PERMANENT_SESSION_LIFETIME=$PERMANENT_SESSION_LIFETIME
+          heroku container:push web --app $APP_NAME --arg MONGO_CLUSTER=$MONGO_CLUSTER --arg REDIS_URL=$REDIS_URL --arg HASH_ALGORITHM=$HASH_ALGORITHM --arg SECRET_KEY=$SECRET_KEY --arg CNAMBOT_EMAIL=$CNAMBOT_EMAIL --arg CNAMBOT_PASSWORD=$CNAMBOT_PASSWORD --arg SESSION_TYPE=$SESSION_TYPE --arg PERMANENT_SESSION_LIFETIME=$PERMANENT_SESSION_LIFETIME
           heroku container:release web --app $APP_NAME
