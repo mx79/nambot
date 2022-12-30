@@ -99,31 +99,7 @@ class ChatBox {
         textField.value = ''
         // Create an event listener on the button element:
         // Get the receiver endpoint from Python using fetch:
-        fetch("https://lecnambot.herokuapp.com/chatbot-receiver",
-            {
-                method: 'POST',
-                // Stringify the payload into JSON:
-                body: JSON.stringify({message: text1}),
-                mode: 'cors',
-                headers: {
-                    'Content-type': 'application/json',
-                    'Accept': 'application/json'
-                }
-            }).then(r => r.json())
-            .then(jsonResponse => {
-                console.log(jsonResponse)
-                let resp = jsonResponse["response"].replace("\n", "<br>");
-                let msg2 = {name: "Nambot", message: resp};
-                this.messages.push(msg2);
-                this.updateChatText(chatbox)
-                if (resp !== "") {
-                    vocal.text = resp.replace("<br>", " ");
-                    console.log(vocal.text)
-                    window.speechSynthesis.speak(vocal);
-                }
-            }).catch((error) => {
-            console.error('Error:', error)
-        });
+        this.fetcher(text1)
     }
 
     /**
@@ -145,36 +121,46 @@ class ChatBox {
                 // Publish on the channel of the user
                 let msg1 = {name: "User", message: instruction}
                 this.messages.push(msg1);
-                this.updateChatText(chatbox)
+                this.updateChatText(chatbox);
                 // Create an event listener on the button element:
                 // Get the receiver endpoint from Python using fetch:
-                fetch("https://lecnambot.herokuapp.com/chatbot-receiver",
-                    {
-                        method: 'POST',
-                        // Stringify the payload into JSON:
-                        body: JSON.stringify({message: instruction}),
-                        mode: 'cors',
-                        headers: {
-                            'Content-type': 'application/json',
-                            'Accept': 'application/json'
-                        }
-                    }).then(r => r.json())
-                    .then(jsonResponse => {
-                        console.log(jsonResponse)
-                        let resp = jsonResponse["response"].replace("\n", "<br>");
-                        let msg2 = {name: "Nambot", message: resp};
-                        this.messages.push(msg2);
-                        this.updateChatText(chatbox)
-                        if (resp !== "") {
-                            vocal.text = resp.replace("<br>", " ");
-                            console.log(vocal.text)
-                            window.speechSynthesis.speak(vocal);
-                        }
-                    }).catch((error) => {
-                    console.error('Error:', error)
-                });
+                this.fetcher(instruction);
             }
         }
+    }
+
+    /**
+     * Utility method to simplify the reuse of fetching:
+     * => Used with the text
+     * => Used with the vocal
+     * @param data {string}
+     * @return {void}
+     */
+    fetcher(data) {
+        fetch("https://lecnambot.herokuapp.com/chatbot-receiver",
+            {
+                method: 'POST',
+                // Stringify the payload into JSON:
+                body: JSON.stringify({message: data}),
+                mode: 'cors',
+                headers: {
+                    'Content-type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            }).then(r => r.json())
+            .then(jsonResponse => {
+                console.log(jsonResponse)
+                let resp = jsonResponse["response"].replace("\n", "<br>");
+                let msg2 = {name: "Nambot", message: resp};
+                this.messages.push(msg2);
+                this.updateChatText(chatbox);
+                if (resp !== "") {
+                    vocal.text = resp.replace("<br>", " ");
+                    window.speechSynthesis.speak(vocal);
+                }
+            }).catch((error) => {
+            console.error('Error:', error)
+        });
     }
 
     /**
