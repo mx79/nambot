@@ -1,3 +1,4 @@
+import os
 import time
 import random
 import string
@@ -178,6 +179,7 @@ def send_email(email: str, option: str):
     msg['From'] = f'CnamBot <{getenv("CNAMBOT_EMAIL")}>'
     msg['To'] = mail
     msg["Date"] = formatdate(localtime=True)
+    url = "http://localhost:5000" if os.getenv("DEV_MODE") else "https://lecnambot.herokuapp.com"
     key = get_random_string(16)
     if option == "verification":
         msg['Subject'] = "Votre lien de validation d'email"
@@ -185,7 +187,7 @@ def send_email(email: str, option: str):
         Bonjour,
 
         Bienvenue sur CnamBot, voici le lien à suivre pour achever la validation de votre adresse email :
-        https://lecnambot.herokuapp.com/email-verified/{key}
+        {url}/email-verified/{key}
 
         Une fois cela fait, vous pourrez profitez pleinement des services de la plateforme.
 
@@ -199,7 +201,7 @@ def send_email(email: str, option: str):
         Bonjour,
 
         Voici votre lien de réinitialisation de mot de passe :
-        https://lecnambot.herokuapp.com/forgot-password/{key}
+        {url}/forgot-password/{key}
 
         Bonne journée,
         L'équipe de développement

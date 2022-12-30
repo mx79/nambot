@@ -64,7 +64,7 @@
          */
         function chessRequest(payload) {
             return fetch(
-                'https://lecnambot.herokuapp.com/chess/' + '{{ game_id }}',
+                '{{ "http://127.0.0.1:5000" if DEV_MODE else "https://lecnambot.herokuapp.com" }}/' + '{{ game_id }}',
                 {
                     method: 'POST',
                     body: JSON.stringify(payload),

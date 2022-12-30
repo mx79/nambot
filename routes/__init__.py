@@ -19,7 +19,6 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 env.verify()
 
 # Path to models
-
 model_dir = join(os.getenv("BASE_DIR"), "resources", "models", "svc.pkl")
 regex_dir = join(os.getenv("BASE_DIR"), "resources", "data", "regex.json")
 

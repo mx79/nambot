@@ -63,17 +63,17 @@ def chatbot_receiver():
 
     # Get user message
     user_msg = request.get_json()["message"]
-    detected_lang = translator.detect(user_msg).lang
-    if detected_lang != "fr":
-        msg_fr = translator.translate(user_msg, dest="fr").text
-        publisher.publish("ongoing_conversation_" + session.get("username"), msg_fr)
-        # Listen to redis worker response
-        for m in subscriber.listen():
-            message = json.loads(m["data"])
-            try:
-                return {"response": translator.translate(message["infos"]["response"], dest=detected_lang).text}
-            except TypeError:
-                return message["infos"]
+    # detected_lang = translator.detect(user_msg).lang
+    # if detected_lang != "fr":
+    #     msg_fr = translator.translate(user_msg, dest="fr").text
+    #     publisher.publish("ongoing_conversation_" + session.get("username"), msg_fr)
+    #     # Listen to redis worker response
+    #     for m in subscriber.listen():
+    #         message = json.loads(m["data"])
+    #         try:
+    #             return {"response": translator.translate(message["infos"]["response"], dest=detected_lang).text}
+    #         except TypeError:
+    #             return message["infos"]
     publisher.publish("ongoing_conversation_" + session.get("username"), user_msg)
 
     # Listen to redis worker response
