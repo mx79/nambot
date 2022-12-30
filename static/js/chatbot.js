@@ -1,5 +1,5 @@
 // TTS integration
-const vocal = new SpeechSynthesisUtterance()
+const vocal = new SpeechSynthesisUtterance();
 vocal.lang = "fr";
 
 // STT: Disable button if navigator is Firefox
@@ -19,9 +19,9 @@ function getLocalStream() {
         window.localAudio.autoplay = true;
     }).catch((err) => {
         console.error(`User refused microphone authorization: ${err}`)
-        return false
+        return false;
     });
-    return true
+    return true;
 }
 
 // ChatBox object
@@ -46,14 +46,14 @@ class ChatBox {
         // Defining constant
         const {openButton, chatBox, sendButton, sttButton} = this.args;
         // Add event listener on click for our buttons
-        openButton.addEventListener('click', () => this.toggleState(chatBox))
-        sendButton.addEventListener('click', () => this.onSendButton(chatBox))
-        sttButton.addEventListener('click', () => this.onSttButton(chatBox))
+        openButton.addEventListener('click', () => this.toggleState(chatBox));
+        sendButton.addEventListener('click', () => this.onSendButton(chatBox));
+        sttButton.addEventListener('click', () => this.onSttButton(chatBox));
         // Action on click
         const node = chatBox.querySelector('input');
         node.addEventListener('keyup', ({key}) => {
             if (key === "Enter") {
-                this.onSendButton(chatBox)
+                this.onSendButton(chatBox);
             }
         })
     }
@@ -88,18 +88,18 @@ class ChatBox {
     onSendButton(chatbox) {
         // Defining var and default behavior for empty textField
         let textField = chatbox.querySelector('input');
-        let text1 = textField.value
+        let text1 = textField.value;
         if (text1 === "") {
             return;
         }
         // Publish on the channel of the user
-        let msg1 = {name: "User", message: text1}
+        let msg1 = {name: "User", message: text1};
         this.messages.push(msg1);
-        this.updateChatText(chatbox)
-        textField.value = ''
+        this.updateChatText(chatbox);
+        textField.value = '';
         // Create an event listener on the button element:
         // Get the receiver endpoint from Python using fetch:
-        this.fetcher(chatbox, text1)
+        this.fetcher(chatbox, text1);
     }
 
     /**
@@ -109,8 +109,8 @@ class ChatBox {
      * @return {void}
      */
     onSttButton(chatbox) {
-        const SpeechRecognition = window.webkitSpeechRecognition
-        let recognition = new SpeechRecognition()
+        const SpeechRecognition = window.webkitSpeechRecognition;
+        let recognition = new SpeechRecognition();
         recognition.continuous = false;
         recognition.lang = 'fr';
         if (getLocalStream()) {
@@ -119,7 +119,7 @@ class ChatBox {
             recognition.onresult = (event) => {
                 const instruction = event.results[0][0].transcript;
                 // Publish on the channel of the user
-                let msg1 = {name: "User", message: instruction}
+                let msg1 = {name: "User", message: instruction};
                 this.messages.push(msg1);
                 this.updateChatText(chatbox);
                 // Create an event listener on the button element:
@@ -160,7 +160,7 @@ class ChatBox {
                     window.speechSynthesis.speak(vocal);
                 }
             }).catch((error) => {
-            console.error('Error:', error)
+            console.error('Error:', error);
         });
     }
 
@@ -173,9 +173,9 @@ class ChatBox {
         let html = '';
         this.messages.slice().reverse().forEach(function (item) {
             if (item.name === 'Nambot') {
-                html += '<div class="messages__item messages__item--visitor">' + item.message + '</div>'
+                html += '<div class="messages__item messages__item--visitor">' + item.message + '</div>';
             } else {
-                html += '<div class="messages__item messages__item--operator">' + item.message + '</div>'
+                html += '<div class="messages__item messages__item--operator">' + item.message + '</div>';
             }
         })
         const chatMessage = chatbot.querySelector(".chatbox__messages");
@@ -184,5 +184,5 @@ class ChatBox {
 }
 
 // New ChatBox object
-const chatbox = new ChatBox()
-chatbox.display()
+const chatbox = new ChatBox();
+chatbox.display();

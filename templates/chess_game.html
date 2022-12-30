@@ -27,7 +27,7 @@
         checkWindowSize();
 
         // WebSocket for chess
-        const socket = io('ws://lecnambot.herokuapp.com/chess');
+        const socket = io('wss://lecnambot.herokuapp.com/chess');
         socket.on('connect', () => {
             console.log('WebSocket connected to chess namespace: ' + '{{ game_id }}');
             socket.emit('chess_join', {gameId: '{{ game_id }}'});
@@ -214,9 +214,9 @@
                 console.log("It is a promotion move!");
                 $('#promotionModal').modal('show');
                 const piece = await choosePiece();
-                return move.slice(0, 4) + piece
+                return move.slice(0, 4) + piece;
             }
-            return move
+            return move;
         }
 
         // This is an async timeout util
@@ -266,7 +266,7 @@
             }
             while (next === false) await timeout(50);
             $('#promotionModal').modal('toggle');
-            return piece
+            return piece;
         }
 
         /**
@@ -318,7 +318,7 @@
             for (const row of fenSplitted) {
                 reversedFen.push(row.split("").reverse().join(""));
             }
-            return reversedFen.join("/")
+            return reversedFen.join("/");
         }
 
         /**
@@ -406,10 +406,10 @@
                                     pieceToAppend = emptyImg;
                                 }
                                 chessCase.appendChild(pieceToAppend.cloneNode());
-                                caseCount++
+                                caseCount++;
                             }
                             caseCount = 0;
-                            rowCount++
+                            rowCount++;
                         }
                         // Allow access to chess pieces only to those who have
                         if ('{{ session.get("username") }}' === '{{ sender_username }}') {
