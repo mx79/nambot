@@ -179,7 +179,7 @@ def send_email(email: str, option: str):
     msg['From'] = f'CnamBot <{getenv("CNAMBOT_EMAIL")}>'
     msg['To'] = mail
     msg["Date"] = formatdate(localtime=True)
-    url = "http://localhost:5000" if os.getenv("DEV_MODE") else "https://lecnambot.herokuapp.com"
+    url = "https://lecnambot.herokuapp.com"
     key = get_random_string(16)
     if option == "verification":
         msg['Subject'] = "Votre lien de validation d'email"

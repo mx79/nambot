@@ -1,7 +1,9 @@
 import os
 
+from srv.srv import env
 from flask import Flask, render_template
 from flask_socketio import SocketIO
+
 from routes.chat import chat_receiver
 from routes.base import root, user_profile
 from routes.chatbot import chatbot_receiver
@@ -28,7 +30,6 @@ def page_not_found(error):
 
     :return: Custom template of error 404
     """
-    print(error)
     return render_template("404.html")
 
 
@@ -63,6 +64,5 @@ socketio.on_event("chess_leave", on_chess_leave, namespace="/chess")
 
 # Launching the app
 if __name__ == "__main__":
-    app.jinja_env["DEV_MODE"] = os.getenv("DEV_MODE")
     port = int(os.getenv("PORT", 5000))
     socketio.run(app, host='0.0.0.0', port=port, allow_unsafe_werkzeug=True)

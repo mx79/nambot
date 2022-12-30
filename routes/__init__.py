@@ -31,7 +31,6 @@ def clean_url_and_users():
     This thread is run every 10 seconds.
     """
     threading.Timer(10.0, clean_url_and_users).start()
-    print("Cleaning of urls and temporary users...")
     actual_time = int(time.time())
     for doc in db.tmp_email_validation_url.find():
         diff = actual_time - doc["created_at"]
