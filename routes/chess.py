@@ -4,11 +4,13 @@ import random
 import threading
 import pickle as pkl
 
-from typing import Dict, List
 from pkg.authlib import db, get_random_string
 from routes import all_chess_games, auth_required
 from flask_socketio import emit, join_room, leave_room
 from flask import redirect, render_template, request, session
+
+
+# ============================================= UTILS ============================================= #
 
 
 def create_chess_url(key: str, sender_email: str, opponent_email: str, sender_color: str, opponent_color: str):
@@ -30,54 +32,46 @@ def create_chess_url(key: str, sender_email: str, opponent_email: str, sender_co
     })
 
 
-def check_possible_move_for_this_piece(game_id: str, chess_case: str) -> Dict[str, List[str]]:
-    """It evaluates all possible move for a given piece.
-    This function is launched once a piece is clicked by a player on the frontend.
+def transform_fen(row: str) -> str:
+    """Transform the row of a given fen representation to make easier the game load process.
 
-    :param game_id: The unique id of the chess game
-    :param chess_case: The chess case to be checked
-    :return: A list of all possible move for the clicked piece.
+    :param row: The input row
+    :return: Transformed row
     """
-    board = all_chess_games[game_id]
-    moves = [str(legal_move) for legal_move in board.legal_moves if chess_case == str(legal_move)[:2]]
+    for char in row:
+        if char not in "rnbqkpRNBQKP":
+            if char == "2":
+                row = row.replace(char, "11")
+            elif char == "3":
+                row = row.replace(char, "111")
+            elif char == "4":
+                row = row.replace(char, "1111")
+            elif char == "5":
+                row = row.replace(char, "11111")
+            elif char == "6":
+                row = row.replace(char, "111111")
+            elif char == "7":
+                row = row.replace(char, "1111111")
+            elif char == "8":
+                row = row.replace(char, "11111111")
 
-    return {"possible_moves": moves}
+    return row
 
 
-def load_chess_board(game_id: str) -> Dict[str, str]:
+def get_fen(game_id: str) -> str:
     """It gets the FEN representation of the given game.
 
     :param game_id: The unique id of the chess game
-    :return: A dict containing the FEN representation of the game
+    :return: Fen representation for a given game
     """
-
-    def transform(row: str) -> str:
-        for char in row:
-            if char not in "rnbqkpRNBQKP":
-                if char == "2":
-                    row = row.replace(char, "11")
-                elif char == "3":
-                    row = row.replace(char, "111")
-                elif char == "4":
-                    row = row.replace(char, "1111")
-                elif char == "5":
-                    row = row.replace(char, "11111")
-                elif char == "6":
-                    row = row.replace(char, "111111")
-                elif char == "7":
-                    row = row.replace(char, "1111111")
-                elif char == "8":
-                    row = row.replace(char, "11111111")
-        return row
-
     try:
         board = all_chess_games[game_id]
     except KeyError:
         board = pkl.loads(db.chess_game.find_one({"url": game_id})["board"])
-    fen_splitted = board.board_fen().split("/")
-    custom_fen = '/'.join(transform(row) for row in fen_splitted)
 
-    return {"fen": custom_fen}
+    fen_splitted = board.board_fen().split("/")
+
+    return '/'.join(transform_fen(row) for row in fen_splitted)
 
 
 def chess_game_end(game_id: str, winner: str | None):
@@ -89,14 +83,20 @@ def chess_game_end(game_id: str, winner: str | None):
     :param winner: The name of the winner of the game
     """
     time.sleep(3)
+
     board = all_chess_games[game_id]
     current_game = db.tmp_chess_url.find_one({"url": game_id})
     current_game["winner"] = winner
     current_game["move_stack"] = [str(move) for move in board.move_stack]
     current_game["board"] = pkl.dumps(board)
+
     db.chess_game.insert_one(current_game)
     db.tmp_chess_url.delete_one({"url": game_id})
+
     all_chess_games.pop(game_id, None)
+
+
+# ============================================= WEBSOCKET ============================================= #
 
 
 def on_chess_join(data):
@@ -105,20 +105,35 @@ def on_chess_join(data):
 
     :param data: The websocket payload
     """
-    room = data["gameId"]
-    join_room(room)
+    game_id = data["gameId"]
+    join_room(game_id)
 
 
-def on_chess_move(data):
-    """WebSocket function to make the game fluid, Player A has played a move, Player B will receive the information
-    and the data is updated in real-time.
+def on_chess_possibilities(data):
+    """It evaluates all possible move for a given piece.
+    This function is launched once a piece is clicked by a player on the frontend.
 
     :param data: The websocket payload
     """
-    room = data["gameId"]
+    user_id = data["userId"]
+    game_id = data["gameId"]
+    chess_case = data["chessCase"]
+
+    board = all_chess_games[game_id]
+    moves = [str(legal_move) for legal_move in board.legal_moves if chess_case == str(legal_move)[:2]]
+
+    emit("chess_possibilities_back", {"userId": user_id, "possibleMoves": moves}, to=game_id)
+
+
+def on_chess_move(data):
+    """WebSocket function updating the chess board and checking for any of the following: draw, check, checkmate.
+
+    :param data: The websocket payload
+    """
+    game_id = data["gameId"]
     move = data["move"]
 
-    board = all_chess_games[room]
+    board = all_chess_games[game_id]
     board.push_san(move)
 
     res = {
@@ -139,11 +154,11 @@ def on_chess_move(data):
         res["checkmate"] = True
 
     if res["checkmate"]:
-        threading.Thread(target=chess_game_end, args=(room, session.get("username"))).start()
+        threading.Thread(target=chess_game_end, args=(game_id, session.get("username"))).start()
     elif res["draw"]:
-        threading.Thread(target=chess_game_end, args=(room, None)).start()
+        threading.Thread(target=chess_game_end, args=(game_id, None)).start()
 
-    emit("chess_move_back", {"move": move, "gameStatus": res}, to=room)
+    emit("chess_move_back", {"move": move, "gameStatus": res}, to=game_id)
 
 
 def on_chess_leave(data):
@@ -152,8 +167,11 @@ def on_chess_leave(data):
 
     :param data: The websocket payload
     """
-    room = data["gameId"]
-    leave_room(room)
+    game_id = data["gameId"]
+    leave_room(game_id)
+
+
+# ============================================= HANDLER ============================================= #
 
 
 @auth_required
@@ -164,18 +182,6 @@ def chess_game(tmp_string: str = None):
     :return:
     """
     if request.method == "POST":
-        if tmp_string:
-            body = request.get_json()
-            if body.get("check"):
-                return check_possible_move_for_this_piece(
-                    game_id=tmp_string,
-                    chess_case=body["chessCase"]
-                )
-            elif body.get("load"):
-                return load_chess_board(
-                    game_id=tmp_string
-                )
-            return
         key = get_random_string(16)
         opponent_username = request.form.get("chess_opponent_username")
         sender_color = random.choice(["white", "black"])
@@ -194,7 +200,8 @@ def chess_game(tmp_string: str = None):
                 sender_username=doc["sender_username"],
                 receiver_username=doc["receiver_username"],
                 sender_color=doc["sender_color"],
-                receiver_color=doc["receiver_color"]
+                receiver_color=doc["receiver_color"],
+                fen=get_fen(tmp_string)
             )
         elif doc := db.chess_game.find_one({"url": tmp_string}):
             return render_template(
@@ -203,7 +210,8 @@ def chess_game(tmp_string: str = None):
                 sender_username=doc["sender_username"],
                 receiver_username=doc["receiver_username"],
                 sender_color=doc["sender_color"],
-                receiver_color=doc["receiver_color"]
+                receiver_color=doc["receiver_color"],
+                fen=get_fen(tmp_string)
             )
         return render_template("404.html")
 

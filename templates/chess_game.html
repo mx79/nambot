@@ -27,13 +27,32 @@
         checkWindowSize();
 
         // WebSocket for chess
-        const socket = io('wss://lecnambot.herokuapp.com/chess');
+        const socket = io('ws://localhost:5000/chess');
         socket.on('connect', () => {
             console.log('WebSocket connected to chess namespace: ' + '{{ game_id }}');
             socket.emit('chess_join', {gameId: '{{ game_id }}'});
         });
+        socket.on('chess_possibilities_back', (data) => {
+            console.log(`Got the user ${data["userId"]}`);
+            if ('{{ session.get("username") }}' === data["userId"]) {
+                // Put some light on the chess cases available for the piece selected:
+                movesArray = data["possibleMoves"];
+                for (const possibility of movesArray) {
+                    const elem = document.getElementById(possibility.slice(2, 4));
+                    // Change the color of the case if it is a valid move
+                    elem.setAttribute("class", "col d-flex justify-content-center");
+                    elem.setAttribute("style", "background-color: #f8f9fa");
+                    // Remove pointer event if there is a piece on this case
+                    if (elem.firstElementChild.alt !== "empty") {
+                        elem.firstElementChild.setAttribute("style", "pointer-events: none");
+                    }
+                    // Add eventListener on click when a possible move case is clicked and ask for the board to update
+                    elem.addEventListener("click", updateChessBoard);
+                    elem.possibility = possibility;
+                }
+            }
+        });
         socket.on('chess_move_back', (data) => {
-            console.log(`Got the move ${data["move"]}`);
             forwardPiece(data["move"]);
             checkMechanism(data["gameStatus"]);
         });
@@ -60,25 +79,6 @@
 
         /**
          *
-         * @param payload
-         */
-        function chessRequest(payload) {
-            return fetch(
-                'https://lecnambot.herokuapp.com/chess/' + '{{ game_id }}',
-                {
-                    method: 'POST',
-                    body: JSON.stringify(payload),
-                    mode: 'cors',
-                    headers: {
-                        'Content-type': 'application/json',
-                        'Accept': 'application/json'
-                    }
-                }
-            );
-        }
-
-        /**
-         *
          * @param piece
          */
         function checkPossibleMoveForThisPiece(piece) {
@@ -86,27 +86,11 @@
             // Start by removing any light on case before we make a request
             removeLightOnCase('{{ game_id }}');
             // Do a request to check possible move for this case
-            chessRequest({check: true, chessCase: chessCase})
-                .then(r => r.json())
-                .then(jsonResponse => {
-                    // Put some light on the chess cases available for the piece selected:
-                    movesArray = jsonResponse["possible_moves"];
-                    for (const possibility of movesArray) {
-                        const elem = document.getElementById(possibility.slice(2, 4));
-                        // Change the color of the case if it is a valid move
-                        elem.setAttribute("class", "col d-flex justify-content-center");
-                        elem.setAttribute("style", "background-color: #f8f9fa");
-                        // Remove pointer event if there is a piece on this case
-                        if (elem.firstElementChild.alt !== "empty") {
-                            elem.firstElementChild.setAttribute("style", "pointer-events: none");
-                        }
-                        // Add eventListener on click when a possible move case is clicked and ask for the board to update
-                        elem.addEventListener("click", updateChessBoard);
-                        elem.possibility = possibility;
-                    }
-                }).catch((error) => {
-                console.error('Error:', error);
-            });
+            socket.emit('chess_possibilities', {
+                userId: '{{ session.get("username") }}',
+                gameId: '{{ game_id }}',
+                chessCase: chessCase
+            })
         }
 
         /**
@@ -334,89 +318,81 @@
 
         // Load the corresponding chess game
         document.addEventListener("DOMContentLoaded", () => {
-            if ('{{ game_id }}') {
-                const chessContainer = document.getElementById("chess-container");
-                const emptyImg = document.querySelector('img[alt="empty"]');
-                const blackRook = document.querySelector('img[alt="black_rook"]');
-                const blackKnight = document.querySelector('img[alt="black_knight"]');
-                const blackBishop = document.querySelector('img[alt="black_bishop"]');
-                const blackQueen = document.querySelector('img[alt="black_queen"]');
-                const blackKing = document.querySelector('img[alt="black_king"]');
-                const blackPawn = document.querySelector('img[alt="black_pawn"]');
-                const whiteRook = document.querySelector('img[alt="white_rook"]');
-                const whiteKnight = document.querySelector('img[alt="white_knight"]');
-                const whiteBishop = document.querySelector('img[alt="white_bishop"]');
-                const whiteQueen = document.querySelector('img[alt="white_queen"]');
-                const whiteKing = document.querySelector('img[alt="white_king"]');
-                const whitePawn = document.querySelector('img[alt="white_pawn"]');
-                chessRequest({load: true})
-                    .then(r => r.json())
-                    .then(jsonResponse => {
-                        let fen = jsonResponse["fen"];
-                        // Taking the right fen representation for the right color
-                        if (('{{ session.get("username") }}' !== '{{ receiver_username }}' && ('{{ sender_color }}' === "black" || '{{ session.get("sender_color") }}' === "black")) || ('{{ session.get("username") }}' === '{{ receiver_username }}' && '{{ receiver_color }}' === "black")) {
-                            fen = reverseFen(fen);
-                        }
-                        // Load the FEN string representing the current game
-                        const fenLines = fen.split("/");
-                        // Set some variable
-                        let rowCount = 0;
-                        let caseCount = 0;
-                        // Remove all piece from the chess board
-                        for (const row of chessContainer.children) {
-                            for (const chessCase of row.children) {
-                                chessCase.firstElementChild.remove();
-                            }
-                        }
-                        // Append all piece from the current game
-                        for (const row of chessContainer.children) {
-                            for (const chessCase of row.children) {
-                                const fenVal = fenLines[rowCount].slice(caseCount, caseCount + 1);
-                                let pieceToAppend;
-                                if (fenVal === "r") {
-                                    pieceToAppend = blackRook;
-                                } else if (fenVal === "n") {
-                                    pieceToAppend = blackKnight;
-                                } else if (fenVal === "b") {
-                                    pieceToAppend = blackBishop;
-                                } else if (fenVal === "q") {
-                                    pieceToAppend = blackQueen;
-                                } else if (fenVal === "k") {
-                                    pieceToAppend = blackKing;
-                                } else if (fenVal === "p") {
-                                    pieceToAppend = blackPawn;
-                                } else if (fenVal === "R") {
-                                    pieceToAppend = whiteRook;
-                                } else if (fenVal === "N") {
-                                    pieceToAppend = whiteKnight;
-                                } else if (fenVal === "B") {
-                                    pieceToAppend = whiteBishop;
-                                } else if (fenVal === "Q") {
-                                    pieceToAppend = whiteQueen;
-                                } else if (fenVal === "K") {
-                                    pieceToAppend = whiteKing;
-                                } else if (fenVal === "P") {
-                                    pieceToAppend = whitePawn;
-                                } else {
-                                    pieceToAppend = emptyImg;
-                                }
-                                chessCase.appendChild(pieceToAppend.cloneNode());
-                                caseCount++;
-                            }
-                            caseCount = 0;
-                            rowCount++;
-                        }
-                        // Allow access to chess pieces only to those who have
-                        if ('{{ session.get("username") }}' === '{{ sender_username }}') {
-                            checkPlayerRights('{{ sender_color }}');
-                        } else if ('{{ session.get("username") }}' === '{{ receiver_username }}') {
-                            checkPlayerRights('{{ receiver_color }}');
-                        }
-                    }).catch((error) => {
-                    console.error('Error:', error);
-                });
+            const chessContainer = document.getElementById("chess-container");
+            const emptyImg = document.querySelector('img[alt="empty"]');
+            const blackRook = document.querySelector('img[alt="black_rook"]');
+            const blackKnight = document.querySelector('img[alt="black_knight"]');
+            const blackBishop = document.querySelector('img[alt="black_bishop"]');
+            const blackQueen = document.querySelector('img[alt="black_queen"]');
+            const blackKing = document.querySelector('img[alt="black_king"]');
+            const blackPawn = document.querySelector('img[alt="black_pawn"]');
+            const whiteRook = document.querySelector('img[alt="white_rook"]');
+            const whiteKnight = document.querySelector('img[alt="white_knight"]');
+            const whiteBishop = document.querySelector('img[alt="white_bishop"]');
+            const whiteQueen = document.querySelector('img[alt="white_queen"]');
+            const whiteKing = document.querySelector('img[alt="white_king"]');
+            const whitePawn = document.querySelector('img[alt="white_pawn"]');
+            let fen = '{{ fen }}';
+            // Taking the right fen representation for the right color
+            if (('{{ session.get("username") }}' !== '{{ receiver_username }}' && ('{{ sender_color }}' === "black" || '{{ session.get("sender_color") }}' === "black")) || ('{{ session.get("username") }}' === '{{ receiver_username }}' && '{{ receiver_color }}' === "black")) {
+                fen = reverseFen(fen);
             }
-        })
+            // Load the FEN string representing the current game
+            const fenLines = fen.split("/");
+            // Set some variable
+            let rowCount = 0;
+            let caseCount = 0;
+            // Remove all piece from the chess board
+            for (const row of chessContainer.children) {
+                for (const chessCase of row.children) {
+                    chessCase.firstElementChild.remove();
+                }
+            }
+            // Append all piece from the current game
+            for (const row of chessContainer.children) {
+                for (const chessCase of row.children) {
+                    const fenVal = fenLines[rowCount].slice(caseCount, caseCount + 1);
+                    let pieceToAppend;
+                    if (fenVal === "r") {
+                        pieceToAppend = blackRook;
+                    } else if (fenVal === "n") {
+                        pieceToAppend = blackKnight;
+                    } else if (fenVal === "b") {
+                        pieceToAppend = blackBishop;
+                    } else if (fenVal === "q") {
+                        pieceToAppend = blackQueen;
+                    } else if (fenVal === "k") {
+                        pieceToAppend = blackKing;
+                    } else if (fenVal === "p") {
+                        pieceToAppend = blackPawn;
+                    } else if (fenVal === "R") {
+                        pieceToAppend = whiteRook;
+                    } else if (fenVal === "N") {
+                        pieceToAppend = whiteKnight;
+                    } else if (fenVal === "B") {
+                        pieceToAppend = whiteBishop;
+                    } else if (fenVal === "Q") {
+                        pieceToAppend = whiteQueen;
+                    } else if (fenVal === "K") {
+                        pieceToAppend = whiteKing;
+                    } else if (fenVal === "P") {
+                        pieceToAppend = whitePawn;
+                    } else {
+                        pieceToAppend = emptyImg;
+                    }
+                    chessCase.appendChild(pieceToAppend.cloneNode());
+                    caseCount++;
+                }
+                caseCount = 0;
+                rowCount++;
+            }
+            // Allow access to chess pieces only to those who have
+            if ('{{ session.get("username") }}' === '{{ sender_username }}') {
+                checkPlayerRights('{{ sender_color }}');
+            } else if ('{{ session.get("username") }}' === '{{ receiver_username }}') {
+                checkPlayerRights('{{ receiver_color }}');
+            }
+        });
     </script>
 {% endblock %}
 

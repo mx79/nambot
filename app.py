@@ -5,7 +5,7 @@ from flask_socketio import SocketIO
 from routes.chat import chat_receiver
 from routes.base import root, user_profile
 from routes.chatbot import chatbot_receiver
-from routes.chess import chess_game, on_chess_join, on_chess_move, on_chess_leave
+from routes.chess import chess_game, on_chess_join, on_chess_possibilities, on_chess_move, on_chess_leave
 from routes.auth import email_verification, forgot_password, login, logout
 
 # Flask app init
@@ -15,6 +15,7 @@ socketio = SocketIO(app)
 
 
 # TODO: Commenter code chess
+# TODO: Responsive footer avec les avatars
 
 # TODO: Discussion de groupe avec WebSocket + popup de chat simple
 
@@ -57,6 +58,7 @@ app.add_url_rule("/chatbot-receiver", view_func=chatbot_receiver, methods=["POST
 app.add_url_rule("/chess", view_func=chess_game, methods=["GET", "POST"])
 app.add_url_rule("/chess/<tmp_string>", view_func=chess_game, methods=["GET", "POST"])
 socketio.on_event("chess_join", on_chess_join, namespace="/chess")
+socketio.on_event("chess_possibilities", on_chess_possibilities, namespace="/chess")
 socketio.on_event("chess_move", on_chess_move, namespace="/chess")
 socketio.on_event("chess_leave", on_chess_leave, namespace="/chess")
 
