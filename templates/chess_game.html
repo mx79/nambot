@@ -27,7 +27,7 @@
         checkWindowSize();
 
         // WebSocket for chess
-        const socket = io('ws://localhost:5000/chess');
+        const socket = io('wss://lecnambot.herokuapp.com/chess');
         socket.on('connect', () => {
             console.log('WebSocket connected to chess namespace: ' + '{{ game_id }}');
             socket.emit('chess_join', {gameId: '{{ game_id }}'});
