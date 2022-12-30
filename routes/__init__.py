@@ -8,7 +8,6 @@ from config import env
 from os.path import join
 from functools import wraps
 from pkg.authlib import db
-from googletrans import Translator
 from flask import redirect, session, url_for
 from frtk import SVCIntentClassifier, RegexEntityExtractor
 
@@ -52,8 +51,8 @@ def redis_init() -> redis.client.Redis:
     :return: An instance of Redis client
     """
     # Redis for session, cache and chatbot
-    REDIS_URL = getenv("REDIS_URL")
-    redis_splitted_url = REDIS_URL.replace("@", " ").replace(":", " ").split(" ")
+    redis_url = getenv("REDIS_URL")
+    redis_splitted_url = redis_url.replace("@", " ").replace(":", " ").split(" ")
     redis_pwd = redis_splitted_url[2]
     redis_host = redis_splitted_url[3]
     redis_port = redis_splitted_url[4]
@@ -103,9 +102,6 @@ def no_auth_required(func):
 # Redis
 publisher = redis_init()
 subscriber = publisher.pubsub(ignore_subscribe_messages=True)
-
-# Translator object
-translator = Translator()
 
 # Instantiate a classifier with the model we want
 cls = SVCIntentClassifier()

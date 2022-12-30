@@ -9,17 +9,8 @@ on:
 env:
   APP_NAME: ${{ 'lecnambot' }}
   HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-#  MONGO_CLUSTER: ${{ secrets.MONGO_CLUSTER }}
-#  REDIS_URL: ${{ secrets.REDIS_URL }}
-#  HASH_ALGORITHM: ${{ secrets.HASH_ALGORITHM }}
-#  SECRET_KEY: ${{ secrets.SECRET_KEY }}
-#  CNAMBOT_EMAIL: ${{ secrets.CNAMBOT_EMAIL }}
-#  CNAMBOT_PASSWORD: ${{ secrets.CNAMBOT_PASSWORD }}
-#  SESSION_TYPE: ${{ secrets.SESSION_TYPE }}
-#  PERMANENT_SESSION_LIFETIME: ${{ secrets.PERMANENT_SESSION_LIFETIME }}
 
 jobs:
-
   deploy:
     name: Deploy to Heroku
     runs-on: ubuntu-20.04

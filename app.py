@@ -1,9 +1,7 @@
 import os
 
-from srv.srv import env
 from flask import Flask, render_template
 from flask_socketio import SocketIO
-
 from routes.chat import chat_receiver
 from routes.base import root, user_profile
 from routes.chatbot import chatbot_receiver
@@ -14,6 +12,7 @@ from routes.auth import email_verification, forgot_password, login, logout
 app = Flask(__name__)
 app.config.from_pyfile("./config/config.py")
 socketio = SocketIO(app)
+
 
 # TODO: Commenter code chess
 
@@ -39,7 +38,6 @@ def page_not_found(error):
 
 # ============================================= ROUTES ============================================= #
 
-
 # Basic routes
 app.add_url_rule("/", view_func=root, methods=["GET", "POST"])
 app.add_url_rule("/profile/<username>", view_func=user_profile, methods=["GET", "POST"])
@@ -62,7 +60,8 @@ socketio.on_event("chess_join", on_chess_join, namespace="/chess")
 socketio.on_event("chess_move", on_chess_move, namespace="/chess")
 socketio.on_event("chess_leave", on_chess_leave, namespace="/chess")
 
-# Launching the app
+# ============================================= LAUNCHER ============================================= #
+
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
     socketio.run(app, host='0.0.0.0', port=port, allow_unsafe_werkzeug=True)

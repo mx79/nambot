@@ -99,7 +99,7 @@ class ChatBox {
         textField.value = ''
         // Create an event listener on the button element:
         // Get the receiver endpoint from Python using fetch:
-        this.fetcher(text1)
+        this.fetcher(chatbox, text1)
     }
 
     /**
@@ -124,7 +124,7 @@ class ChatBox {
                 this.updateChatText(chatbox);
                 // Create an event listener on the button element:
                 // Get the receiver endpoint from Python using fetch:
-                this.fetcher(instruction);
+                this.fetcher(chatbox, instruction);
             }
         }
     }
@@ -133,11 +133,12 @@ class ChatBox {
      * Utility method to simplify the reuse of fetching:
      * => Used with the text
      * => Used with the vocal
+     * @param chatbox
      * @param data {string}
      * @return {void}
      */
-    fetcher(data) {
-        fetch("https://lecnambot.herokuapp.com/chatbot-receiver",
+    fetcher(chatbox, data) {
+        fetch("https://lecnambot.heroku.com/chatbot-receiver",
             {
                 method: 'POST',
                 // Stringify the payload into JSON:

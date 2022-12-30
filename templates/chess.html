@@ -52,11 +52,8 @@
                     <form action="/chess" class="section text-center" id="chess_game_form" method="post">
                         <div class="form-group mt-2">
                             <h5 class="mb-4 pb-3">Sélectionnez votre opposant:</h5>
-                            <div class="input-group">
-                                <input type="search" class="form-control rounded"
-                                       aria-label="Search"
-                                       aria-describedby="search-addon" id="users"/>
-                            </div>
+                            <input type="search" class="form-control rounded" aria-label="Search" name="chess_opponent_username"
+                                   aria-describedby="search-addon" id="users"/>
                             <input type="submit" name="submit" class="btn mt-4"
                                    value="Jouer">
                         </div>

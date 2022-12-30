@@ -4,7 +4,6 @@ flask
 flask-socketio
 google
 googlesearch-python
-googletrans
 gunicorn
 jinja2
 nltk
