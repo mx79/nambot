@@ -230,6 +230,7 @@
         async function choosePiece() {
             let piece;
             if (('{{ session.get("username") }}' !== '{{ receiver_username }}' && ('{{ sender_color }}' === "black" || '{{ session.get("sender_color") }}' === "black")) || ('{{ session.get("username") }}' === '{{ receiver_username }}' && '{{ receiver_color }}' === "black")) {
+                piece = "p";
                 document.getElementById("promotedToBlackBishop").addEventListener("click", () => {
                     piece = "b";
                     next = true;
@@ -247,6 +248,7 @@
                     next = true;
                 });
             } else {
+                piece = "P";
                 document.getElementById("promotedToWhiteBishop").addEventListener("click", () => {
                     piece = "B";
                     next = true;
@@ -291,25 +293,18 @@
         }
 
         /**
-         *
+         * Do a request to update the chess board status.
          * @param event
          */
         async function updateChessBoard(event) {
             let move = event.currentTarget.possibility;
             move = await checkPromotion(move);
-            // Do a request to update the chess board status
-            chessRequest({update: true, move: move})
-                .then(r => r.json())
-                .then(jsonResponse => {
-                    removeLightOnCase('{{ game_id }}');
-                    socket.emit('chess_move', {gameId: '{{ game_id }}', move: move, gameStatus: jsonResponse});
-                }).catch((error) => {
-                console.error('Error:', error);
-            });
+            removeLightOnCase('{{ game_id }}');
+            socket.emit('chess_move', {gameId: '{{ game_id }}', move: move});
         }
 
         /**
-         * Used when the color view side is black
+         * Used when the color view side is black.
          * @param fen
          */
         function reverseFen(fen) {
@@ -322,7 +317,7 @@
         }
 
         /**
-         * Used to check which `onclick listener` we should add or not
+         * Used to check which `onclick listener` we should add or not.
          * @param color
          */
         function checkPlayerRights(color) {

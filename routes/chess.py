@@ -44,41 +44,6 @@ def check_possible_move_for_this_piece(game_id: str, chess_case: str) -> Dict[st
     return {"possible_moves": moves}
 
 
-def update_chess_board(game_id: str, move: str) -> Dict[str, bool]:
-    """It will update the chess board of the given game.
-
-    :param game_id: The unique id of the chess game
-    :param move: The move received from the request
-    :return: A dict containing if there is a position of check, checkmate or draw after the move
-    """
-    board = all_chess_games[game_id]
-    board.push_san(move)
-
-    res = {
-        "draw": False,
-        "check": False,
-        "checkmate": False,
-    }
-
-    if board.is_stalemate():
-        res["draw"] = True
-    if board.is_insufficient_material():
-        res["draw"] = True
-    if board.is_fivefold_repetition():
-        res["draw"] = True
-    if board.is_check():
-        res["check"] = True
-    if board.is_checkmate():
-        res["checkmate"] = True
-
-    if res["checkmate"]:
-        threading.Thread(target=chess_game_end, args=(game_id, session.get("username"))).start()
-    elif res["draw"]:
-        threading.Thread(target=chess_game_end, args=(game_id, None)).start()
-
-    return res
-
-
 def load_chess_board(game_id: str) -> Dict[str, str]:
     """It gets the FEN representation of the given game.
 
@@ -152,8 +117,33 @@ def on_chess_move(data):
     """
     room = data["gameId"]
     move = data["move"]
-    game_status = data["gameStatus"]
-    emit("chess_move_back", {"move": move, "gameStatus": game_status}, to=room)
+
+    board = all_chess_games[room]
+    board.push_san(move)
+
+    res = {
+        "draw": False,
+        "check": False,
+        "checkmate": False,
+    }
+
+    if board.is_stalemate():
+        res["draw"] = True
+    if board.is_insufficient_material():
+        res["draw"] = True
+    if board.is_fivefold_repetition():
+        res["draw"] = True
+    if board.is_check():
+        res["check"] = True
+    if board.is_checkmate():
+        res["checkmate"] = True
+
+    if res["checkmate"]:
+        threading.Thread(target=chess_game_end, args=(room, session.get("username"))).start()
+    elif res["draw"]:
+        threading.Thread(target=chess_game_end, args=(room, None)).start()
+
+    emit("chess_move_back", {"move": move, "gameStatus": res}, to=room)
 
 
 def on_chess_leave(data):
@@ -180,11 +170,6 @@ def chess_game(tmp_string: str = None):
                 return check_possible_move_for_this_piece(
                     game_id=tmp_string,
                     chess_case=body["chessCase"]
-                )
-            elif body.get("update"):
-                return update_chess_board(
-                    game_id=tmp_string,
-                    move=body["move"],
                 )
             elif body.get("load"):
                 return load_chess_board(
