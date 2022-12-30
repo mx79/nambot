@@ -138,7 +138,7 @@ class ChatBox {
      * @return {void}
      */
     fetcher(chatbox, data) {
-        fetch("https://lecnambot.heroku.com/chatbot-receiver",
+        fetch("https://lecnambot.herokuapp.com/chatbot-receiver",
             {
                 method: 'POST',
                 // Stringify the payload into JSON:
