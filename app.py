@@ -14,7 +14,6 @@ app.config.from_pyfile("./config/config.py")
 socketio = SocketIO(app)
 
 
-# TODO: Commenter code chess
 # TODO: Responsive footer avec les avatars
 
 # TODO: Discussion de groupe avec WebSocket + popup de chat simple

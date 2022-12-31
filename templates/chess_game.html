@@ -78,7 +78,7 @@
         let movesArray = [];
 
         /**
-         *
+         * This function is checking all possible moves for the given piece.
          * @param piece
          */
         function checkPossibleMoveForThisPiece(piece) {
@@ -94,7 +94,8 @@
         }
 
         /**
-         *
+         * It removes the light on case, it is used before any call to checkPossibleMoveForThisPiece.
+         * It is also used when we update the chess position by clicking on a blank case.
          * @param gameId
          */
         function removeLightOnCase(gameId) {
@@ -117,7 +118,7 @@
         }
 
         /**
-         *
+         * It permits to forward a chess piece once the move has been registered in the Board object of the game.
          * @param move
          */
         function forwardPiece(move) {
@@ -189,7 +190,8 @@
         }
 
         /**
-         *
+         * It permits to check if the move is a promotion move, if it is,
+         * it will display a BootStrap modal to choose a new piece for the promotion.
          * @param move
          */
         async function checkPromotion(move) {
@@ -209,7 +211,8 @@
         let next = false;
 
         /**
-         *
+         * It contains the logic of choosing a new piece from the BootStrap modal shown at the user screen
+         * when there is a promotion situation.
          */
         async function choosePiece() {
             let piece;
@@ -256,7 +259,9 @@
         }
 
         /**
-         *
+         * It will check if there is a check or a draw in the response from the backend.
+         * If there are any of the following : draw, check, checkmate
+         * => Insert a custom message in the HTML and end the game if applicable.
          * @param jsonResponse
          */
         function checkMechanism(jsonResponse) {
@@ -316,7 +321,7 @@
             }
         }
 
-        // Load the corresponding chess game
+        // Load the corresponding chess game when the page is loaded
         document.addEventListener("DOMContentLoaded", () => {
             const chessContainer = document.getElementById("chess-container");
             const emptyImg = document.querySelector('img[alt="empty"]');

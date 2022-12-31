@@ -6,6 +6,8 @@ from flask import request, session
 from routes import cls, ext, publisher, subscriber
 from pkg.bot import Transcript, Conversation
 
+# ================================== CONVERSATION TREATMENT AND STORAGE ================================== #
+
 
 def transform(username: str, msg: str) -> Transcript:
     """The function that get intent from redis message and return a dict with infos.
@@ -47,6 +49,9 @@ subscriber.psubscribe(**{"ongoing_conversation_*": primary_handler})
 
 # Run redis in thread
 subscriber.run_in_thread()
+
+
+# ============================================= HANDLER ============================================= #
 
 
 @auth_required

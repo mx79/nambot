@@ -4,6 +4,8 @@ from pkg.authlib import db
 from routes import auth_required
 from flask import render_template, request, session
 
+# ============================================= HANDLERS ============================================= #
+
 
 @auth_required
 def root():

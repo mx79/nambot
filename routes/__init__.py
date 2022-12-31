@@ -11,6 +11,8 @@ from pkg.authlib import db
 from flask import redirect, session, url_for
 from frtk import KerasIntentClassifier, RegexEntityExtractor
 
+# ============================================= APP VAR ============================================= #
+
 # App init
 env.verify()
 
@@ -20,6 +22,8 @@ regex_dir = join(os.getenv("BASE_DIR"), "resources", "data", "regex.json")
 
 # Dict in memory containing all the chess games running at the moment
 all_chess_games = {}
+
+# ============================================= THREADS ============================================= #
 
 
 def clean_tmp():
@@ -54,6 +58,9 @@ def clean_chess_url():
             db.tmp_chess_url.delete_one({"created_at": doc["created_at"]})
 
 
+# ============================================= REDIS ============================================= #
+
+
 def redis_init() -> redis.client.Redis:
     """Redis config initialization.
 
@@ -74,6 +81,9 @@ def redis_init() -> redis.client.Redis:
         charset='utf-8',
         decode_responses=True
     )
+
+
+# ======================================= AUTHENTICATION DECORATORS ======================================= #
 
 
 def auth_required(func):
@@ -107,6 +117,8 @@ def no_auth_required(func):
 
     return wrapper
 
+
+# ======================================= APP VAR AND THREAD LAUNCH ======================================= #
 
 # Redis
 publisher = redis_init()
