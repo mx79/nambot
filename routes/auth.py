@@ -39,7 +39,7 @@ def login():
 
             # Create a temporary user while waiting for an email verification
             create_user(signup_username, signup_promo, signup_email, signup_pwd, tmp=True)
-            threading.Thread(target=lambda x: send_email(x, option="verification"), args=signup_email).start()
+            threading.Thread(target=lambda x: send_email(x, option="verification"), args=signup_email)
             return render_template("email-verification.html")
 
     return render_template("login.html")

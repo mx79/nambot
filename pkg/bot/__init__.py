@@ -23,7 +23,7 @@ def get_jeu(jeu: str):
     :param jeu: The game to launch in a new browser tab.
     """
     # TODO: Change this function
-    links = search(jeu, num_results=10)
+    links = search(jeu, num=10)
     webbrowser.open(links[0])
 
 
