@@ -29,7 +29,7 @@ def login():
                     return redirect("/")
             return render_template("login.html", pwd_validation="Nom d'utilisateur ou mot de passe invalide")
         # Starting test tree for signup form
-        if signup_username and signup_email and signup_pwd != "":
+        if signup_username and signup_promo and signup_email and signup_pwd != "":
             if indb := user_in_db(signup_username, signup_email):
                 return render_template("login.html", msg=indb, card_back=True)
 
@@ -61,16 +61,15 @@ def email_verification(tmp_string: str = None):
     if tmp_string:
         if doc := db.tmp_email_validation_url.find_one({"url": tmp_string}):
             # Drop tmp_user key of user session when link is GET by HTTP method
-            if user := db.tmp_users.find_one({"email": doc["email"]}):
-                create_user(
-                    user["username"],
-                    user["promo"],
-                    user["email"],
-                    user["password"]
-                )
-                db.tmp_users.delete_one({"email": doc["email"]})
-                return render_template("email-verification.html", arg=tmp_string)
-            return render_template("404.html")
+            user = db.tmp_users.find_one({"email": doc["email"]})
+            create_user(
+                user["username"],
+                user["promo"],
+                user["email"],
+                user["password"]
+            )
+            db.tmp_users.delete_one({"email": doc["email"]})
+            return render_template("email-verification.html", arg=tmp_string)
         return render_template("404.html")
 
     return render_template("404.html")

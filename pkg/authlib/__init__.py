@@ -7,7 +7,8 @@ import smtplib
 from os import getenv
 from pymongo import MongoClient
 from email.utils import formatdate
-from email.message import EmailMessage
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from passlib.context import CryptContext
 
 # =================================================== VARIABLES =================================================== #
@@ -175,42 +176,50 @@ def send_email(email: str, option: str):
     mail = email.strip()
 
     # Headers : cnambot_address, user_address, actual_date, subject, message
-    msg = EmailMessage()
+    msg = MIMEMultipart('alternative')
     msg['From'] = f'CnamBot <{getenv("CNAMBOT_EMAIL")}>'
     msg['To'] = mail
     msg["Date"] = formatdate(localtime=True)
+    html = ""
     url = "https://lecnambot.herokuapp.com"
     key = get_random_string(16)
     if option == "verification":
         msg['Subject'] = "Votre lien de validation d'email"
-        msg.set_content(f"""\
-        Bonjour,
-
-        Bienvenue sur CnamBot, voici le lien à suivre pour achever la validation de votre adresse email :
-        {url}/email-verified/{key}
-
-        Une fois cela fait, vous pourrez profitez pleinement des services de la plateforme.
-
-        Bonne journée,
-        L'équipe de développement
-        """)
+        html = f"""\
+        <html>
+          <head></head>
+          <body>
+            <p>
+              Bonjour,<br><br>
+              Bienvenue sur CnamBot, voici le lien à suivre pour achever la validation de ton adresse email : <a href="{url}/email-verified/{key}">CnamBot</a><br><br>
+              Bonne journée,<br>
+              Max
+            </p>
+          </body>
+        </html>
+        """
         create_email_validation_url(key, mail)
     elif option == "forgot":
         msg['Subject'] = "Votre lien de réinitialisation de mot de passe"
-        msg.set_content(f"""\
-        Bonjour,
-
-        Voici votre lien de réinitialisation de mot de passe :
-        {url}/forgot-password/{key}
-
-        Bonne journée,
-        L'équipe de développement
-        """)
+        html = f"""\
+        <html>
+          <head></head>
+          <body>
+            <p>
+              Bonjour,<br><br>
+              Voici le lien de réinitialisation de ton mot de passe : <a href="{url}/forgot-password/{key}">CnamBot</a><br><br>
+              Bonne journée,<br>
+              Max
+            </p>
+          </body>
+        </html>
+        """
         create_forgot_url(key, mail)
 
     # Try to send the message, catch if there are any error
+    msg.attach(MIMEText(html, 'html'))
     try:
-        server.send_message(msg)
+        server.sendmail(getenv("CNAMBOT_EMAIL"), mail, msg.as_string())
         print(option)
         print('{0} : send'.format(mail))
     except smtplib.SMTPException as e:
