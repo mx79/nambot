@@ -39,7 +39,7 @@ def login():
 
             # Create a temporary user while waiting for an email verification
             create_user(signup_username, signup_promo, signup_email, signup_pwd, tmp=True)
-            threading.Thread(target=lambda x: send_email(x, option="verification"), args=signup_email)
+            threading.Thread(target=lambda x: send_email(x, option="verification"), args=(signup_email,)).start()
             return render_template("email-verification.html")
 
     return render_template("login.html")
@@ -90,8 +90,7 @@ def forgot_password(tmp_string: str = None):
     if request.method == "POST":
         if tmp_string is None:
             forgot_email = request.form.get("forgot_email", "")
-            threading.Thread(target=lambda x: send_email(x, option="forgot"), args=forgot_email)
-            send_email(forgot_email, option="forgot")
+            threading.Thread(target=lambda x: send_email(x, option="forgot"), args=(forgot_email,)).start()
             return render_template("forgot.html", send=True)
         else:
             new_pwd = request.form.get("new_password")
