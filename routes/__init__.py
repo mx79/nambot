@@ -125,7 +125,8 @@ publisher = redis_init()
 subscriber = publisher.pubsub(ignore_subscribe_messages=True)
 
 # Instantiate a classifier with the model we want
-cls = KerasIntentClassifier().train(nlu_dir)
+cls = KerasIntentClassifier()
+cls.train(nlu_dir)
 
 # Instantiate an entity extractor
 ext = RegexEntityExtractor(regex_dir)
