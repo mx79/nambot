@@ -62,6 +62,10 @@
                                     <input type="submit" name="submit" class="btn mt-4"
                                            value="Envoyer" id="forgot_button">
                                 </div>
+                                <!-- Error message if the user is not in DB-->
+                                {% if not_found %}
+                                    <p class="mb-0 mt-4 text-center">Cette adresse email n'est pas utilisée sur CnamBot.</p>
+                                {% endif %}
                             </form>
                         </div>
                     </div>

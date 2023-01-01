@@ -2,10 +2,47 @@
 
 {% block title %}CnamBot{% endblock %}
 
-{% block custom_link %}{% endblock %}
+{% block header %}{% endblock %}
 
-{% block page_title %}Bienvenue sur CnamBot{% endblock %}
-
-{% block page_desc %}
-
+{% block content %}
+    <section class="page-section portfolio" id="portfolio">
+        <div class="container">
+            <!-- Section Heading-->
+            <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Bienvenue sur CnamBot</h2>
+            <!-- Icon Divider-->
+            <div class="divider-custom">
+                <div class="divider-custom-line"></div>
+                <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+                <div class="divider-custom-line"></div>
+            </div>
+            <!-- Grid Items-->
+            <div class="row justify-content-center">
+                <!-- Item 1-->
+                <div class="col-md-6 col-lg-4 mb-5">
+                    <div class="portfolio-item mx-auto">
+                        <a href="/chess">
+                            <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                                <div class="portfolio-item-caption-content text-center text-white"><i
+                                        class="fas fa-plus fa-3x"></i></div>
+                            </div>
+                            <img class="img-fluid"
+                                 src="{{ url_for('static', filename='./assets/img/menu/chess.webp') }}"
+                                 alt="chess-menu"/>
+                        </a>
+                    </div>
+                </div>
+                <!-- Item 2-->
+                <div class="col-md-6 col-lg-4 mb-5">
+                    <div class="portfolio-item mx-auto">
+                        <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
+                            <div class="portfolio-item-caption-content text-center text-white"><i
+                                    class="fas fa-plus fa-3x"></i></div>
+                        </div>
+                        <img class="img-fluid" src="{{ url_for('static', filename='./assets/img/menu/chess.webp') }}"
+                             alt="chess-menu"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 {% endblock %}

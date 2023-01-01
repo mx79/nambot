@@ -90,8 +90,10 @@ def forgot_password(tmp_string: str = None):
     if request.method == "POST":
         if tmp_string is None:
             forgot_email = request.form.get("forgot_email", "")
-            threading.Thread(target=lambda x: send_email(x, option="forgot"), args=(forgot_email,)).start()
-            return render_template("forgot.html", send=True)
+            if db.users.find_one({"email": forgot_email}):
+                threading.Thread(target=lambda x: send_email(x, option="forgot"), args=(forgot_email,)).start()
+                return render_template("forgot.html", send=True)
+            return render_template("forgot.html", not_found=True)
         else:
             new_pwd = request.form.get("new_password")
             doc = db.tmp_forgot_url.find_one({"url": tmp_string})

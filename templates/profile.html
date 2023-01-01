@@ -63,7 +63,7 @@
             <div class="col"></div>
         </div>
         <div class="row">
-            <div class="col" style="margin-bottom: 30px">
+            <div class="col align-self-center">
                 {% if user_infos["avatar"] %}
                     <a href="https://getavataaars.com/" target="_blank">
                         <img class="avatar" src="{{ avatar }}"
@@ -79,13 +79,14 @@
                     <form action="/profile/{{ user_infos["username"] }}" class="section text-center"
                           method="post"
                           enctype="multipart/form-data">
+                        <p>Pour customiser votre avatar, cliquez sur celui que vous avez actuellement: <b>(image PNG uniquement)</b></p>
                         <input type="file" name="file" accept=".png" class="btn btn-secondary" required>
                         <br><br>
                         <input type="submit" class="btn btn-secondary" value="Changer d'avatar">
                     </form>
                 {% endif %}
             </div>
-            <div class="col">
+            <div class="col align-self-center">
                 <ul class="list-group">
                     <li class="list-group-item">Prénom : {{ user_infos["firstname"] }}</li>
                     <li class="list-group-item">Nom : {{ user_infos["lastname"] }}</li>

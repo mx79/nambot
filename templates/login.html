@@ -7,6 +7,31 @@
     <link href="{{ url_for('static', filename='./css/login.css') }}" rel="stylesheet">
 {% endblock %}
 
+{% block custom_link %}
+    <script type="text/javascript">
+        // Check if the input is in the users list provided
+        window.addEventListener("DOMContentLoaded", () => {
+            const signupPromo = document.getElementById("signup_promo");
+            const signupEmail = document.getElementById("signup_email");
+            const signupPassword = document.getElementById("signup_password");
+            const signupForm = document.getElementById("signup_form");
+            signupForm.onsubmit = () => {
+                const tmpMessage = document.getElementById("tmp-message");
+                if (tmpMessage) {
+                    tmpMessage.remove();
+                }
+                if (!signupPromo.checkValidity()) {
+                    signupForm.innerHTML += '<p class="mb-0 mt-4 text-center" id="tmp-message">Le nom d\'une promotion BDIA au CNAM se note ainsi : P5BDIA, P4BDIA, P3BDIA</p>';
+                } else if (!signupEmail.checkValidity()) {
+                    signupForm.innerHTML += '<p class="mb-0 mt-4 text-center" id="tmp-message">Une adresse auditeur du CNAM ressemble à : prenom.nom.auditeur@lecnam.net</p>';
+                } else if (!signupPassword.checkValidity()) {
+                    signupForm.innerHTML += '<p class="mb-0 mt-4 text-center" id="tmp-message">Votre mot de passe doit contenir au minimum : une lettre minuscule, une lettre majuscule, 1 chiffre, 10 caractères</p>';
+                }
+            };
+        });
+    </script>
+{% endblock %}
+
 {% block header %}{% endblock %}
 
 {% block content %}
@@ -46,16 +71,17 @@
                                                 {% if pwd_validation %}
                                                     <p class="mb-0 mt-4 text-center">{{ pwd_validation }}</p>
                                                 {% endif %}
-                                                <p class="mb-0 mt-4 text-center"><a href="/forgot-password"
-                                                                                    class="link">J'ai oublié mon mot de
-                                                    passe</a></p>
+                                                <p class="mb-0 mt-4 text-center">
+                                                    <a href="/forgot-password" class="link">J'ai oublié mon mot de
+                                                        passe</a></p>
                                             </form>
                                         </div>
                                     </div>
                                     <div class="card-back">
                                         <!-- Register card-->
                                         <div class="center-wrap">
-                                            <form action="/login" class="section text-center" method="post">
+                                            <form action="/login" class="section text-center" method="post"
+                                                  id="signup_form">
                                                 <h4 class="mb-4 pb-3">Inscription</h4>
                                                 <div class="form-group">
                                                     <input type="text" name="signup_username" class="form-style"
@@ -67,7 +93,7 @@
                                                 <div class="form-group mt-2">
                                                     <input type="text" name="signup_promo" class="form-style"
                                                            placeholder="Promotion, ex : P4BDIA" id="signup_promo"
-                                                           title="Le nom d'une promotion BDIA au cnam se note ainsi :
+                                                           title="Le nom d'une promotion BDIA au CNAM se note ainsi :
                                                            P5BDIA,
                                                            P4BDIA,
                                                            P3BDIA"
