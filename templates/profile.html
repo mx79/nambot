@@ -79,8 +79,8 @@
                     <form action="/profile/{{ user_infos["username"] }}" class="section text-center"
                           method="post"
                           enctype="multipart/form-data">
-                        <p>Pour customiser votre avatar, cliquez sur celui que vous avez actuellement: <b>(image PNG uniquement)</b></p>
-                        <input type="file" name="file" accept=".png" class="btn btn-secondary" required>
+                        <p>Pour customiser votre avatar, cliquez sur celui que vous avez actuellement :</p>
+                        <input type="file" name="file" accept="image/*" class="btn btn-secondary" required>
                         <br><br>
                         <input type="submit" class="btn btn-secondary" value="Changer d'avatar">
                     </form>

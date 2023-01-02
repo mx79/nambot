@@ -14,6 +14,7 @@ def login():
     :return: Login template related to the information entered in the form
     """
     session.permanent = True
+    session["SameSite"] = None
     if request.method == "POST":
         # Login form data
         login_username = request.form.get("login_username", "")

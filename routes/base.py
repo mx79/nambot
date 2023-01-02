@@ -35,7 +35,7 @@ def user_profile(username: str):
         for doc in docs:
             if doc["username"] == username:
                 if doc.get("avatar", None):
-                    avatar = f"data:image/png;charset=utf-8;base64,{base64.b64encode(doc['avatar']).decode('utf-8')}"
+                    avatar = f"data:image/*;charset=utf-8;base64,{base64.b64encode(doc['avatar']).decode('utf-8')}"
                 else:
                     avatar = None
                 return render_template("profile.html", user_infos=doc, avatar=avatar,

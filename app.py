@@ -14,8 +14,6 @@ app.config.from_pyfile("./config/config.py")
 socketio = SocketIO(app)
 
 # TODO: Régler le problème de cookie SameSite
-# TODO: Créer une description du CnamBot sur la page d'accueil, peut-être un menu avec des cards
-# TODO: Responsive footer avec les avatars (Quand Coco et Ammar seront inscrits)
 
 # TODO: Discussion de groupe avec WebSocket + popup de chat simple
 

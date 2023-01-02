@@ -23,6 +23,10 @@ regex_dir = join(os.getenv("BASE_DIR"), "resources", "data", "regex.json")
 # Dict in memory containing all the chess games running at the moment
 all_chess_games = {}
 
+# Dict in memory containing the current conversation between the CnamBot and a user
+bot_conversations = {}
+
+
 # ============================================= THREADS ============================================= #
 
 

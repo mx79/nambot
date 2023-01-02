@@ -217,7 +217,6 @@
         async function choosePiece() {
             let piece;
             if (('{{ session.get("username") }}' !== '{{ receiver_username }}' && ('{{ sender_color }}' === "black" || '{{ session.get("sender_color") }}' === "black")) || ('{{ session.get("username") }}' === '{{ receiver_username }}' && '{{ receiver_color }}' === "black")) {
-                piece = "p";
                 document.getElementById("promotedToBlackBishop").addEventListener("click", () => {
                     piece = "b";
                     next = true;

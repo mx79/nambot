@@ -10,6 +10,7 @@
 {% block custom_link %}
     <script type="text/javascript">
         // Check if the input is in the users list provided
+        /*
         window.addEventListener("DOMContentLoaded", () => {
             const signupPromo = document.getElementById("signup_promo");
             const signupEmail = document.getElementById("signup_email");
@@ -29,6 +30,7 @@
                 }
             };
         });
+        */
     </script>
 {% endblock %}
 
@@ -93,17 +95,13 @@
                                                 <div class="form-group mt-2">
                                                     <input type="text" name="signup_promo" class="form-style"
                                                            placeholder="Promotion, ex : P4BDIA" id="signup_promo"
-                                                           title="Le nom d'une promotion BDIA au CNAM se note ainsi :
-                                                           P5BDIA,
-                                                           P4BDIA,
-                                                           P3BDIA"
-                                                           pattern="P[3-5]{1}BDIA"
+                                                           title="Une promotion au CNAM s'écrit : P5BDIA, P4BDIA, P3BDIA, etc."
                                                            autocomplete="off" required>
                                                     <i class="input-icon uil uil-at"></i>
                                                 </div>
                                                 <div class="form-group mt-2">
                                                     <input type="email" name="signup_email" class="form-style"
-                                                           placeholder="Adresse email CNAM" id="signup_email"
+                                                           placeholder="Adresse email auditeur du CNAM" id="signup_email"
                                                            title="Une adresse auditeur du CNAM ressemble à : prenom.nom.auditeur@lecnam.net"
                                                            pattern="[\w-]{1,}[.][\w-]{1,}[.]auditeur@lecnam.net"
                                                            autocomplete="off" required>
@@ -111,13 +109,13 @@
                                                 </div>
                                                 <div class="form-group mt-2">
                                                     <input type="password" name="signup_password" class="form-style"
-                                                           placeholder="Mot de passe" id="signup_password"
+                                                           placeholder="Mot de passe (8 caractères minimum)" id="signup_password"
                                                            title="Votre mot de passe doit contenir au minimum :
                                                            une lettre minuscule,
                                                            une lettre majuscule,
                                                            1 chiffre,
                                                            10 caractères"
-                                                           pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{10,}"
+                                                           pattern=".{8,}"
                                                            autocomplete="off" required>
                                                     <i class="input-icon uil uil-lock-alt"></i>
                                                 </div>

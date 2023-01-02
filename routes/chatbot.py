@@ -1,76 +1,39 @@
-import json
-
+import re
 from typing import Dict
-from routes import auth_required
+from pkg.bot import bot_response
 from flask import request, session
-from routes import cls, ext, publisher, subscriber
-from pkg.bot import Transcript, Conversation
-
-# ================================== CONVERSATION TREATMENT AND STORAGE ================================== #
-
-
-def transform(username: str, msg: str) -> Transcript:
-    """The function that get intent from redis message and return a dict with infos.
-
-    :param username: The name of the channel used (user id)
-    :param msg: The content of the message published on Redis
-    :return: A dict with some information
-    """
-    conv = Conversation(username)
-    for c in conv_list.values():
-        if c.conv_id == username:
-            conv = c
-
-    intent = cls.get_intent(msg)
-    entities = ext.get_entity(msg)
-    transcript = Transcript(username, msg, intent, entities)
-    conv.add_transcript(transcript)
-    conv_list[username] = conv
-
-    return transcript
-
-
-def primary_handler(message: Dict):
-    """The function that first processes the message retrieved from the Redis channel.
-
-    :param message: Redis incoming message
-    """
-    user = message["channel"].replace("ongoing_conversation_", "")
-    data = message["data"]
-    res = transform(user, data).as_dict()
-    publisher.publish(f"ongoing_infos_{user}", f'{json.dumps(eval(str(res)))!s}')
-
-
-# Dict of all conversation
-conv_list = {}
-
-# Listen to all channels matching the pattern below
-subscriber.psubscribe(**{"ongoing_conversation_*": primary_handler})
-
-# Run redis in thread
-subscriber.run_in_thread()
+from routes import cls, ext
+from routes import auth_required, bot_conversations
 
 
 # ============================================= HANDLER ============================================= #
 
 
 @auth_required
-def chatbot_receiver():
+def chatbot_receiver() -> Dict[str, str]:
     """Endpoint waiting to receive user message from frontend.
-    Once the message is received, publish on the right redis channel.
-    Then get response on another redis channel.
-    Finally, post the Nambot response to the frontend.
+    First, we process the user message with entities and intent.
+    Then, we get the corresponding response from the ChatBot library in pkg/bot.
+    Finally, we send Nambot response to the frontend.
 
     :return: Nambot response's
     """
-    # Subscribe to incoming bot response
-    subscriber.subscribe("ongoing_infos_" + session.get("username"))
+    user = session.get("username")
 
-    # Get user message
-    user_msg = request.get_json()["message"]
-    publisher.publish("ongoing_conversation_" + session.get("username"), user_msg)
+    # Extract information from message
+    msg = request.get_json()["message"]
+    entities = ext.get_entity(f" {msg} ")
+    intent = cls.get_intent(msg)
 
-    # Listen to redis worker response
-    for m in subscriber.listen():
-        message = json.loads(m["data"])
-        return message["infos"]
+    # Check if there is a conv for this user
+    if not bot_conversations.get(user, None):
+        bot_conversations[user] = []
+        resp = bot_response(entities, intent)
+    else:
+        previous_intent = bot_conversations[user][-1]
+        resp = bot_response(entities, intent, previous_intent)
+
+    # Append to conv dict the last intent detected
+    bot_conversations[user].append(intent)
+
+    return {"response": resp}

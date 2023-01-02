@@ -150,7 +150,6 @@ class ChatBox {
                 }
             }).then(r => r.json())
             .then(jsonResponse => {
-                console.log(jsonResponse)
                 let resp = jsonResponse["response"].replace("\n", "<br>");
                 let msg2 = {name: "Nambot", message: resp};
                 this.messages.push(msg2);
