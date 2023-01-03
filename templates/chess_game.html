@@ -41,7 +41,7 @@
                     const elem = document.getElementById(possibility.slice(2, 4));
                     // Change the color of the case if it is a valid move
                     elem.setAttribute("class", "col d-flex justify-content-center");
-                    elem.setAttribute("style", "background-color: #f8f9fa");
+                    elem.setAttribute("style", "background-color: #9d0c0c");
                     // Remove pointer event if there is a piece on this case
                     if (elem.firstElementChild.alt !== "empty") {
                         elem.firstElementChild.setAttribute("style", "pointer-events: none");
@@ -103,7 +103,7 @@
                 const elem = document.getElementById(possibility.slice(2, 4));
                 // Unset color on valid move and reset to the base background
                 if (primaryBgCases.includes(elem.id)) {
-                    elem.setAttribute("class", "col bg-primary d-flex justify-content-center");
+                    elem.setAttribute("class", "col bg-light d-flex justify-content-center");
                 } else {
                     elem.setAttribute("class", "col bg-secondary d-flex justify-content-center");
                 }
@@ -414,7 +414,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_rook.png') }}"
                                  alt="white_rook">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="g1">
+                        <div class="col bg-light d-flex justify-content-center" id="g1">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_knight.png') }}"
                                  alt="white_knight">
@@ -424,7 +424,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_bishop.png') }}"
                                  alt="white_bishop">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="e1">
+                        <div class="col bg-light d-flex justify-content-center" id="e1">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_king.png') }}"
                                  alt="white_king">
@@ -434,7 +434,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_queen.png') }}"
                                  alt="white_queen">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="c1">
+                        <div class="col bg-light d-flex justify-content-center" id="c1">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_bishop.png') }}"
                                  alt="white_bishop">
@@ -444,14 +444,14 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_knight.png') }}"
                                  alt="white_knight">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="a1">
+                        <div class="col bg-light d-flex justify-content-center" id="a1">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_rook.png') }}"
                                  alt="white_rook">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col bg-primary d-flex justify-content-center" id="h2">
+                        <div class="col bg-light d-flex justify-content-center" id="h2">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
                                  alt="white_pawn">
@@ -461,7 +461,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
                                  alt="white_pawn">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="f2">
+                        <div class="col bg-light d-flex justify-content-center" id="f2">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
                                  alt="white_pawn">
@@ -471,7 +471,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
                                  alt="white_pawn">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="d2">
+                        <div class="col bg-light d-flex justify-content-center" id="d2">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
                                  alt="white_pawn">
@@ -481,7 +481,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
                                  alt="white_pawn">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="b2">
+                        <div class="col bg-light d-flex justify-content-center" id="b2">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
                                  alt="white_pawn">
@@ -497,7 +497,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="g3">
+                        <div class="col bg-light d-flex justify-content-center" id="g3">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -505,7 +505,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="e3">
+                        <div class="col bg-light d-flex justify-content-center" id="e3">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -513,7 +513,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="c3">
+                        <div class="col bg-light d-flex justify-content-center" id="c3">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -521,13 +521,13 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="a3">
+                        <div class="col bg-light d-flex justify-content-center" id="a3">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col bg-primary justify-content-center" id="h4">
+                        <div class="col bg-light justify-content-center" id="h4">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -535,7 +535,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="f4">
+                        <div class="col bg-light d-flex justify-content-center" id="f4">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -543,7 +543,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="d4">
+                        <div class="col bg-light d-flex justify-content-center" id="d4">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -551,7 +551,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="b4">
+                        <div class="col bg-light d-flex justify-content-center" id="b4">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -565,7 +565,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="g5">
+                        <div class="col bg-light d-flex justify-content-center" id="g5">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -573,7 +573,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="e5">
+                        <div class="col bg-light d-flex justify-content-center" id="e5">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -581,7 +581,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="c5">
+                        <div class="col bg-light d-flex justify-content-center" id="c5">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -589,13 +589,13 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="a5">
+                        <div class="col bg-light d-flex justify-content-center" id="a5">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col bg-primary d-flex justify-content-center" id="h6">
+                        <div class="col bg-light d-flex justify-content-center" id="h6">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -603,7 +603,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="f6">
+                        <div class="col bg-light d-flex justify-content-center" id="f6">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -611,7 +611,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="d6">
+                        <div class="col bg-light d-flex justify-content-center" id="d6">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -619,7 +619,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="b6">
+                        <div class="col bg-light d-flex justify-content-center" id="b6">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -634,7 +634,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
                                  alt="black_pawn">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="g7">
+                        <div class="col bg-light d-flex justify-content-center" id="g7">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
                                  alt="black_pawn">
@@ -644,7 +644,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
                                  alt="black_pawn">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="e7">
+                        <div class="col bg-light d-flex justify-content-center" id="e7">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
                                  alt="black_pawn">
@@ -654,7 +654,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
                                  alt="black_pawn">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="c7">
+                        <div class="col bg-light d-flex justify-content-center" id="c7">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
                                  alt="black_pawn">
@@ -664,14 +664,14 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
                                  alt="black_pawn">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="a7">
+                        <div class="col bg-light d-flex justify-content-center" id="a7">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
                                  alt="black_pawn">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col bg-primary d-flex justify-content-center" id="h8">
+                        <div class="col bg-light d-flex justify-content-center" id="h8">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_rook.png') }}"
                                  alt="black_rook">
@@ -681,7 +681,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_knight.png') }}"
                                  alt="black_knight">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="f8">
+                        <div class="col bg-light d-flex justify-content-center" id="f8">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_bishop.png') }}"
                                  alt="black_bishop">
@@ -691,7 +691,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_king.png') }}"
                                  alt="black_king">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="d8">
+                        <div class="col bg-light d-flex justify-content-center" id="d8">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_queen.png') }}"
                                  alt="black_queen">
@@ -701,7 +701,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_bishop.png') }}"
                                  alt="black_bishop">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="b8">
+                        <div class="col bg-light d-flex justify-content-center" id="b8">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_knight.png') }}"
                                  alt="black_knight">
@@ -726,7 +726,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_rook.png') }}"
                                  alt="black_rook">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="b8">
+                        <div class="col bg-light d-flex justify-content-center" id="b8">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_knight.png') }}"
                                  alt="black_knight">
@@ -736,7 +736,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_bishop.png') }}"
                                  alt="black_bishop">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="d8">
+                        <div class="col bg-light d-flex justify-content-center" id="d8">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_queen.png') }}"
                                  alt="black_queen">
@@ -746,7 +746,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_king.png') }}"
                                  alt="black_king">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="f8">
+                        <div class="col bg-light d-flex justify-content-center" id="f8">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_bishop.png') }}"
                                  alt="black_bishop">
@@ -756,14 +756,14 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_knight.png') }}"
                                  alt="black_knight">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="h8">
+                        <div class="col bg-light d-flex justify-content-center" id="h8">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_rook.png') }}"
                                  alt="black_rook">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col bg-primary d-flex justify-content-center" id="a7">
+                        <div class="col bg-light d-flex justify-content-center" id="a7">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
                                  alt="black_pawn">
@@ -773,7 +773,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
                                  alt="black_pawn">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="c7">
+                        <div class="col bg-light d-flex justify-content-center" id="c7">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
                                  alt="black_pawn">
@@ -783,7 +783,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
                                  alt="black_pawn">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="e7">
+                        <div class="col bg-light d-flex justify-content-center" id="e7">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
                                  alt="black_pawn">
@@ -793,7 +793,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
                                  alt="black_pawn">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="g7">
+                        <div class="col bg-light d-flex justify-content-center" id="g7">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/black_pawn.png') }}"
                                  alt="black_pawn">
@@ -809,7 +809,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="b6">
+                        <div class="col bg-light d-flex justify-content-center" id="b6">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -817,7 +817,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="d6">
+                        <div class="col bg-light d-flex justify-content-center" id="d6">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -825,7 +825,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="f6">
+                        <div class="col bg-light d-flex justify-content-center" id="f6">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -833,13 +833,13 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="h6">
+                        <div class="col bg-light d-flex justify-content-center" id="h6">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col bg-primary d-flex justify-content-center" id="a5">
+                        <div class="col bg-light d-flex justify-content-center" id="a5">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -847,7 +847,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="c5">
+                        <div class="col bg-light d-flex justify-content-center" id="c5">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -855,7 +855,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="e5">
+                        <div class="col bg-light d-flex justify-content-center" id="e5">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -863,7 +863,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="g5">
+                        <div class="col bg-light d-flex justify-content-center" id="g5">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -877,7 +877,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="b4">
+                        <div class="col bg-light d-flex justify-content-center" id="b4">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -885,7 +885,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="d4">
+                        <div class="col bg-light d-flex justify-content-center" id="d4">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -893,7 +893,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="f4">
+                        <div class="col bg-light d-flex justify-content-center" id="f4">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -901,13 +901,13 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="h4">
+                        <div class="col bg-light d-flex justify-content-center" id="h4">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col bg-primary d-flex justify-content-center" id="a3">
+                        <div class="col bg-light d-flex justify-content-center" id="a3">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -915,7 +915,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="c3">
+                        <div class="col bg-light d-flex justify-content-center" id="c3">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -923,7 +923,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="e3">
+                        <div class="col bg-light d-flex justify-content-center" id="e3">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -931,7 +931,7 @@
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="g3">
+                        <div class="col bg-light d-flex justify-content-center" id="g3">
                             <img class="card-img" src="{{ url_for('static', filename='./assets/img/chess/empty.png') }}"
                                  alt="empty">
                         </div>
@@ -946,7 +946,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
                                  alt="white_pawn">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="b2">
+                        <div class="col bg-light d-flex justify-content-center" id="b2">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
                                  alt="white_pawn">
@@ -956,7 +956,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
                                  alt="white_pawn">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="d2">
+                        <div class="col bg-light d-flex justify-content-center" id="d2">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
                                  alt="white_pawn">
@@ -966,7 +966,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
                                  alt="white_pawn">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="f2">
+                        <div class="col bg-light d-flex justify-content-center" id="f2">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
                                  alt="white_pawn">
@@ -976,14 +976,14 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
                                  alt="white_pawn">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="h2">
+                        <div class="col bg-light d-flex justify-content-center" id="h2">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_pawn.png') }}"
                                  alt="white_pawn">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col bg-primary d-flex justify-content-center" id="a1">
+                        <div class="col bg-light d-flex justify-content-center" id="a1">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_rook.png') }}"
                                  alt="white_rook">
@@ -993,7 +993,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_knight.png') }}"
                                  alt="white_knight">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="c1">
+                        <div class="col bg-light d-flex justify-content-center" id="c1">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_bishop.png') }}"
                                  alt="white_bishop">
@@ -1003,7 +1003,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_queen.png') }}"
                                  alt="white_queen">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="e1">
+                        <div class="col bg-light d-flex justify-content-center" id="e1">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_king.png') }}"
                                  alt="white_king">
@@ -1013,7 +1013,7 @@
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_bishop.png') }}"
                                  alt="white_bishop">
                         </div>
-                        <div class="col bg-primary d-flex justify-content-center" id="g1">
+                        <div class="col bg-light d-flex justify-content-center" id="g1">
                             <img class="card-img"
                                  src="{{ url_for('static', filename='./assets/img/chess/256px/white_knight.png') }}"
                                  alt="white_knight">

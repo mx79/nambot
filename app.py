@@ -13,7 +13,6 @@ app = Flask(__name__)
 app.config.from_pyfile("./config/config.py")
 socketio = SocketIO(app)
 
-# TODO: Régler le problème de cookie SameSite
 
 # TODO: Discussion de groupe avec WebSocket + popup de chat simple
 
