@@ -1,5 +1,6 @@
 import time
 import chess
+import base64
 import random
 import threading
 import pickle as pkl
@@ -187,6 +188,28 @@ def chess_game(tmp_string: str = None):
     :param tmp_string: The
     :return:
     """
+
+    def template() -> str:
+        if avatar := db.users.find_one({"username": doc["sender_username"]}).get("avatar", None):
+            sender_avatar = f"data:image/*;charset=utf-8;base64,{base64.b64encode(avatar).decode('utf-8')}"
+        else:
+            sender_avatar = None
+        if avatar := db.users.find_one({"username": doc["receiver_username"]}).get("avatar", None):
+            receiver_avatar = f"data:image/*;charset=utf-8;base64,{base64.b64encode(avatar).decode('utf-8')}"
+        else:
+            receiver_avatar = None
+        return render_template(
+            "chess_game.html",
+            game_id=tmp_string,
+            sender_username=doc["sender_username"],
+            receiver_username=doc["receiver_username"],
+            sender_color=doc["sender_color"],
+            receiver_color=doc["receiver_color"],
+            sender_avatar=sender_avatar,
+            receiver_avatar=receiver_avatar,
+            fen=get_fen(tmp_string)
+        )
+
     if request.method == "POST":
         key = get_random_string(16)
         opponent_username = request.form.get("chess_opponent_username")
@@ -200,29 +223,9 @@ def chess_game(tmp_string: str = None):
 
     if tmp_string:
         if doc := db.tmp_chess_url.find_one({"url": tmp_string}):
-            return render_template(
-                "chess_game.html",
-                game_id=tmp_string,
-                sender_username=doc["sender_username"],
-                receiver_username=doc["receiver_username"],
-                sender_color=doc["sender_color"],
-                receiver_color=doc["receiver_color"],
-                sender_avatar=doc["sender_avatar"],
-                receiver_=doc["receiver_avatar"],
-                fen=get_fen(tmp_string)
-            )
+            return template()
         elif doc := db.chess_game.find_one({"url": tmp_string}):
-            return render_template(
-                "chess_game.html",
-                game_id=tmp_string,
-                sender_username=doc["sender_username"],
-                receiver_username=doc["receiver_username"],
-                sender_color=doc["sender_color"],
-                receiver_color=doc["receiver_color"],
-                sender_avatar=doc["sender_avatar"],
-                receiver_avatar=doc["receiver_avatar"],
-                fen=get_fen(tmp_string)
-            )
+            return template()
         return render_template("404.html")
 
     return render_template("chess.html", users=[user["username"] for user in db.users.find()

@@ -9,7 +9,7 @@ from typing import Dict
 def get_edt() -> str:
     """It opens the timetable of th promotion P4BDIA in a new browser tab.
     """
-    return "https://qrc.gescicca.net/Planning.aspx?id=JIQmJi9xPenYP9j1da6bMA%3d%3d&annsco=2022&typepersonne=AUDITEUR"
+    return '<a href="https://qrc.gescicca.net/Planning.aspx?id=JIQmJi9xPenYP9j1da6bMA%3d%3d&annsco=2022&typepersonne=AUDITEUR">Emploi du temps</a>'
 
 
 def get_news() -> str:
@@ -77,7 +77,7 @@ def bot_response(entities: Dict, intent: str, previous_intent: str = None) -> st
         response += datetime.date
     # API "edt"
     elif intent == "EDT":
-        response += f"Voici ton emploi du temps : {get_edt()}"
+        response += f"Le voici : {get_edt()}"
     # API "meteo"
     elif intent == "METEO":
         if "VILLE" in entities.keys():

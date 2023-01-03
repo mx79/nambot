@@ -170,7 +170,7 @@ class ChatBox {
      */
     updateChatText(chatbot) {
         let html = '';
-        this.messages.slice().reverse().forEach(function (item) {
+        this.messages.slice().reverse().forEach(item => {
             if (item.name === 'Nambot') {
                 html += '<div class="messages__item messages__item--visitor">' + item.message + '</div>';
             } else {

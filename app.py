@@ -17,8 +17,8 @@ socketio = SocketIO(app)
 #  compteur
 #  score
 #  bouton abondon
-#  chat
-#  couleur case
+#  chat rapide avec l'adversaire
+#  croix sur les case possible
 #  avatar et nom
 
 # TODO: FastAPI à la place de Flask ?
