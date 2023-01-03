@@ -35,6 +35,9 @@
     --bs-gray-900: #212529;
     --bs-primary: #9d0c0c;
     --bs-secondary: #0e0c0c;
+    --bs-chess-primary: #c4ad9c;
+    --bs-chess-secondary: #623f1f;
+    --bs-chess-possible-move: rgba(157, 12, 12, 0.5);
     --bs-success: #198754;
     --bs-info: #0dcaf0;
     --bs-warning: #ffc107;
@@ -43,6 +46,9 @@
     --bs-dark: #212529;
     --bs-primary-rgb: 157, 12, 12;
     --bs-secondary-rgb: 14, 12, 12;
+    --bs-chess-primary-rgb: 196, 173, 156;
+    --bs-chess-secondary-rgb: 98, 63, 31;
+    --bs-chess-possible-move-rgb: rgba(157, 12, 12, 0.5);
     --bs-success-rgb: 25, 135, 84;
     --bs-info-rgb: 13, 202, 240;
     --bs-warning-rgb: 255, 193, 7;
@@ -8431,6 +8437,21 @@ textarea.form-control-lg {
 .bg-secondary {
     --bs-bg-opacity: 1;
     background-color: rgba(var(--bs-secondary-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.bg-chess-primary {
+    --bs-bg-opacity: 1;
+    background-color: rgba(var(--bs-chess-primary-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.bg-chess-secondary {
+    --bs-bg-opacity: 1;
+    background-color: rgba(var(--bs-chess-secondary-rgb), var(--bs-bg-opacity)) !important;
+}
+
+.bg-chess-possible-move {
+    --bs-bg-opacity: 1;
+    background-color: rgba(var(--bs-chess-possible-move-rgb), var(--bs-bg-opacity)) !important;
 }
 
 .bg-success {

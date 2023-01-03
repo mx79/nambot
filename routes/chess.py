@@ -13,7 +13,13 @@ from flask import redirect, render_template, request, session
 # ============================================= UTILS ============================================= #
 
 
-def create_chess_url(key: str, sender_email: str, opponent_email: str, sender_color: str, opponent_color: str):
+def create_chess_url(
+        key: str,
+        sender_email: str,
+        opponent_email: str,
+        sender_color: str,
+        opponent_color: str,
+):
     """It creates the temporary chess game URL.
 
     :param key: The generated key to construct the URL
@@ -28,7 +34,7 @@ def create_chess_url(key: str, sender_email: str, opponent_email: str, sender_co
         "sender_username": sender_email,
         "receiver_username": opponent_email,
         "sender_color": sender_color,
-        "receiver_color": opponent_color,
+        "receiver_color": opponent_color
     })
 
 
@@ -201,6 +207,8 @@ def chess_game(tmp_string: str = None):
                 receiver_username=doc["receiver_username"],
                 sender_color=doc["sender_color"],
                 receiver_color=doc["receiver_color"],
+                sender_avatar=doc["sender_avatar"],
+                receiver_=doc["receiver_avatar"],
                 fen=get_fen(tmp_string)
             )
         elif doc := db.chess_game.find_one({"url": tmp_string}):
@@ -211,6 +219,8 @@ def chess_game(tmp_string: str = None):
                 receiver_username=doc["receiver_username"],
                 sender_color=doc["sender_color"],
                 receiver_color=doc["receiver_color"],
+                sender_avatar=doc["sender_avatar"],
+                receiver_avatar=doc["receiver_avatar"],
                 fen=get_fen(tmp_string)
             )
         return render_template("404.html")

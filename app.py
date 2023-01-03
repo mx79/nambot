@@ -13,6 +13,15 @@ app = Flask(__name__)
 app.config.from_pyfile("./config/config.py")
 socketio = SocketIO(app)
 
+# TODO CHESS:
+#  compteur
+#  score
+#  bouton abondon
+#  chat
+#  couleur case
+#  avatar et nom
+
+# TODO: FastAPI à la place de Flask ?
 
 # TODO: Discussion de groupe avec WebSocket + popup de chat simple
 
