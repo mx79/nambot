@@ -410,15 +410,6 @@
 {% block page_desc %}{% endblock %}
 
 {% block content %}
-    {% if (session.get("username") != receiver_username and (sender_color == "black" or session.get("sender_color") == "black")) or (session.get("username") == receiver_username and receiver_color == "black") %}
-        {% if sender_avatar %}
-            <img class="avatar" src="{{ sender_avatar }}"
-                 alt="avatar-{{ sender_avatar }}"/>
-        {% else %}
-            <img class="avatar" src="{{ url_for('static', filename='./assets/img/avatar.png') }}"
-                 alt="avatar-{{ sender_avatar }}"/>
-        {% endif %}
-    {% endif %}
     <section id="chess-area">
         <div class="container border border-dark border-3"
              style="max-width: 720px;max-height: 720px" id="chess-container">
@@ -1099,13 +1090,6 @@
             {% endif %}
         </div>
     </section>
-    {% if receiver_avatar %}
-        <img class="avatar" src="{{ receiver_avatar }}"
-             alt="avatar-{{ receiver_username }}"/>
-    {% else %}
-        <img class="avatar" src="{{ url_for('static', filename='./assets/img/avatar.png') }}"
-             alt="avatar-{{ receiver_username }}"/>
-    {% endif %}
     <!-- Modal -->
     <div class="modal fade" id="promotionModal" tabindex="-1" role="dialog"
          aria-labelledby="promotionModal" aria-hidden="true">
